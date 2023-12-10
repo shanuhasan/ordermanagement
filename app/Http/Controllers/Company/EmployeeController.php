@@ -12,7 +12,10 @@ class EmployeeController extends Controller
 {
     public function index(Request $request)
     {
-        $employees = Employee::latest()->where('is_deleted','!=','1');
+        $companyId = Auth::guard('web')->user()->company_id;
+        $employees = Employee::latest()
+                                ->where('company_id',$companyId)
+                                ->where('is_deleted','!=','1');
 
         if(!empty($request->get('keyword')))
         {
@@ -62,6 +65,10 @@ class EmployeeController extends Controller
     }
 
     public function edit($id , Request $request){
+        if(empty(employeeExist($id)))
+        {
+            return redirect()->route('employee.index');
+        }
 
         $employee = Employee::find($id);
         if(empty($employee))
@@ -73,6 +80,11 @@ class EmployeeController extends Controller
     }
 
     public function update($id, Request $request){
+
+        if(empty(employeeExist($id)))
+        {
+            return redirect()->route('employee.index');
+        }
 
         $model = Employee::find($id);
         if(empty($model))
@@ -115,6 +127,11 @@ class EmployeeController extends Controller
     }
 
     public function destroy($id, Request $request){
+        
+        if(empty(employeeExist($id)))
+        {
+            return redirect()->route('employee.index');
+        }
         $model = Employee::find($id);
         if(empty($model))
         {
