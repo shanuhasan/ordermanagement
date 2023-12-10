@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Company;
 
-use App\Http\Controllers\Controller;
+use App\Models\Employee;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        return view('dashboard');
+        $totalEmployee = Employee::where('is_deleted','!=','1')->count();
+        return view('dashboard',[
+            'totalEmployee'=>$totalEmployee
+        ]);
     }
 }

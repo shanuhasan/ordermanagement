@@ -26,8 +26,8 @@
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
                         <div class="inner">
-                            <h3>123</h3>
-                            <p>Total Orders</p>
+                            <h3>{{ $totalEmployee }}</h3>
+                            <p>Total Employee</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>

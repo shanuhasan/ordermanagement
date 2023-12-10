@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Company\EmployeeController;
 use App\Http\Controllers\Company\DashboardController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
@@ -58,6 +60,18 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
 
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
     Route::get('/dashboard', [DashboardController::class, 'index'])
                 ->name('dashboard');
+
+    //employee management
+    Route::get('/employee', [EmployeeController::class, 'index'])->name('employee.index');
+    Route::get('/employee/create',[EmployeeController::class,'create'])->name('employee.create');
+    Route::post('/employee/store',[EmployeeController::class,'store'])->name('employee.store');
+    Route::get('/employee/{employee_id}/edit',[EmployeeController::class,'edit'])->name('employee.edit');
+    Route::put('/employee/{employee_id}',[EmployeeController::class,'update'])->name('employee.update');
+    Route::get('/employee/{employee_id}',[EmployeeController::class,'destroy'])->name('employee.delete');
 });
