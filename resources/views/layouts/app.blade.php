@@ -81,7 +81,7 @@
         <!-- /.content-wrapper -->
         <footer class="main-footer">
 
-            <strong>Copyright &copy; 2014-2022 AmazingShop All rights reserved.
+            <strong>Copyright &copy; {{ date('Y') }} Musheeda Solution All rights reserved.
         </footer>
 
     </div>

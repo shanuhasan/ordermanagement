@@ -58,7 +58,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                     <label for="rate">Status</label>
                                     <select name="status" id="status" class="form-control">
                                         @foreach (getStatus() as $key => $item)
-                                            <option value="{{ $key }}">{{ $item }}</option>
+                                            <option value="{{ $key }}"
+                                                {{ $order->status == $key ? 'selected' : '' }}>{{ $item }}</option>
                                         @endforeach
                                     </select>
                                     <p class="error"></p>

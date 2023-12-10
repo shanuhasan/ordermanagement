@@ -65,6 +65,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                         </tbody>
                     </table>
                     <button class="no-print btn btn-primary mt-2" onclick="window.print();">Print</button>
+                    <a href="{{ route('employee.order', $employeeId) }}" class="no-print btn btn-info mt-2">Back</a>
                 </div>
             </div>
         </div>

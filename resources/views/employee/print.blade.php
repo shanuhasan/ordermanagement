@@ -115,8 +115,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                     ?>
                                 @endforeach
                             @else
-                                <tr colspan="3">
-                                    <td>No Advance Amount</td>
+                                <tr style="border:1px solid #000">
+                                    <td colspan="3" style="text-align:center">No Advance Amount</td>
                                 </tr>
                             @endif
                         </tbody>
@@ -139,6 +139,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                         </tfoot>
                     </table>
                     <button class="no-print btn btn-primary mt-2" onclick="window.print();">Print</button>
+                    <a href="{{ route('employee.order', $employeeId) }}" class="no-print btn btn-info mt-2">Back</a>
                 </div>
 
             </div>
