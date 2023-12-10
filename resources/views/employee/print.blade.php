@@ -116,7 +116,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                         <tfoot>
                             <tr style="border:1px solid #000">
                                 <td style="border:1px solid #000;text-align:center"></td>
-                                <td style="border:1px solid #000;text-align:center;font-weight:bold">Received Amount</td>
+                                <td style="border:1px solid #000;text-align:center;font-weight:bold">Total Amount</td>
                                 <td style="border:1px solid #000;text-align:center;font-weight:bold">₹{{ $total1 }}
                                 </td>
                             </tr>
