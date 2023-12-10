@@ -94,35 +94,43 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $total1 = 0;
-                            $i = 1; ?>
-                            @foreach ($paymentHistory as $item)
-                                <tr style="border:1px solid #000">
-                                    <td style="border:1px solid #000;text-align:center">{{ $i++ }}</td>
-                                    <td style="border:1px solid #000;text-align:center">
-                                        {{ date('d-m-Y', strtotime($item->created_at)) }}</td>
-                                    <td
-                                        style="border:1px
+                            @if ($paymentHistory->isNotEmpty())
+                                <?php $total1 = 0;
+                                $i = 1; ?>
+                                @foreach ($paymentHistory as $item)
+                                    <tr style="border:1px solid #000">
+                                        <td style="border:1px solid #000;text-align:center">{{ $i++ }}</td>
+                                        <td style="border:1px solid #000;text-align:center">
+                                            {{ date('d-m-Y', strtotime($item->created_at)) }}</td>
+                                        <td
+                                            style="border:1px
                                         solid #000;text-align:center">
-                                        ₹{{ $item->amount }}
-                                    </td>
-                                    </td>
+                                            ₹{{ $item->amount }}
+                                        </td>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                    $total1 += $item->amount;
+                                    ?>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="3">No Advance Amount</td>
                                 </tr>
-                                <?php
-                                $total1 += $item->amount;
-                                ?>
-                            @endforeach
+                            @endif
                         </tbody>
                         <tfoot>
                             <tr style="border:1px solid #000">
                                 <td style="border:1px solid #000;text-align:center"></td>
                                 <td style="border:1px solid #000;text-align:center;font-weight:bold">Total Amount</td>
-                                <td style="border:1px solid #000;text-align:center;font-weight:bold">₹{{ $total1 }}
+                                <td style="border:1px solid #000;text-align:center;font-weight:bold">
+                                    ₹{{ $total1 }}
                                 </td>
                             </tr>
                             <tr style="border:1px solid #000">
                                 <td style="border:1px solid #000;text-align:center"></td>
-                                <td style="border:1px solid #000;text-align:center;font-weight:bold">Remaining Amount</td>
+                                <td style="border:1px solid #000;text-align:center;font-weight:bold">Remaining Amount
+                                </td>
                                 <td style="border:1px solid #000;text-align:center;font-weight:bold">
                                     ₹{{ $total - $total1 }}
                                 </td>
@@ -131,6 +139,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                     </table>
                     <button class="no-print btn btn-primary mt-2" onclick="window.print();">Print</button>
                 </div>
+
             </div>
         </div>
         <!-- /.card -->
