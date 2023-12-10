@@ -81,4 +81,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/employee/order/{employeeId}/{orderId}/edit',[EmployeeController::class,'orderEdit'])->name('employee.order.edit');
     Route::post('/employee/order/{id}',[EmployeeController::class,'orderUpdate'])->name('employee.order.update');
     Route::post('/employee-order-payment',[EmployeeController::class,'orderPayment'])->name('employee.order.payment');
+    Route::get('/employee-order-singleprint/{employeeId}/{orderId}',[EmployeeController::class,'singlePrint'])->name('employee.order.singleprint');
+    Route::get('/employee-order-print/{employeeId}',[EmployeeController::class,'orderPrint'])->name('employee.order.print');
 });

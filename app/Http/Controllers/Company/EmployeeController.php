@@ -25,7 +25,7 @@ class EmployeeController extends Controller
             $employees = $employees->where('name','like','%'.$request->get('keyword').'%');
         }
 
-        $employees = $employees->paginate(10);
+        $employees = $employees->paginate(20);
 
         return view('employee.index',[
             'employees'=>$employees
@@ -168,7 +168,7 @@ class EmployeeController extends Controller
 
         $orders = Order::where('employee_id',$id)
                         ->where('company_id',$companyId)
-                        ->paginate(10);
+                        ->paginate(20);
         $data['orders'] = $orders;
         $data['employeeId'] = $id;
 
@@ -182,7 +182,7 @@ class EmployeeController extends Controller
 
         $employeePaymentHistory = OrderItem::where('employee_id',$id)
                                     ->where('company_id',$companyId)
-                                    ->get();
+                                    ->paginate(20);
 
         $data['totalAmount'] = $totalAmount;
         $data['employeeTotalPayment'] = $employeeTotalPayment;
@@ -283,6 +283,7 @@ class EmployeeController extends Controller
             $model->qty = $request->qty;
             $model->rate = $request->rate;
             $model->total_amount = $request->qty * $request->rate;
+            $model->status = $request->status;
             $model->save();
 
             session()->flash('success','Updated successfully.');
@@ -324,6 +325,56 @@ class EmployeeController extends Controller
         }else{
             return Redirect::back()->withErrors($validator);
         }
+        
+    }
+
+    public function singlePrint($employeeId,$orderId)
+    {
+        if(empty(employeeExist($employeeId)))
+        {
+            return redirect()->route('employee.index');
+        }
+
+        $companyId = Auth::guard('web')->user()->company_id;
+
+        $order = Order::where('employee_id',$employeeId)
+                        ->where('company_id',$companyId)
+                        ->where('id',$orderId)
+                        ->first();
+
+        // $paymentHistory = OrderItem::where('employee_id',$employeeId)
+        //                     ->where('company_id',$companyId)
+        //                     ->get();
+
+        return view('employee.single-print',[
+            'order'=>$order,
+            'employeeId'=>$employeeId,
+        ]);
+        
+    }
+
+    public function orderPrint($employeeId)
+    {
+        if(empty(employeeExist($employeeId)))
+        {
+            return redirect()->route('employee.index');
+        }
+
+        $companyId = Auth::guard('web')->user()->company_id;
+
+        $orders = Order::where('employee_id',$employeeId)
+                        ->where('company_id',$companyId)
+                        ->get();
+
+        $paymentHistory = OrderItem::where('employee_id',$employeeId)
+                            ->where('company_id',$companyId)
+                            ->get();
+
+        return view('employee.print',[
+            'orders'=>$orders,
+            'paymentHistory'=>$paymentHistory,
+            'employeeId'=>$employeeId,
+        ]);
         
     }
 }

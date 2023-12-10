@@ -26,3 +26,12 @@ function getEmployeeDetail($id)
     }
     return $employee;
 }
+
+function getStatus()
+{
+    $list = [
+        '0'=>'Pending',
+        '1'=>'Complete',
+    ];
+    return $list;
+}

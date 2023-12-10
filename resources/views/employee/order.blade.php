@@ -17,6 +17,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                 </div>
                 <div class="col-sm-6 text-right">
                     <a href="{{ route('employee.order.create', $employeeId) }}" class="btn btn-primary">Add New</a>
+                    <a href="{{ route('employee.order.print', $employeeId) }}" class="btn btn-success">Print</a>
                 </div>
             </div>
         </div>
@@ -57,6 +58,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                 <th>Qty</th>
                                 <th>Rate</th>
                                 <th>Total Amount</th>
+                                <th>Status</th>
                                 <th width="100">Action</th>
                             </tr>
                         </thead>
@@ -81,10 +83,22 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                         <td>{{ $order->qty }}</td>
                                         <td>₹{{ $order->rate }}</td>
                                         <td>₹{{ $order->total_amount }}</td>
+                                        <td
+                                            style="{{ $order->status == 0 ? 'background:red;color:#fff;font-weight:bold;' : 'background:green;color:#fff;font-weight:bold;' }}">
+                                            @if ($order->status == 0)
+                                                Pending
+                                            @else
+                                                Complete
+                                            @endif
+                                        </td>
                                         <td>
                                             <a
                                                 href="{{ route('employee.order.edit', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
                                                 <i class="fa fa-edit" aria-hidden="true"></i>
+                                            </a>
+                                            <a
+                                                href="{{ route('employee.order.singleprint', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
+                                                <i class="fa fa-print" aria-hidden="true"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -172,6 +186,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                                 @endif
                                             </tbody>
                                         </table>
+                                    </div>
+                                    <div class="card-footer clearfix">
+                                        {{ $employeePaymentHistory->links('pagination::bootstrap-5') }}
                                     </div>
                                 </div>
                             </div>
