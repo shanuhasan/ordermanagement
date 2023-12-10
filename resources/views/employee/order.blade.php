@@ -55,7 +55,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                 <th>#</th>
                                 <th>Date</th>
                                 <th>Particular</th>
-                                <th>Pices</th>
+                                <th>Pieces</th>
                                 <th>Rate</th>
                                 <th>Total Amount</th>
                                 <th>Status</th>

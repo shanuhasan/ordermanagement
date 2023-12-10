@@ -39,9 +39,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="qty">Pices</label>
+                                    <label for="qty">Pieces</label>
                                     <input type="text" name="qty" id="qty" class="form-control"
-                                        placeholder="Pices" value="{{ $order->qty }}">
+                                        placeholder="Pieces" value="{{ $order->qty }}">
                                     <p class="error"></p>
                                 </div>
                             </div>

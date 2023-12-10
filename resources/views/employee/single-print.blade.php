@@ -45,7 +45,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                 <th style="border:1px solid #000;text-align:center">#</th>
                                 <th style="border:1px solid #000;text-align:center">Date</th>
                                 <th style="border:1px solid #000;text-align:center">Particular</th>
-                                <th style="border:1px solid #000;text-align:center">Pices</th>
+                                <th style="border:1px solid #000;text-align:center">Pieces</th>
                                 <th style="border:1px solid #000;text-align:center">Rate</th>
                                 <th style="border:1px solid #000;text-align:center">Total</th>
                             </tr>
