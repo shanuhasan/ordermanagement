@@ -94,9 +94,10 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             </tr>
                         </thead>
                         <tbody>
+                            <?php $total1 = 0;
+                            $i = 1; ?>
                             @if ($paymentHistory->isNotEmpty())
-                                <?php $total1 = 0;
-                                $i = 1; ?>
+
                                 @foreach ($paymentHistory as $item)
                                     <tr style="border:1px solid #000">
                                         <td style="border:1px solid #000;text-align:center">{{ $i++ }}</td>
