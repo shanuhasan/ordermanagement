@@ -74,4 +74,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/employee/{employee_id}/edit',[EmployeeController::class,'edit'])->name('employee.edit');
     Route::put('/employee/{employee_id}',[EmployeeController::class,'update'])->name('employee.update');
     Route::get('/employee/{employee_id}',[EmployeeController::class,'destroy'])->name('employee.delete');
+
+    Route::get('/employee/order/{id}', [EmployeeController::class, 'order'])->name('employee.order');
+    Route::get('/employee/order/{id}/create',[EmployeeController::class,'orderCreate'])->name('employee.order.create');
+    Route::post('/employee/order/store',[EmployeeController::class,'orderStore'])->name('employee.order.store');
+    Route::get('/employee/order/{employeeId}/{orderId}/edit',[EmployeeController::class,'orderEdit'])->name('employee.order.edit');
+    Route::post('/employee/order/{id}',[EmployeeController::class,'orderUpdate'])->name('employee.order.update');
+    Route::post('/employee-order-payment',[EmployeeController::class,'orderPayment'])->name('employee.order.payment');
 });

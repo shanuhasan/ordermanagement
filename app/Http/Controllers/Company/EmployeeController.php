@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Company;
 
+use App\Models\Order;
 use App\Models\Employee;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
 class EmployeeController extends Controller
@@ -152,5 +155,175 @@ class EmployeeController extends Controller
             'message'=>'Employee deleted successfully.'
         ]);
 
+    }
+
+    public function order($id,Request $request)
+    {
+        $companyId = Auth::guard('web')->user()->company_id;
+
+        if(empty(employeeExist($id)))
+        {
+            return redirect()->route('employee.index');
+        }
+
+        $orders = Order::where('employee_id',$id)
+                        ->where('company_id',$companyId)
+                        ->paginate(10);
+        $data['orders'] = $orders;
+        $data['employeeId'] = $id;
+
+        $totalAmount = Order::where('employee_id',$id)
+                            ->where('company_id',$companyId)
+                            ->sum('total_amount');
+
+        $employeeTotalPayment = OrderItem::where('employee_id',$id)
+                                        ->where('company_id',$companyId)
+                                        ->sum('amount');
+
+        $employeePaymentHistory = OrderItem::where('employee_id',$id)
+                                    ->where('company_id',$companyId)
+                                    ->get();
+
+        $data['totalAmount'] = $totalAmount;
+        $data['employeeTotalPayment'] = $employeeTotalPayment;
+        $data['employeePaymentHistory'] = $employeePaymentHistory;
+
+        return view('employee.order',$data);
+
+    }
+
+    public function orderCreate($id){
+        if(empty(employeeExist($id)))
+        {
+            return redirect()->route('employee.index');
+        }
+        $employeeId = $id;
+        return view('employee.order-create',compact('employeeId'));
+    }
+
+    public function orderStore(Request $request){
+        $companyId = Auth::guard('web')->user()->company_id;
+
+        $validator = Validator::make($request->all(),[
+            'employee_id'=>'required',
+            'particular'=>'required',
+            'qty'=>'required',
+            'rate'=>'required',
+        ]);
+
+        if($validator->passes()){
+            $model = new Order();
+            $model->company_id = $companyId;
+            $model->employee_id = $request->employee_id;
+            $model->particular = $request->particular;
+            $model->qty = $request->qty;
+            $model->rate = $request->rate;
+            $model->total_amount = $request->qty * $request->rate;
+            $model->save();
+
+            session()->flash('success','Add New added successfully.');
+            return response()->json([
+                'status'=>true,
+                'employeeId'=>$request->employee_id,
+            ]);
+
+        }else{
+            return response()->json([
+                'status'=>false,
+                'errors'=>$validator->errors()
+            ]);
+        }
+    }
+
+    public function orderEdit($employeeId,$orderId){
+
+        if(empty(employeeExist($employeeId)))
+        {
+            return redirect()->route('employee.index');
+        }
+        $order = Order::where('id',$orderId)
+                        ->where('employee_id',$employeeId)
+                        ->first();
+        if(empty($order))
+        {
+            return redirect()->route('orders.index');
+        }
+
+        $orderDetail = OrderItem::where('order_id',$order->id)->get();
+
+        $data['order'] = $order;
+        $data['orderDetail'] = $orderDetail;
+        $data['employeeId'] = $employeeId;
+
+        return view('employee.order-edit',$data);
+        
+    }
+
+    public function orderUpdate($id, Request $request){
+
+        $companyId = Auth::guard('web')->user()->company_id;
+        $model = Order::find($id);
+        if(empty($model))
+        {
+            return redirect()->route('employee.index')->with('error','Order not found.');
+        }
+
+        $validator = Validator::make($request->all(),[
+            'employee_id'=>'required',
+            'particular'=>'required',
+            'qty'=>'required',
+            'rate'=>'required',
+        ]);
+
+        if($validator->passes()){
+
+            $model->company_id = $companyId;
+            $model->employee_id = $request->employee_id;
+            $model->particular = $request->particular;
+            $model->qty = $request->qty;
+            $model->rate = $request->rate;
+            $model->total_amount = $request->qty * $request->rate;
+            $model->save();
+
+            session()->flash('success','Updated successfully.');
+            return response()->json([
+                'status'=>true,
+                'employeeId'=>$request->employee_id,
+            ]);
+
+        }else{
+            return response()->json([
+                'status'=>false,
+                'errors'=>$validator->errors()
+            ]);
+        }
+    }
+
+    public function orderPayment(Request $request)
+    {
+        if(empty(employeeExist($request->employee_id)))
+        {
+            return redirect()->route('employee.index');
+        }
+        $companyId = Auth::guard('web')->user()->company_id;
+        $validator = Validator::make($request->all(),[
+            'amount'=>'required|numeric',
+        ]);
+
+        if($validator->passes())
+        {
+            if(!empty($request->amount) && $request->amount > 0)
+            {
+                $model = new OrderItem();
+                $model->company_id = $companyId;
+                $model->employee_id = $request->employee_id;
+                $model->amount = $request->amount;
+                $model->save();
+            }
+            return redirect()->back()->with('success','Payment updated successfully.');
+        }else{
+            return Redirect::back()->withErrors($validator);
+        }
+        
     }
 }
