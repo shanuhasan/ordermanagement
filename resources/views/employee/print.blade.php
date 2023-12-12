@@ -75,6 +75,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                 <td style="border:1px solid #000;text-align:center"></td>
                                 <td style="border:1px solid #000;text-align:center"></td>
                                 <td style="border:1px solid #000;text-align:center"></td>
+                                <td style="border:1px solid #000;text-align:center"></td>
                                 <td style="border:1px solid #000;text-align:center;font-weight:bold">Total</td>
                                 <td style="border:1px solid #000;text-align:center;font-weight:bold">₹{{ $total }}
                                 </td>
