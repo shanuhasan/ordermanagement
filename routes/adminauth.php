@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UploadImageController;
 use App\Http\Controllers\Admin\Auth\PasswordController;
@@ -82,6 +83,23 @@ Route::group(['middleware'=>['auth:admin'],'prefix'=>'admin','as'=>'admin.'],fun
     Route::get('/user/{user_id}/edit',[UserController::class,'edit'])->name('user.edit');
     Route::put('/user/{user_id}',[UserController::class,'update'])->name('user.update');
     Route::delete('/user/{user_id}',[UserController::class,'destroy'])->name('user.delete');
+
+     //employee management
+     Route::get('/employee', [EmployeeController::class, 'index'])->name('employee.index');
+     Route::get('/employee/create',[EmployeeController::class,'create'])->name('employee.create');
+     Route::post('/employee/store',[EmployeeController::class,'store'])->name('employee.store');
+     Route::get('/employee/{employee_id}/edit',[EmployeeController::class,'edit'])->name('employee.edit');
+     Route::put('/employee/{employee_id}',[EmployeeController::class,'update'])->name('employee.update');
+     Route::get('/employee/{employee_id}',[EmployeeController::class,'destroy'])->name('employee.delete');
+ 
+     Route::get('/employee/order/{id}', [EmployeeController::class, 'order'])->name('employee.order');
+     Route::get('/employee/order/{id}/create',[EmployeeController::class,'orderCreate'])->name('employee.order.create');
+     Route::post('/employee/order/store',[EmployeeController::class,'orderStore'])->name('employee.order.store');
+     Route::get('/employee/order/{employeeId}/{orderId}/edit',[EmployeeController::class,'orderEdit'])->name('employee.order.edit');
+     Route::post('/employee/order/{id}',[EmployeeController::class,'orderUpdate'])->name('employee.order.update');
+     Route::post('/employee-order-payment',[EmployeeController::class,'orderPayment'])->name('employee.order.payment');
+     Route::get('/employee-order-singleprint/{employeeId}/{orderId}',[EmployeeController::class,'singlePrint'])->name('employee.order.singleprint');
+     Route::get('/employee-order-print/{employeeId}',[EmployeeController::class,'orderPrint'])->name('employee.order.print');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

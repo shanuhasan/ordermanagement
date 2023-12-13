@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Models\Company;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -34,4 +35,26 @@ function getStatus()
         '1'=>'Complete',
     ];
     return $list;
+}
+
+function getCompany()
+{
+    $company =  Company::where('status',1)->get();
+    
+    if(empty($company))
+    {
+        return '';
+    }
+    return $company;
+}
+
+function companyName($id)
+{
+    $company =  Company::find($id);
+    
+    if(empty($company))
+    {
+        return '';
+    }
+    return $company->name;
 }

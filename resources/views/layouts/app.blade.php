@@ -46,18 +46,20 @@
                     </a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link p-0 pr-3" data-toggle="dropdown" href="#">
-                        <img src="{{ asset('admin-assets/img/avatar5.png') }}" class='img-circle elevation-2'
-                            width="40" height="40" alt="">
+                    <a class="nav-link p-0 pr-3" data-toggle="dropdown" href="javascript:void(0);">
+                        <img src="{{ !empty(Auth::guard('web')->user()->image) ? asset('uploads/user/' . Auth::guard('web')->user()->image) : asset('admin-assets/img/avatar5.png') }}"
+                            class='img-circle elevation-2' width="40" height="40" alt="">
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-3">
                         <h4 class="h4 mb-0"><strong>{{ Auth::guard('web')->user()->name }}</strong></h4>
                         <div class="mb-3">{{ Auth::guard('web')->user()->email }}</div>
                         <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-user-cog mr-2"></i> Settings
+                        <a href="{{ route('profile.edit') }}" class="dropdown-item">
+                            <i class="fas fa-user mr-2"></i> Profile
                         </a>
-                        <div class="dropdown-divider"></div>
+                        <a href="{{ route('profile.changePassword') }}" class="dropdown-item">
+                            <i class="fas fa-lock mr-2"></i> Change Password
+                        </a>
                         <div class="dropdown-divider"></div>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
