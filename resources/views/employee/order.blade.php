@@ -16,7 +16,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                     </h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('employee.order.create', $employeeId) }}" class="btn btn-primary">Add New</a>
+                    <a href="{{ route('employee.order.create', $employeeId) }}" class="btn btn-primary">Add</a>
                     <a href="{{ route('employee.order.print', $employeeId) }}" class="btn btn-success">Print</a>
                 </div>
             </div>
@@ -131,27 +131,28 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             @csrf
                             <input type="hidden" value="{{ $employeeId }}" name="employee_id" id="employee_id">
                             <div class="card">
+                                <h5 style="text-align: center;font-weight:bold;background:gray;">ADVANCE</h5>
                                 <div class="card-body">
-                                    <span style="font-size: 24px;">
-                                        Total Amount :-
-                                        <strong>₹{{ $totalAmount }}</strong><br>
-                                        Paid Amount :-
-                                        <strong>₹{{ $employeeTotalPayment }}</strong><br>
-                                        Remaining Balance :-
-                                        <strong>₹{{ $totalAmount - $employeeTotalPayment }}</strong>
-                                    </span>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label for="order_no">Advance Amount</label>
                                                 <input type="text" name="amount"
                                                     class="form-control @error('amount') is-invalid	@enderror"
-                                                    placeholder="Amount">
+                                                    placeholder="Advance Amount">
                                                 @error('amount')
                                                     <p class="invalid-feedback">{{ $message }}</p>
                                                 @enderror
                                             </div>
                                             <button type="submit" class="btn btn-success">Submit</button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <p>Total Amount :- <strong>₹{{ $totalAmount }}</strong></p>
+                                                <p>Paid Amount :- <strong>₹{{ $employeeTotalPayment }}</strong></p>
+                                                <p>Remaining Amount :-
+                                                    <strong>₹{{ $totalAmount - $employeeTotalPayment }}</strong>
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -163,6 +164,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             <!-- Default box -->
                             <div class="container-fluid">
                                 <div class="card">
+                                    <h5 style="text-align: center;font-weight:bold;background:gray;">PAID AMOUNT</h5>
                                     <div class="card-body table-responsive p-0">
                                         <table class="table table-hover text-nowrap">
                                             <thead>
@@ -172,12 +174,14 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <?php $total = 0; ?>
                                                 @if ($employeePaymentHistory->isNotEmpty())
                                                     @foreach ($employeePaymentHistory as $item)
                                                         <tr>
                                                             <td>{{ date('d-m-Y', strtotime($item->created_at)) }}</td>
                                                             <td>₹{{ $item->amount }}</td>
                                                         </tr>
+                                                        <?php $total += $item->amount; ?>
                                                     @endforeach
                                                 @else
                                                     <tr>
@@ -185,11 +189,21 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                                     </tr>
                                                 @endif
                                             </tbody>
+                                            <tfoot>
+                                                <tr style="background: green;color:#fff;">
+                                                    <td><strong>Paid</strong></td>
+                                                    <td><strong>₹{{ $total }}</strong></td>
+                                                </tr>
+                                                <tr style="background: red;color:#fff;">
+                                                    <td><strong>Remaining</strong></td>
+                                                    <td><strong>₹{{ $totalAmount - $employeeTotalPayment }}</strong></td>
+                                                </tr>
+                                            </tfoot>
                                         </table>
                                     </div>
-                                    <div class="card-footer clearfix">
+                                    {{-- <div class="card-footer clearfix">
                                         {{ $employeePaymentHistory->links('pagination::bootstrap-5') }}
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <!-- /.card -->

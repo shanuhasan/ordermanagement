@@ -11,10 +11,10 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Add New ({{ $employeeDetail->name }} , {{ $employeeDetail->phone }})</h1>
+                    <h1>{{ $employeeDetail->name }} ({{ $employeeDetail->phone }}) Add</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('employee.index') }}" class="btn btn-primary">Back</a>
+                    <a href="{{ route('employee.order', $employeeId) }}" class="btn btn-primary">Back</a>
                 </div>
             </div>
         </div>
