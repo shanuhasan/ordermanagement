@@ -27,6 +27,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
             <form action="" id="employeeForm" method="post">
                 @csrf
                 <input type="hidden" value="{{ $employeeId }}" name="employee_id">
+                <input type="hidden" name="company" value="{{ $employeeDetail->company_id }}">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">

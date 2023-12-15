@@ -159,7 +159,7 @@ class EmployeeController extends Controller
 
         $employeePaymentHistory = OrderItem::where('employee_id',$id)
                                     // ->where('company_id',$companyId)
-                                    ->paginate(20);
+                                    ->paginate(1000);
 
         $data['totalAmount'] = $totalAmount;
         $data['employeeTotalPayment'] = $employeeTotalPayment;
@@ -176,8 +176,7 @@ class EmployeeController extends Controller
     }
 
     public function orderStore(Request $request){
-        $companyId = Auth::guard('web')->user()->company_id;
-
+        
         $validator = Validator::make($request->all(),[
             'employee_id'=>'required',
             'particular'=>'required',
@@ -187,7 +186,7 @@ class EmployeeController extends Controller
 
         if($validator->passes()){
             $model = new Order();
-            $model->company_id = $companyId;
+            $model->company_id = $request->company;
             $model->employee_id = $request->employee_id;
             $model->particular = $request->particular;
             $model->qty = $request->qty;
@@ -230,7 +229,6 @@ class EmployeeController extends Controller
 
     public function orderUpdate($id, Request $request){
 
-        $companyId = Auth::guard('web')->user()->company_id;
         $model = Order::find($id);
         if(empty($model))
         {
@@ -246,7 +244,7 @@ class EmployeeController extends Controller
 
         if($validator->passes()){
 
-            $model->company_id = $companyId;
+            $model->company_id = $request->company;
             $model->employee_id = $request->employee_id;
             $model->particular = $request->particular;
             $model->qty = $request->qty;
@@ -271,7 +269,6 @@ class EmployeeController extends Controller
 
     public function orderPayment(Request $request)
     {
-        $companyId = Auth::guard('web')->user()->company_id;
         $validator = Validator::make($request->all(),[
             'amount'=>'required|numeric',
         ]);
@@ -308,14 +305,10 @@ class EmployeeController extends Controller
 
     public function orderPrint($employeeId)
     {
-        $companyId = Auth::guard('web')->user()->company_id;
-
         $orders = Order::where('employee_id',$employeeId)
-                        ->where('company_id',$companyId)
                         ->get();
 
         $paymentHistory = OrderItem::where('employee_id',$employeeId)
-                            ->where('company_id',$companyId)
                             ->get();
 
         return view('admin.employee.print',[

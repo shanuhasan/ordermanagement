@@ -40,7 +40,7 @@
                                     <select name="company" id="" class="form-control">
                                         <option value="">select</option>
                                         @foreach (getCompany() as $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                            <option value="{{ $item->id }}" {{Request::get('company') == $item->id ? 'selected':'' }}>{{ $item->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>

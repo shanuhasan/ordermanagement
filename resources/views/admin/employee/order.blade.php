@@ -13,7 +13,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>{{ $employeeDetail->name }} ({{ $employeeDetail->phone }})
-                        {{ @companyName($orders[0]->company_id) }}
+                        {{ companyName($employeeDetail->company_id) }}
                     </h1>
                 </div>
                 <div class="col-sm-6 text-right">
@@ -145,7 +145,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="order_no">Advance Amount</label>
-                                                <input type="hidden" name="company" value="{{ $orders[0]->company_id }}">
+                                                <input type="hidden" name="company"
+                                                    value="{{ $employeeDetail->company_id }}">
                                                 <input type="text" name="amount"
                                                     class="form-control @error('amount') is-invalid	@enderror"
                                                     placeholder="Amount">
@@ -165,6 +166,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             <!-- Default box -->
                             <div class="container-fluid">
                                 <div class="card">
+                                    <h5 style="text-align: center;font-weight:bold">PAID AMOUNT</h5>
                                     <div class="card-body table-responsive p-0">
                                         <table class="table table-hover text-nowrap">
                                             <thead>
@@ -174,12 +176,14 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <?php $total = 0; ?>
                                                 @if ($employeePaymentHistory->isNotEmpty())
                                                     @foreach ($employeePaymentHistory as $item)
                                                         <tr>
                                                             <td>{{ date('d-m-Y', strtotime($item->created_at)) }}</td>
                                                             <td>₹{{ $item->amount }}</td>
                                                         </tr>
+                                                        <?php $total += $item->amount; ?>
                                                     @endforeach
                                                 @else
                                                     <tr>
@@ -187,11 +191,17 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                                     </tr>
                                                 @endif
                                             </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td><strong>Total</strong></td>
+                                                    <td><strong>₹{{ $total }}</strong></td>
+                                                </tr>
+                                            </tfoot>
                                         </table>
                                     </div>
-                                    <div class="card-footer clearfix">
+                                    {{-- <div class="card-footer clearfix">
                                         {{ $employeePaymentHistory->links('pagination::bootstrap-5') }}
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <!-- /.card -->

@@ -21,7 +21,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.company.index') }}" class="nav-link @yield('company')">
-                        <i class="nav-icon  fas fa-users"></i>
+                        <i class="nav-icon  fas fa-building"></i>
                         <p>Company</p>
                     </a>
                 </li>
@@ -33,7 +33,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.employee.index') }}" class="nav-link @yield('employee')">
-                        <i class="nav-icon fas fa-users"></i>
+                        <i class="nav-icon fas fa-user-tie"></i>
                         <p>Employee</p>
                     </a>
                 </li>
