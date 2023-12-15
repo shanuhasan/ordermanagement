@@ -78,11 +78,26 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                     ?>
                                     <tr>
                                         <td>{{ $i++ }}</td>
-                                        <td>{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
-                                        <td>{{ $order->particular }}</td>
+                                        <td>
+                                            <a
+                                                href="{{ route('employee.order.edit', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
+                                                {{ date('d-m-Y', strtotime($order->created_at)) }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a
+                                                href="{{ route('employee.order.edit', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
+                                                {{ $order->particular }}
+                                            </a>
+                                        </td>
                                         <td>{{ $order->qty }}</td>
                                         <td>₹{{ $order->rate }}</td>
-                                        <td>₹{{ $order->total_amount }}</td>
+                                        <td>
+                                            <a
+                                                href="{{ route('employee.order.edit', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
+                                                ₹{{ $order->total_amount }}
+                                            </a>
+                                        </td>
                                         <td
                                             style="{{ $order->status == 0 ? 'background:red;color:#fff;font-weight:bold;' : 'background:green;color:#fff;font-weight:bold;' }}">
                                             @if ($order->status == 0)
@@ -137,7 +152,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <input type="text" name="amount"
-                                                    class="form-control @error('amount') is-invalid	@enderror"
+                                                    class="form-control only-number @error('amount') is-invalid	@enderror"
                                                     placeholder="Advance Amount">
                                                 @error('amount')
                                                     <p class="invalid-feedback">{{ $message }}</p>
