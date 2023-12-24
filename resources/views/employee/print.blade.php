@@ -117,9 +117,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                 @endforeach
                             @else
                                 <tr style="border:1px solid #000">
-                                    <td></td>
-                                    <td style="text-align:center">No Advance Amount.</td>
-                                    <td></td>
+                                    <td style="border:1px solid #000;text-align:center"></td>
+                                    <td style="border:1px solid #000;text-align:center">No Advance Amount.</td>
+                                    <td style="border:1px solid #000;text-align:center"></td>
                                 </tr>
                             @endif
                         </tbody>
