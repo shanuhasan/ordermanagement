@@ -30,7 +30,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="particular">Particular</label>
                                     <input type="text" name="particular" id="particular" class="form-control"
@@ -38,7 +38,19 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                     <p class="error"></p>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="size">Size</label>
+                                    <select name="size" id="size" class="form-control">
+                                        <option value="">Select Size</option>
+                                        @foreach (getSize() as $key => $item)
+                                            <option value="{{ $key }}">{{ $item }}</option>
+                                        @endforeach
+                                    </select>
+                                    <p class="error"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="qty">Pieces</label>
                                     <input type="text" name="qty" id="qty" class="form-control"
@@ -46,7 +58,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                     <p class="error"></p>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="rate">Rate</label>
                                     <input type="text" name="rate" id="rate" class="form-control"

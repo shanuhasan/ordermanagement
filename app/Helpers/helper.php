@@ -36,6 +36,17 @@ function getStatus()
     ];
     return $list;
 }
+function getSize()
+{
+    $list = [
+        'S'=>'S',
+        'M'=>'M',
+        'L'=>'L',
+        'XL'=>'XL',
+        'XXL'=>'XXL',
+    ];
+    return $list;
+}
 
 function getCompany()
 {

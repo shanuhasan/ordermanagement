@@ -207,6 +207,7 @@ class EmployeeController extends Controller
         $validator = Validator::make($request->all(),[
             'employee_id'=>'required',
             'particular'=>'required',
+            'size'=>'required',
             'qty'=>'required',
             'rate'=>'required',
         ]);
@@ -216,6 +217,7 @@ class EmployeeController extends Controller
             $model->company_id = $companyId;
             $model->employee_id = $request->employee_id;
             $model->particular = $request->particular;
+            $model->size = $request->size;
             $model->qty = $request->qty;
             $model->rate = $request->rate;
             $model->total_amount = $request->qty * $request->rate;
@@ -271,6 +273,7 @@ class EmployeeController extends Controller
         $validator = Validator::make($request->all(),[
             'employee_id'=>'required',
             'particular'=>'required',
+            'size'=>'required',
             'qty'=>'required',
             'rate'=>'required',
         ]);
@@ -280,6 +283,7 @@ class EmployeeController extends Controller
             $model->company_id = $companyId;
             $model->employee_id = $request->employee_id;
             $model->particular = $request->particular;
+            $model->size = $request->size;
             $model->qty = $request->qty;
             $model->rate = $request->rate;
             $model->total_amount = $request->qty * $request->rate;

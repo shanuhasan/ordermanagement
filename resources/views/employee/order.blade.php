@@ -55,6 +55,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                 <th>#</th>
                                 <th>Date</th>
                                 <th>Particular</th>
+                                <th>Size</th>
                                 <th>Pieces</th>
                                 <th>Rate</th>
                                 <th>Total Amount</th>
@@ -81,7 +82,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                         <td>
                                             <a
                                                 href="{{ route('employee.order.edit', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
-                                                {{ date('d-m-Y', strtotime($order->created_at)) }}
+                                                {{ date('d-m-Y H:i A', strtotime($order->created_at)) }}
                                             </a>
                                         </td>
                                         <td>
@@ -90,6 +91,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                                 {{ $order->particular }}
                                             </a>
                                         </td>
+                                        <td>{{ $order->size }}</td>
                                         <td>{{ $order->qty }}</td>
                                         <td>₹{{ $order->rate }}</td>
                                         <td>
@@ -193,7 +195,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                                 @if ($employeePaymentHistory->isNotEmpty())
                                                     @foreach ($employeePaymentHistory as $item)
                                                         <tr>
-                                                            <td>{{ date('d-m-Y', strtotime($item->created_at)) }}</td>
+                                                            <td>{{ date('d-m-Y H:i A', strtotime($item->created_at)) }}
+                                                            </td>
                                                             <td>₹{{ $item->amount }}</td>
                                                         </tr>
                                                         <?php $total += $item->amount; ?>
