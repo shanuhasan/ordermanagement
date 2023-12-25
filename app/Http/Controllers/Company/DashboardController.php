@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Company;
 
 use App\Models\Order;
 use App\Models\Employee;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -17,17 +18,26 @@ class DashboardController extends Controller
                             ->where('company_id',$companyId)
                             ->count();
 
-        $totalComplete = Order::where('status','=','1')
+        $totalComplete = Order::where('status','=','Completed')
                             ->where('company_id',$companyId)
                             ->count();
-        $totalPending = Order::where('status','!=','1')
+
+        $totalPending = Order::where('status','=','Pending')
                             ->where('company_id',$companyId)
                             ->count();
+
+        $totalAmount = Order::where('company_id',$companyId)
+                            ->sum('total_amount');
+
+        $paidAmount = OrderItem::where('company_id',$companyId)
+                                ->sum('amount');
 
         return view('dashboard',[
             'totalEmployee'=>$totalEmployee,
             'totalComplete'=>$totalComplete,
             'totalPending'=>$totalPending,
+            'totalAmount'=>$totalAmount,
+            'paidAmount'=>$paidAmount,
         ]);
     }
 }

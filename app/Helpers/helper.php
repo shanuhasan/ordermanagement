@@ -36,6 +36,16 @@ function getStatus()
     ];
     return $list;
 }
+
+function itemStatus()
+{
+    $list = [
+        'Pending'=>'Pending',
+        'Completed'=>'Completed',
+    ];
+    return $list;
+}
+
 function getSize()
 {
     $list = [

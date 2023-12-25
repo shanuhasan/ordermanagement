@@ -60,6 +60,20 @@
                                 </div>
                             </div>
 
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="status">Status</label>
+                                    <select name="status" class="form-control">
+                                        <option value="">select</option>
+                                        @foreach (itemStatus() as $key => $item)
+                                            <option value="{{ $key }}"
+                                                {{ Request::get('status') == $key ? 'selected' : '' }}>{{ $item }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </form>
@@ -95,13 +109,15 @@
                                 <?php $i = 1; ?>
                                 @foreach ($orders as $order)
                                     <?php
-                                    $advAmt = 0;
-                                    $orderDetail = \App\Models\OrderItem::where('order_id', $order->id)->get();
-                                    if (!empty($orderDetail)) {
-                                        foreach ($orderDetail as $k => $vl) {
-                                            $advAmt += $vl->amount;
-                                        }
+                                    $emp = false;
+                                    $model = App\Models\Employee::getSingleEmployee($order->employee_id);
+                                    
+                                    if (empty($model)) {
+                                        continue;
                                     }
+                                    // echo '<pre>';
+                                    // print_r($model);
+                                    // die();
                                     ?>
                                     <tr>
                                         <td>{{ $i++ }}</td>
@@ -119,11 +135,11 @@
                                             ₹{{ $order->total_amount }}
                                         </td>
                                         <td
-                                            style="{{ $order->status == 0 ? 'background:red;color:#fff;font-weight:bold;' : 'background:green;color:#fff;font-weight:bold;' }}">
-                                            @if ($order->status == 0)
+                                            style="{{ $order->status == 'Pending' ? 'background:red;color:#fff;font-weight:bold;' : 'background:green;color:#fff;font-weight:bold;' }}">
+                                            @if ($order->status == 'Pending')
                                                 Pending
                                             @else
-                                                Complete
+                                                Completed
                                             @endif
                                         </td>
                                         {{-- <td>

@@ -46,8 +46,9 @@
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">More info <i
-                                class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('items.index', ['status' => 'Completed']) }}"
+                            class="small-box-footer text-dark">More info
+                            <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
 
@@ -60,8 +61,48 @@
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">More info <i
-                                class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('items.index', ['status' => 'Pending']) }}"
+                            class="small-box-footer text-dark">More info
+                            <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-6">
+                    <div class="small-box card">
+                        <div class="inner" style="background:rgb(255, 147, 6);color:#fff">
+                            <h3>₹{{ $totalAmount }}</h3>
+                            <p>Total Amount</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-6">
+                    <div class="small-box card">
+                        <div class="inner" style="background:green;color:#fff">
+                            <h3>₹{{ $paidAmount }}</h3>
+                            <p>Paid Amount</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-6">
+                    <div class="small-box card">
+                        <div class="inner" style="background:red;color:#fff">
+                            <h3>₹{{ $totalAmount - $paidAmount }}</h3>
+                            <p>Remaining Amount</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>
                 </div>
 

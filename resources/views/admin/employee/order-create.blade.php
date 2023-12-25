@@ -59,7 +59,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                 <div class="mb-3">
                                     <label for="rate">Status</label>
                                     <select name="status" id="status" class="form-control">
-                                        @foreach (getStatus() as $key => $item)
+                                        @foreach (itemStatus() as $key => $item)
                                             <option value="{{ $key }}">{{ $item }}</option>
                                         @endforeach
                                     </select>

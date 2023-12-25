@@ -104,11 +104,11 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                             </a>
                                         </td>
                                         <td
-                                            style="{{ $order->status == 0 ? 'background:red;color:#fff;font-weight:bold;' : 'background:green;color:#fff;font-weight:bold;' }}">
-                                            @if ($order->status == 0)
+                                            style="{{ $order->status == 'Pending' ? 'background:red;color:#fff;font-weight:bold;' : 'background:green;color:#fff;font-weight:bold;' }}">
+                                            @if ($order->status == 'Pending')
                                                 Pending
                                             @else
-                                                Complete
+                                                Completed
                                             @endif
                                         </td>
                                         <td>

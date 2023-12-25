@@ -417,6 +417,12 @@ class EmployeeController extends Controller
         {
             $orders = $orders->where('employee_id','=', $request->get('employee_id'));
         }
+
+        if(!empty($request->get('status')))
+        {
+            $orders = $orders->where('status','=', $request->get('status'));
+        }
+        
         $orders = $orders->paginate(20);
 
         $data['orders'] = $orders;

@@ -20,4 +20,16 @@ class Employee extends Model
                         ->orderBy('name','ASC')
                         ->get();
     }
+
+    static public function getSingleEmployee($id)
+    {
+        $companyId = Auth::guard('web')->user()->company_id;
+
+        return self::where('status',1)
+                        ->where('id',$id)
+                        ->where('company_id',$companyId)
+                        ->where('is_deleted','!=',1)
+                        ->orderBy('name','ASC')
+                        ->first();
+    }
 }
