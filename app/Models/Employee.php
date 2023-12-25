@@ -11,6 +11,9 @@ class Employee extends Model
 
     static public function getEmployee()
     {
-        return self::where('status',1)->where('is_deleted',0)->orderBy('name','ASC')->get();
+        return self::where('status',1)
+                    ->where('is_deleted','!=',1)
+                    ->orderBy('name','ASC')
+                    ->get();
     }
 }
