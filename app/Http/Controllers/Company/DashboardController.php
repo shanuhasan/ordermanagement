@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Company;
 
+use App\Models\Order;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,8 +16,18 @@ class DashboardController extends Controller
         $totalEmployee = Employee::where('is_deleted','!=','1')
                             ->where('company_id',$companyId)
                             ->count();
+
+        $totalComplete = Order::where('status','=','1')
+                            ->where('company_id',$companyId)
+                            ->count();
+        $totalPending = Order::where('status','!=','1')
+                            ->where('company_id',$companyId)
+                            ->count();
+
         return view('dashboard',[
-            'totalEmployee'=>$totalEmployee
+            'totalEmployee'=>$totalEmployee,
+            'totalComplete'=>$totalComplete,
+            'totalPending'=>$totalPending,
         ]);
     }
 }

@@ -38,7 +38,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <div class="container-fluid">
             <div class="card">
                 <div class="card-body">
-                    <h2>{{ $employeeDetail->name }} ({{ $employeeDetail->phone }})</h2>
+                    <h2>{{ $employeeDetail->name }}
+                        ({{ !empty($employeeDetail->code) ? 'Code:- ' . $employeeDetail->code . ',' : '' }}
+                        {{ !empty($employeeDetail->phone) ? 'Mobile:- ' . $employeeDetail->phone : '' }})</h2>
                     <table cellpadding="3" cellspacing='3' border="0" width="100%">
                         <thead style="background: #000;color:#ffffff">
                             <tr>

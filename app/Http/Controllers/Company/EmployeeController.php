@@ -20,9 +20,19 @@ class EmployeeController extends Controller
                                 ->where('company_id',$companyId)
                                 ->where('is_deleted','!=','1');
 
-        if(!empty($request->get('keyword')))
+        if(!empty($request->get('name')))
         {
-            $employees = $employees->where('name','like','%'.$request->get('keyword').'%');
+            $employees = $employees->where('name','like','%'.$request->get('name').'%');
+        }
+
+        if(!empty($request->get('code')))
+        {
+            $employees = $employees->where('code','=',$request->get('code'));
+        }
+
+        if(!empty($request->get('phone')))
+        {
+            $employees = $employees->where('phone','like','%'.$request->get('phone').'%');
         }
 
         $employees = $employees->paginate(20);
@@ -50,6 +60,7 @@ class EmployeeController extends Controller
             $model = new Employee();
             $model->name = $request->name;
             $model->phone = $request->phone;
+            $model->code = $request->code;
             $model->address = $request->address;
             $model->company_id = Auth::guard('web')->user()->company_id;
             $model->status = $request->status;
@@ -110,6 +121,7 @@ class EmployeeController extends Controller
 
             $model->name = $request->name;
             $model->phone = $request->phone;
+            $model->code = $request->code;
             $model->address = $request->address;
             $model->company_id = Auth::guard('web')->user()->company_id;
             $model->status = $request->status;
@@ -166,7 +178,7 @@ class EmployeeController extends Controller
             return redirect()->route('employee.index');
         }
 
-        $orders = Order::where('employee_id',$id)
+        $orders = Order::latest()->where('employee_id',$id)
                         ->where('company_id',$companyId)
                         ->paginate(20);
         $data['orders'] = $orders;
@@ -180,7 +192,7 @@ class EmployeeController extends Controller
                                         ->where('company_id',$companyId)
                                         ->sum('amount');
 
-        $employeePaymentHistory = OrderItem::where('employee_id',$id)
+        $employeePaymentHistory = OrderItem::latest()->where('employee_id',$id)
                                     ->where('company_id',$companyId)
                                     ->paginate(20);
 
@@ -220,6 +232,7 @@ class EmployeeController extends Controller
             $model->size = $request->size;
             $model->qty = $request->qty;
             $model->rate = $request->rate;
+            $model->status = $request->status;
             $model->total_amount = $request->qty * $request->rate;
             $model->save();
 
@@ -366,11 +379,11 @@ class EmployeeController extends Controller
 
         $companyId = Auth::guard('web')->user()->company_id;
 
-        $orders = Order::where('employee_id',$employeeId)
+        $orders = Order::latest()->where('employee_id',$employeeId)
                         ->where('company_id',$companyId)
                         ->get();
 
-        $paymentHistory = OrderItem::where('employee_id',$employeeId)
+        $paymentHistory = OrderItem::latest()->where('employee_id',$employeeId)
                             ->where('company_id',$companyId)
                             ->get();
 
@@ -380,5 +393,34 @@ class EmployeeController extends Controller
             'employeeId'=>$employeeId,
         ]);
         
+    }
+
+    public function items(Request $request)
+    {
+        $companyId = Auth::guard('web')->user()->company_id;
+
+        $orders = Order::latest()
+                        ->where('company_id',$companyId);
+
+        if(!empty($request->get('date')))
+        {
+            $orders = $orders->whereDate('created_at','=',$request->get('date'));
+        }
+
+        if(!empty($request->get('particular')))
+        {
+            $orders = $orders->where('particular','like', '%'.$request->get('particular').'%');
+        }
+
+        if(!empty($request->get('employee_id')))
+        {
+            $orders = $orders->where('employee_id','=', $request->get('employee_id'));
+        }
+        $orders = $orders->paginate(20);
+
+        $data['orders'] = $orders;
+
+        return view('employee.items',$data);
+
     }
 }

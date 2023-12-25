@@ -16,40 +16,60 @@
         </div>
         <!-- /.container-fluid -->
     </section>
+
+    <section class="content">
+        <!-- Default box -->
+        <div class="container-fluid">
+            <div class="card">
+                <form action="" method="get">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="name">Name</label>
+                                    <input type="text" name="name" class="form-control" placeholder="Name"
+                                        value="{{ Request::get('name') }}">
+                                </div>
+                                <button type="submit" class="btn btn-success">Filter</button>
+                                <a href="{{ route('employee.index') }}" class="btn btn-danger">Reset</a>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="code">Code</label>
+                                    <input type="text" name="code" class="form-control only-number" placeholder="Code"
+                                        value="{{ Request::get('code') }}">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="phone">Phone</label>
+                                    <input type="text" name="phone" class="form-control only-number"
+                                        placeholder="Phone" value="{{ Request::get('phone') }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.card -->
+    </section>
     <!-- Main content -->
     <section class="content">
         <!-- Default box -->
         <div class="container-fluid">
             @include('message')
             <div class="card">
-                <form action="" method="get">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <a href="{{ route('employee.index') }}" class="btn btn-danger">Reset</a>
-                        </div>
-                        <div class="card-tools">
-                            <div class="input-group input-group" style="width: 250px;">
-                                <input type="text" value="{{ Request::get('keyword') }}" name="keyword"
-                                    class="form-control float-right" placeholder="Search">
-
-                                <div class="input-group-append">
-                                    <button type="submit" class="btn btn-default">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
                 <div class="card-body table-responsive p-0">
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th width="60">S.No</th>
+                                <th>S.No</th>
                                 <th>Name</th>
+                                <th>Code</th>
                                 <th>Phone</th>
-                                <th width="100">Status</th>
-                                <th width="100">Action</th>
+                                <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,6 +81,9 @@
                                         <td><a href="{{ route('employee.order', $employee->id) }}">{{ $i++ }}</a>
                                         </td>
                                         <td><a href="{{ route('employee.order', $employee->id) }}">{{ $employee->name }}</a>
+                                        </td>
+                                        <td><a
+                                                href="{{ route('employee.order', $employee->id) }}">{{ $employee->code }}</a>
                                         </td>
                                         <td>{{ $employee->phone }}</td>
                                         <td>

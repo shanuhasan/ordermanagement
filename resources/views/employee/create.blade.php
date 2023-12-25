@@ -25,25 +25,33 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="name">Name</label>
+                                    <label for="name">Name*</label>
                                     <input type="text" name="name" id="name" class="form-control"
                                         placeholder="Name">
                                     <p class="error"></p>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="phone">Phone</label>
+                                    <label for="code">Code</label>
+                                    <input type="text" name="code" id="code" class="form-control"
+                                        placeholder="Code">
+                                    <p class="error"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="phone">Phone*</label>
                                     <input type="phone" name="phone" id="phone" class="form-control"
                                         placeholder="Phone">
                                     <p class="error"></p>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="status">Status</label>
+                                    <label for="status">Status*</label>
                                     <select name="status" id="status" class="form-control">
                                         <option value="1">Active</option>
                                         <option value="0">Block</option>

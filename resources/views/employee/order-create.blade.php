@@ -33,8 +33,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="particular">Particular</label>
-                                    <input type="text" name="particular" id="particular" class="form-control"
-                                        placeholder="Particular">
+                                    <input type="text" name="particular" id="particular"
+                                        class="form-control text-to-upper" placeholder="Particular">
                                     <p class="error"></p>
                                 </div>
                             </div>

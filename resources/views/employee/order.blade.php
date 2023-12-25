@@ -12,7 +12,10 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>{{ $employeeDetail->name }} ({{ $employeeDetail->phone }})
+                    <h1>
+                        {{ $employeeDetail->name }}
+                        ({{ !empty($employeeDetail->code) ? 'Code:- ' . $employeeDetail->code . ',' : '' }}
+                        {{ !empty($employeeDetail->phone) ? 'Mobile:- ' . $employeeDetail->phone : ' ' }})
                     </h1>
                 </div>
                 <div class="col-sm-6 text-right">

@@ -26,6 +26,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('items.index') }}" class="nav-link @yield('items')">
+                        <i class="nav-icon fas fa-list"></i>
+                        <p>Items</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('profile.edit') }}" class="nav-link @yield('profile')">
                         <i class="nav-icon fas fa-user"></i>
                         <p>Profile</p>

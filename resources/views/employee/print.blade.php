@@ -38,7 +38,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <div class="container-fluid">
             <div class="card">
                 <div class="card-body">
-                    <h2>{{ $employeeDetail->name }} ({{ $employeeDetail->phone }})</h2>
+                    <h2>{{ $employeeDetail->name }}
+                        ({{ !empty($employeeDetail->code) ? 'Code:- ' . $employeeDetail->code . ',' : '' }}
+                        {{ !empty($employeeDetail->phone) ? 'Mobile:- ' . $employeeDetail->phone : '' }})</h2>
                     <table cellpadding="3" cellspacing='3' border="0" width="100%">
                         <thead style="background: #000;color:#ffffff">
                             <tr>
@@ -57,7 +59,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                 <tr style="border:1px solid #000">
                                     <td style="border:1px solid #000;text-align:center">{{ $i++ }}</td>
                                     <td style="border:1px solid #000;text-align:center">
-                                        {{ date('d-m-Y', strtotime($item->created_at)) }}</td>
+                                        {{ date('d-m-Y h:i A', strtotime($item->created_at)) }}</td>
                                     <td style="border:1px solid #000;text-align:center">{{ $item->particular }}
                                     <td style="border:1px solid #000;text-align:center">{{ $item->qty }}
                                     </td>
@@ -103,7 +105,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                     <tr style="border:1px solid #000">
                                         <td style="border:1px solid #000;text-align:center">{{ $i++ }}</td>
                                         <td style="border:1px solid #000;text-align:center">
-                                            {{ date('d-m-Y', strtotime($item->created_at)) }}</td>
+                                            {{ date('d-m-Y h:i A', strtotime($item->created_at)) }}</td>
                                         <td
                                             style="border:1px
                                         solid #000;text-align:center">
