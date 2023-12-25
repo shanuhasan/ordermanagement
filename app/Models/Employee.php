@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Employee extends Model
 {
@@ -11,9 +12,12 @@ class Employee extends Model
 
     static public function getEmployee()
     {
+        $companyId = Auth::guard('web')->user()->company_id;
+
         return self::where('status',1)
-                    ->where('is_deleted','!=',1)
-                    ->orderBy('name','ASC')
-                    ->get();
+                        ->where('company_id',$companyId)
+                        ->where('is_deleted','!=',1)
+                        ->orderBy('name','ASC')
+                        ->get();
     }
 }

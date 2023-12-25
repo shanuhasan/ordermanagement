@@ -18,7 +18,8 @@ class EmployeeController extends Controller
         $companyId = Auth::guard('web')->user()->company_id;
         $employees = Employee::latest()
                                 ->where('company_id',$companyId)
-                                ->where('is_deleted','!=','1');
+                                ->where('is_deleted','!=','1')
+                                ->where('status','=','1');
 
         if(!empty($request->get('name')))
         {
