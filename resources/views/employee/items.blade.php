@@ -142,16 +142,12 @@
                                                 Completed
                                             @endif
                                         </td>
-                                        {{-- <td>
+                                        <td>
                                             <a
-                                                href="{{ route('employee.order.edit', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
+                                                href="{{ route('employee.order.edit', ['employeeId' => $order->employee_id, 'orderId' => $order->id]) }}">
                                                 <i class="fa fa-edit" aria-hidden="true"></i>
                                             </a>
-                                            <a
-                                                href="{{ route('employee.order.singleprint', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
-                                                <i class="fa fa-print" aria-hidden="true"></i>
-                                            </a>
-                                        </td> --}}
+                                        </td>
                                     </tr>
                                 @endforeach
                             @else
