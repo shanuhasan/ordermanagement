@@ -40,8 +40,8 @@
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
                         <div class="inner">
-                            <h3>{{ $totalComplete }}</h3>
-                            <p>Completed</p>
+                            <h3>{{ number_format($totalComplete) }}</h3>
+                            <p>Completed Pcs.</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -55,8 +55,8 @@
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
                         <div class="inner">
-                            <h3>{{ $totalPending }}</h3>
-                            <p>Pending</p>
+                            <h3>{{ number_format($totalPending) }}</h3>
+                            <p>Pending Pcs.</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -70,7 +70,7 @@
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
                         <div class="inner" style="background:rgb(255, 147, 6);color:#fff">
-                            <h3>₹{{ $totalAmount }}</h3>
+                            <h3>₹{{ number_format($totalAmount) }}</h3>
                             <p>Total Amount</p>
                         </div>
                         <div class="icon">
@@ -83,7 +83,7 @@
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
                         <div class="inner" style="background:green;color:#fff">
-                            <h3>₹{{ $paidAmount }}</h3>
+                            <h3>₹{{ number_format($paidAmount) }}</h3>
                             <p>Paid Amount</p>
                         </div>
                         <div class="icon">
@@ -96,7 +96,7 @@
                 <div class="col-lg-4 col-6">
                     <div class="small-box card">
                         <div class="inner" style="background:red;color:#fff">
-                            <h3>₹{{ $totalAmount - $paidAmount }}</h3>
+                            <h3>₹{{ number_format($totalAmount - $paidAmount) }}</h3>
                             <p>Remaining Amount</p>
                         </div>
                         <div class="icon">

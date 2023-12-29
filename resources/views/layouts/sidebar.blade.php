@@ -11,8 +11,12 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class
-        with font-awesome or any other icon font library -->
+                <li class="nav-item">
+                    <a href="javascript:void(0);" class="nav-link"
+                        style="background: green;color:#fff;font-weight:bold;font-size:24px;text-align:center">
+                        <p>{{ Auth::user()->name }}</p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('dashboard') }}" class="nav-link @yield('dashboard')">
                         <i class="nav-icon fas fa-tachometer-alt"></i>

@@ -19,12 +19,12 @@ class DashboardController extends Controller
                             ->count();
 
         $totalComplete = Order::where('status','=','Completed')
-                            ->where('company_id',$companyId)
-                            ->count();
+                                ->where('company_id',$companyId)
+                                ->sum('qty');
 
         $totalPending = Order::where('status','=','Pending')
                             ->where('company_id',$companyId)
-                            ->count();
+                            ->sum('qty');
 
         $totalAmount = Order::where('company_id',$companyId)
                             ->sum('total_amount');
