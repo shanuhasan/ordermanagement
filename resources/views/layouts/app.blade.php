@@ -34,6 +34,9 @@
                             class="fas fa-bars"></i></a>
                 </li>
             </ul>
+            <a href="javascript:void(0);" class="ml-auto" style="font-weight:bold;font-size:24px;text-align:center">
+                {{ Auth::user()->name }}
+            </a>
             <div class="navbar-nav pl-2">
                 <!-- <ol class="breadcrumb p-0 m-0 bg-white">
       <li class="breadcrumb-item active">Dashboard</li>
