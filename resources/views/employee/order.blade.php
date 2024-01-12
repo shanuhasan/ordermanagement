@@ -20,6 +20,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                 </div>
                 <div class="col-sm-6 text-right">
                     <a href="{{ route('employee.order.create', $employeeId) }}" class="btn btn-primary">Add</a>
+                    <a href="{{ route('employee.order.payment.history', $employeeId) }}" class="btn btn-info">Payment
+                        History</a>
                     <a href="{{ route('employee.order.print', $employeeId) }}" class="btn btn-success">Print</a>
                 </div>
             </div>
@@ -85,7 +87,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                         <td>
                                             <a
                                                 href="{{ route('employee.order.edit', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
-                                                {{ date('d-m-Y h:i A', strtotime($order->created_at)) }}
+                                                {{ !empty($order->date) ? date('d-m-Y', strtotime($order->date)) : date('d-m-Y h:i A', strtotime($order->created_at)) }}
                                             </a>
                                         </td>
                                         <td>
@@ -179,9 +181,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             </div>
                         </form>
                     </div>
-                    <div class="col-md-6">
+                    {{-- <div class="col-md-6">
                         <section class="content">
-                            <!-- Default box -->
                             <div class="container-fluid">
                                 <div class="card">
                                     <h5 style="text-align: center;font-weight:bold;background:gray;">PAID AMOUNT</h5>
@@ -222,14 +223,13 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                             </tfoot>
                                         </table>
                                     </div>
-                                    {{-- <div class="card-footer clearfix">
+                                    <div class="card-footer clearfix">
                                         {{ $employeePaymentHistory->links('pagination::bootstrap-5') }}
-                                    </div> --}}
+                                    </div>
                                 </div>
                             </div>
-                            <!-- /.card -->
                         </section>
-                    </div>
+                    </div> --}}
                 </div>
 
             </div>

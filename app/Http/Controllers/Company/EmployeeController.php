@@ -193,13 +193,13 @@ class EmployeeController extends Controller
                                         ->where('company_id',$companyId)
                                         ->sum('amount');
 
-        $employeePaymentHistory = OrderItem::latest()->where('employee_id',$id)
-                                    ->where('company_id',$companyId)
-                                    ->paginate(20);
+        // $employeePaymentHistory = OrderItem::latest()->where('employee_id',$id)
+        //                             ->where('company_id',$companyId)
+        //                             ->paginate(20);
 
         $data['totalAmount'] = $totalAmount;
         $data['employeeTotalPayment'] = $employeeTotalPayment;
-        $data['employeePaymentHistory'] = $employeePaymentHistory;
+        // $data['employeePaymentHistory'] = $employeePaymentHistory;
 
         return view('employee.order',$data);
 
@@ -234,6 +234,7 @@ class EmployeeController extends Controller
             $model->qty = $request->qty;
             $model->rate = $request->rate;
             $model->status = $request->status;
+            $model->date = $request->date;
             $model->total_amount = $request->qty * $request->rate;
             $model->save();
 
@@ -428,6 +429,36 @@ class EmployeeController extends Controller
         $data['orders'] = $orders;
 
         return view('employee.items',$data);
+
+    }
+
+    public function paymentHistory($id,Request $request)
+    {
+        $companyId = Auth::guard('web')->user()->company_id;
+
+        if(empty(employeeExist($id)))
+        {
+            return redirect()->route('employee.index');
+        }
+        $data['employeeId'] = $id;
+
+        $totalAmount = Order::where('employee_id',$id)
+                            ->where('company_id',$companyId)
+                            ->sum('total_amount');
+
+        $employeeTotalPayment = OrderItem::where('employee_id',$id)
+                    ->where('company_id',$companyId)
+                    ->sum('amount');
+
+        $employeePaymentHistory = OrderItem::latest()->where('employee_id',$id)
+                                    ->where('company_id',$companyId)
+                                    ->paginate(20);
+
+        $data['totalAmount'] = $totalAmount;
+        $data['employeeTotalPayment'] = $employeeTotalPayment;
+        $data['employeePaymentHistory'] = $employeePaymentHistory;
+
+        return view('employee.payment-history',$data);
 
     }
 }

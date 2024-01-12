@@ -53,7 +53,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="qty">Pieces</label>
-                                    <input type="text" name="qty" id="qty" class="form-control"
+                                    <input type="text" name="qty" id="qty" class="form-control only-number"
                                         placeholder="Pieces">
                                     <p class="error"></p>
                                 </div>
@@ -61,12 +61,20 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="rate">Rate</label>
-                                    <input type="text" name="rate" id="rate" class="form-control"
+                                    <input type="text" name="rate" id="rate" class="form-control only-number"
                                         placeholder="Rate">
                                     <p class="error"></p>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="date">Date</label>
+                                    <input type="date" name="date" id="date" class="form-control"
+                                        placeholder="Date" value="{{ date('Y-m-d') }}">
+                                    <p class="error"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="rate">Status</label>
                                     <select name="status" id="status" class="form-control">

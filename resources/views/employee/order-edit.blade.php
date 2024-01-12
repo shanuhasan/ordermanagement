@@ -55,7 +55,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="qty">Pieces</label>
-                                    <input type="text" name="qty" id="qty" class="form-control"
+                                    <input type="text" name="qty" id="qty" class="form-control only-number"
                                         placeholder="Pieces" value="{{ $order->qty }}">
                                     <p class="error"></p>
                                 </div>
@@ -63,8 +63,16 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="rate">Rate</label>
-                                    <input type="text" name="rate" id="rate" class="form-control"
+                                    <input type="text" name="rate" id="rate" class="form-control only-number"
                                         placeholder="Rate" value="{{ $order->rate }}">
+                                    <p class="error"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="date">Date</label>
+                                    <input type="date" name="date" id="date" class="form-control"
+                                        placeholder="Date" value="{{ $order->date }}">
                                     <p class="error"></p>
                                 </div>
                             </div>
