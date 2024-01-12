@@ -56,7 +56,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             <tr style="border:1px solid #000">
                                 <td style="border:1px solid #000;text-align:center"></td>
                                 <td style="border:1px solid #000;text-align:center">
-                                    {{ !empty($item->date) ? date('d-m-Y', strtotime($item->date)) : date('d-m-Y h:i A', strtotime($item->created_at)) }}
+                                    {{ !empty($order->date) ? date('d-m-Y', strtotime($order->date)) : date('d-m-Y h:i A', strtotime($order->created_at)) }}
                                 </td>
                                 <td style="border:1px solid #000;text-align:center">{{ $order->particular }}
                                 <td style="border:1px solid #000;text-align:center">{{ $order->qty }}
