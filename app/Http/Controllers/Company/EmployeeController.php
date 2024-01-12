@@ -303,6 +303,7 @@ class EmployeeController extends Controller
             $model->rate = $request->rate;
             $model->total_amount = $request->qty * $request->rate;
             $model->status = $request->status;
+            $model->date = $request->date;
             $model->save();
 
             session()->flash('success','Updated successfully.');
