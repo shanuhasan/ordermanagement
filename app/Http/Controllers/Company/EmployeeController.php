@@ -293,10 +293,12 @@ class EmployeeController extends Controller
 
         $orderDetail = OrderItem::where('order_id',$order->id)->get();
 
+        $pendingQty = $order->qty - receivedItems($orderId);
+
         $data['order'] = $order;
         $data['orderDetail'] = $orderDetail;
         $data['employeeId'] = $employeeId;
-        $data['pendingItem'] = $order->qty - receivedItems($orderId);
+        $data['pendingItem'] = $pendingQty;
 
         return view('employee.order-edit',$data);
         
@@ -306,6 +308,7 @@ class EmployeeController extends Controller
 
         $companyId = Auth::guard('web')->user()->company_id;
         $model = Order::find($id);
+        $pendingQty = $model->qty - receivedItems($id);
         if(empty($model))
         {
             return redirect()->route('employee.index')->with('error','Order not found.');
@@ -332,7 +335,7 @@ class EmployeeController extends Controller
             $model->date = $request->date;
             if($model->save())
             {
-                if(!empty($request->received_qty) && receivedItems($id) == $request->received_qty)
+                if(!empty($request->received_qty) && ($request->received_qty <= $pendingQty))
                 {
                     $rModel = new ReceivedItem();
                     $rModel->order_id = $id;
