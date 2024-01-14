@@ -26,7 +26,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Print</h1>
+                    <h1>Received Piece History</h1>
                 </div>
                 <div class="col-sm-6 text-right">
                     <a class="btn btn-success" onclick="window.print();">Print</a>

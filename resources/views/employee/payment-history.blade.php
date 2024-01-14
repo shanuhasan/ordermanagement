@@ -7,6 +7,24 @@
 $employeeDetail = getEmployeeDetail($employeeId);
 ?>
 @section('content')
+
+    <style>
+        @media print {
+            .h {
+                background: #000 !important;
+                print-color-adjust: exact;
+            }
+
+            th {
+                color: #000;
+            }
+
+            .main-footer {
+                display: none
+            }
+        }
+    </style>
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid my-2">
@@ -18,6 +36,10 @@ $employeeDetail = getEmployeeDetail($employeeId);
                         {{ !empty($employeeDetail->phone) ? 'Mobile:- ' . $employeeDetail->phone : ' ' }})
                     </h1>
                 </div>
+                <div class="col-sm-6 text-right">
+                    <a onclick="window.print();" class="btn btn-success">Print </a>
+                    <a href="{{ route('employee.order', $employeeId) }}" class="btn btn-primary">Back</a>
+                </div>
             </div>
         </div>
         <!-- /.container-fluid -->
@@ -28,14 +50,14 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <!-- Default box -->
         <div class="container-fluid">
             <div class="card">
-                <h5 style="text-align: center;font-weight:bold;background:gray;">PAID AMOUNT</h5>
-                <div class="card-body table-responsive p-0">
-                    <table class="table table-hover text-nowrap">
-                        <thead>
+                <h5 style="text-align: center;font-weight:bold">PAYMENT HISTORY</h5>
+                <div class="card-body">
+                    <table cellpadding="3" cellspacing='3' border="0" width="100%">
+                        <thead style="background: #000;color:#ffffff">
                             <tr>
-                                <th>Date</th>
-                                <th>Pament Method</th>
-                                <th>Amount</th>
+                                <th style="border:1px solid #000;text-align:center">Date</th>
+                                <th style="border:1px solid #000;text-align:center">Pament Method</th>
+                                <th style="border:1px solid #000;text-align:center">Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,30 +65,37 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             @if ($employeePaymentHistory->isNotEmpty())
                                 @foreach ($employeePaymentHistory as $item)
                                     <tr>
-                                        <td>{{ date('d-m-Y h:i A', strtotime($item->created_at)) }}
+                                        <td style="border:1px solid #000;text-align:center">
+                                            {{ date('d-m-Y h:i A', strtotime($item->created_at)) }}
                                         </td>
-                                        <td>{{ $item->payment_method }}</td>
-                                        <td>₹{{ $item->amount }}</td>
+                                        <td style="border:1px solid #000;text-align:center">{{ $item->payment_method }}</td>
+                                        <td style="border:1px solid #000;text-align:center">₹{{ $item->amount }}</td>
                                     </tr>
                                     <?php $total += $item->amount; ?>
                                 @endforeach
                             @else
                                 <tr>
-                                    <td colspan="" align="center">Data not found.</td>
+                                    <td></td>
+                                    <td style="text-align:center">Data not found.</td>
+                                    <td></td>
                                 </tr>
                             @endif
                         </tbody>
-                        <tfoot>
-                            <tr style="background: green;color:#fff;">
-                                <td></td>
-                                <td><strong>Paid</strong></td>
-                                <td><strong>₹{{ $employeeTotalPayment }}</strong></td>
+                        <tfoot style="background: #000;color:#ffffff">
+                            <tr>
+                                <th style="border:1px solid #000;text-align:center"></th>
+                                <th style="border:1px solid #000;text-align:center"><strong>Paid</strong></th>
+                                <th style="border:1px solid #000;text-align:center">
+                                    <strong>₹{{ $employeeTotalPayment }}</strong>
+                                </th>
                             </tr>
-                            <tr style="background: red;color:#fff;">
-                                <td></td>
-                                <td><strong>Remaining</strong></td>
-                                <td><strong>₹{{ $totalAmount - $employeeTotalPayment }}</strong></td>
-                            </tr>
+                            {{-- <tr>
+                                <th style="border:1px solid #000;text-align:center"></th>
+                                <th style="border:1px solid #000;text-align:center"><strong>Remaining</strong></th>
+                                <th style="border:1px solid #000;text-align:center">
+                                    <strong>₹{{ $totalAmount - $employeeTotalPayment }}</strong>
+                                </th>
+                            </tr> --}}
                         </tfoot>
                     </table>
                 </div>

@@ -19,6 +19,10 @@ $employeeDetail = getEmployeeDetail($employeeId);
                     </h1>
                 </div>
                 <div class="col-sm-6 text-right">
+                    <a href="{{ route('employee.order.singleprint', ['employeeId' => $employeeId, 'orderId' => $orderId]) }}"
+                        class="btn btn-success">
+                        Print
+                    </a>
                     <a href="{{ route('employee.order', $employeeId) }}" class="btn btn-primary">Back</a>
                 </div>
             </div>

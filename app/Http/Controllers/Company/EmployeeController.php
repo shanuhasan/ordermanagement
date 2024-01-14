@@ -370,7 +370,8 @@ class EmployeeController extends Controller
 
         return view('employee.order-view',[
             'items' => $items,
-            'employeeId'=>$employeeId
+            'employeeId'=>$employeeId,
+            'orderId'=>$orderId
         ]);
         
     }
@@ -413,17 +414,36 @@ class EmployeeController extends Controller
 
         $companyId = Auth::guard('web')->user()->company_id;
 
-        $order = Order::where('employee_id',$employeeId)
-                        ->where('company_id',$companyId)
-                        ->where('id',$orderId)
-                        ->first();
+        // $order = Order::where('employee_id',$employeeId)
+        //                 ->where('company_id',$companyId)
+        //                 ->where('id',$orderId)
+        //                 ->first();
 
-        // $paymentHistory = OrderItem::where('employee_id',$employeeId)
-        //                     ->where('company_id',$companyId)
-        //                     ->get();
+        $items = ReceivedItem::where('order_id',$orderId)
+                                ->where('company_id', $companyId)
+                                ->get();
 
         return view('employee.single-print',[
-            'order'=>$order,
+            'items'=>$items,
+            'employeeId'=>$employeeId,
+        ]);
+        
+    }
+    public function receivedPieceHistory($employeeId)
+    {
+        if(empty(employeeExist($employeeId)))
+        {
+            return redirect()->route('employee.index');
+        }
+
+        $companyId = Auth::guard('web')->user()->company_id;
+
+        $items = ReceivedItem::where('company_id', $companyId)
+                                ->orderBy('id','DESC')
+                                ->get();
+
+        return view('employee.received-piece-history',[
+            'items'=>$items,
             'employeeId'=>$employeeId,
         ]);
         
