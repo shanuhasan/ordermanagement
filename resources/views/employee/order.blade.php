@@ -39,7 +39,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                 <form action="" method="get">
                     <div class="card-header">
                         <div class="card-title">
-                            {{-- <a href="{{ route('orders.index') }}" class="btn btn-danger">Reset</a> --}}
+                            <a href="{{ route('employee.order', $employeeId) }}" class="btn btn-danger">Reset</a>
                         </div>
                         <div class="card-tools">
                             <div class="input-group input-group" style="width: 250px;">

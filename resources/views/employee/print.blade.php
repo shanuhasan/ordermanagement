@@ -95,6 +95,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             <tr>
                                 <th style="border:1px solid #000;text-align:center">#</th>
                                 <th style="border:1px solid #000;text-align:center">Date</th>
+                                <th style="border:1px solid #000;text-align:center">Payment Method</th>
                                 <th style="border:1px solid #000;text-align:center">Amount</th>
                             </tr>
                         </thead>
@@ -108,6 +109,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                         <td style="border:1px solid #000;text-align:center">{{ $i++ }}</td>
                                         <td style="border:1px solid #000;text-align:center">
                                             {{ date('d-m-Y h:i A', strtotime($item->created_at)) }}</td>
+                                        <td style="border:1px solid #000;text-align:center">{{ $item->payment_method }}
+                                        </td>
                                         <td
                                             style="border:1px
                                         solid #000;text-align:center">
@@ -122,6 +125,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             @else
                                 <tr style="border:1px solid #000">
                                     <td style="border:1px solid #000;text-align:center"></td>
+                                    <td style="border:1px solid #000;text-align:center"></td>
                                     <td style="border:1px solid #000;text-align:center">No Advance Amount.</td>
                                     <td style="border:1px solid #000;text-align:center"></td>
                                 </tr>
@@ -130,12 +134,14 @@ $employeeDetail = getEmployeeDetail($employeeId);
                         <tfoot>
                             <tr style="border:1px solid #000">
                                 <td style="border:1px solid #000;text-align:center"></td>
+                                <td style="border:1px solid #000;text-align:center"></td>
                                 <td style="border:1px solid #000;text-align:center;font-weight:bold">Total Amount</td>
                                 <td style="border:1px solid #000;text-align:center;font-weight:bold">
                                     ₹{{ $total1 }}
                                 </td>
                             </tr>
                             <tr style="border:1px solid #000">
+                                <td style="border:1px solid #000;text-align:center"></td>
                                 <td style="border:1px solid #000;text-align:center"></td>
                                 <td style="border:1px solid #000;text-align:center;font-weight:bold">Remaining Amount
                                 </td>

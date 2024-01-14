@@ -92,7 +92,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="received_qty">Received Piece ({{ $pendingItem }} Piece Pending)</label>
+                                    <label for="received_qty">Received Piece (<span style="color: red">{{ $pendingItem }}
+                                            Pcs. Pending</span>)</label>
                                     <input type="text" name="received_qty" id="received_qty"
                                         class="form-control only-number" placeholder="Enter Received Piece">
                                     <p class="error"></p>

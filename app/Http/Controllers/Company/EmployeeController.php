@@ -181,8 +181,14 @@ class EmployeeController extends Controller
         }
 
         $orders = Order::latest()->where('employee_id',$id)
-                        ->where('company_id',$companyId)
-                        ->paginate(20);
+                        ->where('company_id',$companyId);
+                        
+
+        if(!empty($request->get('keyword')))
+        {
+            $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
+        }
+        $orders = $orders->paginate(20);
         $data['orders'] = $orders;
         $data['employeeId'] = $id;
 
@@ -240,22 +246,22 @@ class EmployeeController extends Controller
 
             if($model->save())
             {
-                if(!empty($request->received_qty))
+                if($request->status == 'Completed')
                 {
                     $rModel = new ReceivedItem();
                     $rModel->order_id = $model->id;
                     $rModel->company_id = $companyId;
                     $rModel->employee_id = $request->employee_id;
-                    $rModel->qty = $request->received_qty;
+                    $rModel->qty = $request->qty;
                     $rModel->save();
                 }
             }
 
-            if($request->qty == receivedItems($model->id))
-            {
-                $model->status = 'Completed';
-                $model->save();
-            }
+            // if($request->qty == receivedItems($model->id))
+            // {
+            //     $model->status = 'Completed';
+            //     $model->save();
+            // }
 
             session()->flash('success','Add New added successfully.');
             return response()->json([
@@ -326,7 +332,7 @@ class EmployeeController extends Controller
             $model->date = $request->date;
             if($model->save())
             {
-                if(!empty($request->received_qty))
+                if(!empty($request->received_qty) && receivedItems($id) == $request->received_qty)
                 {
                     $rModel = new ReceivedItem();
                     $rModel->order_id = $id;
