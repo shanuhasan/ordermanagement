@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Company;
 use App\Models\Order;
 use App\Models\Employee;
 use App\Models\OrderItem;
+use App\Models\ReceivedItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -236,7 +237,24 @@ class EmployeeController extends Controller
             $model->status = $request->status;
             $model->date = $request->date;
             $model->total_amount = $request->qty * $request->rate;
-            $model->save();
+
+            if($model->save())
+            {
+                if(!empty($request->received_qty))
+                {
+                    $rModel = new ReceivedItem();
+                    $rModel->order_id = $model->id;
+                    $rModel->company_id = $companyId;
+                    $rModel->qty = $request->received_qty;
+                    $rModel->save();
+                }
+            }
+
+            if($request->qty == receivedItems($model->id))
+            {
+                $model->status = 'Completed';
+                $model->save();
+            }
 
             session()->flash('success','Add New added successfully.');
             return response()->json([
@@ -271,6 +289,7 @@ class EmployeeController extends Controller
         $data['order'] = $order;
         $data['orderDetail'] = $orderDetail;
         $data['employeeId'] = $employeeId;
+        $data['pendingItem'] = $order->qty - receivedItems($orderId);
 
         return view('employee.order-edit',$data);
         
@@ -304,7 +323,23 @@ class EmployeeController extends Controller
             $model->total_amount = $request->qty * $request->rate;
             $model->status = $request->status;
             $model->date = $request->date;
-            $model->save();
+            if($model->save())
+            {
+                if(!empty($request->received_qty))
+                {
+                    $rModel = new ReceivedItem();
+                    $rModel->order_id = $id;
+                    $rModel->company_id = $companyId;
+                    $rModel->qty = $request->received_qty;
+                    $rModel->save();
+                }
+            }
+
+            if($request->qty == receivedItems($id))
+            {
+                $model->status = 'Completed';
+                $model->save();
+            }
 
             session()->flash('success','Updated successfully.');
             return response()->json([
@@ -318,6 +353,26 @@ class EmployeeController extends Controller
                 'errors'=>$validator->errors()
             ]);
         }
+    }
+
+    public function orderView($employeeId,$orderId){
+
+        if(empty(employeeExist($employeeId)))
+        {
+            return redirect()->route('employee.index');
+        }
+
+        $companyId = Auth::guard('web')->user()->company_id;
+
+        $items = ReceivedItem::where('order_id',$orderId)
+                                ->where('company_id', $companyId)
+                                    ->paginate(30);
+
+        return view('employee.order-view',[
+            'items' => $items,
+            'employeeId'=>$employeeId
+        ]);
+        
     }
 
     public function orderPayment(Request $request)
@@ -339,6 +394,7 @@ class EmployeeController extends Controller
                 $model->company_id = $companyId;
                 $model->employee_id = $request->employee_id;
                 $model->amount = $request->amount;
+                $model->payment_method = $request->payment_method;
                 $model->save();
             }
             return redirect()->back()->with('success','Payment updated successfully.');

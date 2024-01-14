@@ -1,8 +1,11 @@
 <?php
 
 
+use App\Models\Size;
+use App\Models\Order;
 use App\Models\Company;
 use App\Models\Employee;
+use App\Models\ReceivedItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -58,6 +61,15 @@ function getSize()
     return $list;
 }
 
+function paymentMethod()
+{
+    $list = [
+        'Cash'=>'Cash',
+        'Online'=>'Online',
+    ];
+    return $list;
+}
+
 function getCompany()
 {
     $company =  Company::where('status',1)->get();
@@ -78,4 +90,38 @@ function companyName($id)
         return '';
     }
     return $company->name;
+}
+
+function sizeName($id)
+{
+    $size =  Size::find($id);
+    
+    if(empty($size))
+    {
+        return '';
+    }
+    return $size->name;
+}
+
+
+function receivedItems($orderId)
+{
+    $items =  ReceivedItem::where('order_id',$orderId)->sum('qty');
+    
+    if(empty($items))
+    {
+        return 0;
+    }
+    return $items;
+}
+
+function getOrder($id)
+{
+    $order =  Order::find($id);
+    
+    if(empty($order))
+    {
+        return [];
+    }
+    return $order;
 }

@@ -33,7 +33,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="particular">Particular</label>
+                                    <label for="particular">Particular<span style="color: red">*</span></label>
                                     <input type="text" name="particular" id="particular" class="form-control"
                                         placeholder="Particular" value="{{ $order->particular }}">
                                     <p class="error"></p>
@@ -41,12 +41,13 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="size">Size</label>
+                                    <label for="size">Size<span style="color: red">*</span></label>
                                     <select name="size" id="size" class="form-control">
                                         <option value="">Select Size</option>
-                                        @foreach (getSize() as $key => $item)
-                                            <option value="{{ $key }}"
-                                                {{ $order->size == $key ? 'selected' : '' }}>{{ $item }}</option>
+                                        @foreach (App\Models\Size::list() as $item)
+                                            <option value="{{ $item->id }}"
+                                                {{ $order->size == $item->id ? 'selected' : '' }}>{{ $item->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     <p class="error"></p>
@@ -54,7 +55,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="qty">Pieces</label>
+                                    <label for="qty">Pieces<span style="color: red">*</span></label>
                                     <input type="text" name="qty" id="qty" class="form-control only-number"
                                         placeholder="Pieces" value="{{ $order->qty }}">
                                     <p class="error"></p>
@@ -62,7 +63,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="rate">Rate</label>
+                                    <label for="rate">Rate<span style="color: red">*</span></label>
                                     <input type="text" name="rate" id="rate" class="form-control only-number"
                                         placeholder="Rate" value="{{ $order->rate }}">
                                     <p class="error"></p>
@@ -70,7 +71,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="date">Date</label>
+                                    <label for="date">Date<span style="color: red">*</span></label>
                                     <input type="date" name="date" id="date" class="form-control"
                                         placeholder="Date" value="{{ $order->date }}">
                                     <p class="error"></p>
@@ -78,7 +79,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="rate">Status</label>
+                                    <label for="rate">Status<span style="color: red">*</span></label>
                                     <select name="status" id="status" class="form-control">
                                         @foreach (itemStatus() as $key => $item)
                                             <option value="{{ $key }}"
@@ -86,6 +87,14 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                             </option>
                                         @endforeach
                                     </select>
+                                    <p class="error"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="received_qty">Received Piece</label>
+                                    <input type="text" name="received_qty" id="received_qty"
+                                        class="form-control only-number" placeholder="{{ $pendingItem }} Piece Pending">
                                     <p class="error"></p>
                                 </div>
                             </div>

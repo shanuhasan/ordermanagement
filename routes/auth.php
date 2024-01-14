@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Company\SizeController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\VerifyEmailController;
@@ -77,11 +78,20 @@ Route::middleware('auth')->group(function () {
     Route::put('/employee/{employee_id}',[EmployeeController::class,'update'])->name('employee.update');
     Route::get('/employee/{employee_id}',[EmployeeController::class,'destroy'])->name('employee.delete');
 
+    //size management
+    Route::get('/size', [SizeController::class, 'index'])->name('size.index');
+    Route::get('/size/create',[SizeController::class,'create'])->name('size.create');
+    Route::post('/size/store',[SizeController::class,'store'])->name('size.store');
+    Route::get('/size/{size_id}/edit',[SizeController::class,'edit'])->name('size.edit');
+    Route::put('/size/{size_id}',[SizeController::class,'update'])->name('size.update');
+    Route::get('/size/{size_id}',[SizeController::class,'destroy'])->name('size.delete');
+
     Route::get('/employee/order/{id}', [EmployeeController::class, 'order'])->name('employee.order');
     Route::get('/employee/order/{id}/create',[EmployeeController::class,'orderCreate'])->name('employee.order.create');
     Route::post('/employee/order/store',[EmployeeController::class,'orderStore'])->name('employee.order.store');
     Route::get('/employee/order/{employeeId}/{orderId}/edit',[EmployeeController::class,'orderEdit'])->name('employee.order.edit');
     Route::post('/employee/order/{id}',[EmployeeController::class,'orderUpdate'])->name('employee.order.update');
+    Route::get('/employee/order/{employeeId}/{orderId}/view',[EmployeeController::class,'orderView'])->name('employee.order.view');
     Route::post('/employee-order-payment',[EmployeeController::class,'orderPayment'])->name('employee.order.payment');
     Route::get('/employee-order-singleprint/{employeeId}/{orderId}',[EmployeeController::class,'singlePrint'])->name('employee.order.singleprint');
     Route::get('/employee-order-print/{employeeId}',[EmployeeController::class,'orderPrint'])->name('employee.order.print');

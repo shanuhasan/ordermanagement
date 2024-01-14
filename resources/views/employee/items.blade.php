@@ -128,7 +128,7 @@
                                             {{ $order->particular }}
                                         </td>
                                         <td>{{ getEmployeeDetail($order->employee_id)->name }}</td>
-                                        <td>{{ $order->size }}</td>
+                                        <td>{{ sizeName($order->size) }}</td>
                                         <td>{{ $order->qty }}</td>
                                         <td>₹{{ $order->rate }}</td>
                                         <td>

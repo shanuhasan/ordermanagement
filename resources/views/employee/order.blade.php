@@ -61,7 +61,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                 <th>Date</th>
                                 <th>Particular</th>
                                 <th>Size</th>
-                                <th>Pieces</th>
+                                <th>Total Piece</th>
+                                <th>Received Piece</th>
+                                <th>Pending Piece</th>
                                 <th>Rate</th>
                                 <th>Total Amount</th>
                                 <th>Status</th>
@@ -96,8 +98,10 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                                 {{ $order->particular }}
                                             </a>
                                         </td>
-                                        <td>{{ $order->size }}</td>
+                                        <td>{{ sizeName($order->size) }}</td>
                                         <td>{{ $order->qty }}</td>
+                                        <td>{{ receivedItems($order->id) }}</td>
+                                        <td>{{ $order->qty - receivedItems($order->id) }}</td>
                                         <td>₹{{ $order->rate }}</td>
                                         <td>
                                             <a
@@ -121,6 +125,10 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                             <a
                                                 href="{{ route('employee.order.singleprint', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
                                                 <i class="fa fa-print" aria-hidden="true"></i>
+                                            </a>
+                                            <a
+                                                href="{{ route('employee.order.view', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -148,16 +156,17 @@ $employeeDetail = getEmployeeDetail($employeeId);
             <!-- Default box -->
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <form action="{{ route('employee.order.payment') }}" method="post">
                             @csrf
                             <input type="hidden" value="{{ $employeeId }}" name="employee_id" id="employee_id">
                             <div class="card">
-                                <h5 style="text-align: center;font-weight:bold;background:gray;">ADVANCE</h5>
+                                <h5 style="text-align: center;font-weight:bold;background:gray;">ADVANCE AMOUNT</h5>
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="mb-3">
+                                                <label for="rate">Advance Amount</label>
                                                 <input type="text" name="amount"
                                                     class="form-control only-number @error('amount') is-invalid	@enderror"
                                                     placeholder="Advance Amount">
@@ -167,7 +176,18 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                             </div>
                                             <button type="submit" class="btn btn-success">Submit</button>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="rate">Payment Method</label>
+                                                <select name="payment_method" id="payment_method" class="form-control">
+                                                    @foreach (paymentMethod() as $key => $item)
+                                                        <option value="{{ $key }}">{{ $item }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <p class="error"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
                                             <div class="mb-3">
                                                 <p>Total Amount :- <strong>₹{{ $totalAmount }}</strong></p>
                                                 <p>Paid Amount :- <strong>₹{{ $employeeTotalPayment }}</strong></p>

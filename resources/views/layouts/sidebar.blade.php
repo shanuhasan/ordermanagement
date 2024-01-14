@@ -29,6 +29,12 @@
                         <p>Employee</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('size.index') }}" class="nav-link @yield('size')">
+                        <i class="nav-icon fas fa-list"></i>
+                        <p>Size</p>
+                    </a>
+                </li>
                 {{-- <li class="nav-item">
                     <a href="{{ route('items.index') }}" class="nav-link @yield('items')">
                         <i class="nav-icon fas fa-list"></i>

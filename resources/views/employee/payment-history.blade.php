@@ -34,6 +34,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                         <thead>
                             <tr>
                                 <th>Date</th>
+                                <th>Pament Method</th>
                                 <th>Amount</th>
                             </tr>
                         </thead>
@@ -44,22 +45,25 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                     <tr>
                                         <td>{{ date('d-m-Y h:i A', strtotime($item->created_at)) }}
                                         </td>
+                                        <td>{{ $item->payment_method }}</td>
                                         <td>₹{{ $item->amount }}</td>
                                     </tr>
                                     <?php $total += $item->amount; ?>
                                 @endforeach
                             @else
                                 <tr>
-                                    <td colspan="5" align="center">Data not found.</td>
+                                    <td colspan="" align="center">Data not found.</td>
                                 </tr>
                             @endif
                         </tbody>
                         <tfoot>
                             <tr style="background: green;color:#fff;">
+                                <td></td>
                                 <td><strong>Paid</strong></td>
                                 <td><strong>₹{{ $employeeTotalPayment }}</strong></td>
                             </tr>
                             <tr style="background: red;color:#fff;">
+                                <td></td>
                                 <td><strong>Remaining</strong></td>
                                 <td><strong>₹{{ $totalAmount - $employeeTotalPayment }}</strong></td>
                             </tr>
