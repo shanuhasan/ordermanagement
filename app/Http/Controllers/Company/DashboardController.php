@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Company;
 use App\Models\Order;
 use App\Models\Employee;
 use App\Models\OrderItem;
+use App\Models\ReceivedItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -18,12 +19,14 @@ class DashboardController extends Controller
                             ->where('company_id',$companyId)
                             ->count();
 
-        $totalComplete = Order::where('status','=','Completed')
-                                ->where('company_id',$companyId)
-                                ->sum('qty');
+        // $totalComplete = Order::where('status','=','Completed')
+        //                         ->where('company_id',$companyId)
+        //                         ->sum('qty');
 
-        $totalPending = Order::where('status','=','Pending')
-                            ->where('company_id',$companyId)
+        $totalComplete = ReceivedItem::where('company_id',$companyId)
+                                    ->sum('qty');
+
+        $totalPending = Order::where('company_id',$companyId)
                             ->sum('qty');
 
         $totalAmount = Order::where('company_id',$companyId)
@@ -35,7 +38,7 @@ class DashboardController extends Controller
         return view('dashboard',[
             'totalEmployee'=>$totalEmployee,
             'totalComplete'=>$totalComplete,
-            'totalPending'=>$totalPending,
+            'totalPending'=>$totalPending - $totalComplete,
             'totalAmount'=>$totalAmount,
             'paidAmount'=>$paidAmount,
         ]);

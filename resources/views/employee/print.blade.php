@@ -26,7 +26,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Print</h1>
+                    <h2>{{ $employeeDetail->name }}
+                        ({{ !empty($employeeDetail->code) ? 'Code:- ' . $employeeDetail->code . ',' : '' }}
+                        {{ !empty($employeeDetail->phone) ? 'Mobile:- ' . $employeeDetail->phone : '' }})</h2>
                 </div>
             </div>
         </div>
@@ -37,10 +39,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <!-- Default box -->
         <div class="container-fluid">
             <div class="card">
+                <h5 style="text-align: center;font-weight:bold">HISTORY
+                    ({{ strtoupper($employeeDetail->name) }})</h5>
                 <div class="card-body">
-                    <h2>{{ $employeeDetail->name }}
-                        ({{ !empty($employeeDetail->code) ? 'Code:- ' . $employeeDetail->code . ',' : '' }}
-                        {{ !empty($employeeDetail->phone) ? 'Mobile:- ' . $employeeDetail->phone : '' }})</h2>
                     <table cellpadding="3" cellspacing='3' border="0" width="100%">
                         <thead style="background: #000;color:#ffffff">
                             <tr>
@@ -88,7 +89,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                 </div>
 
                 <div class="card-body">
-                    <h6 style="text-align: center">Payment History</h6>
+                    <h5 style="text-align: center;font-weight:bold">PAYMENT HISTORY</h5>
                     <table cellpadding="3" cellspacing='3' border="0" width="100%">
                         <thead style="background: #000;color:#ffffff">
                             <tr>
@@ -144,10 +145,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             </tr>
                         </tfoot>
                     </table>
-                    <button class="no-print btn btn-primary mt-2" onclick="window.print();">Print</button>
+                    <button class="no-print btn btn-success mt-2" onclick="window.print();">Print</button>
                     <a href="{{ route('employee.order', $employeeId) }}" class="no-print btn btn-info mt-2">Back</a>
                 </div>
-
             </div>
         </div>
         <!-- /.card -->

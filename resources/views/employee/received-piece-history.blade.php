@@ -26,7 +26,10 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Received Piece History</h1>
+                    <h2>{{ $employeeDetail->name }}
+                        ({{ !empty($employeeDetail->code) ? 'Code:- ' . $employeeDetail->code . ',' : '' }}
+                        {{ !empty($employeeDetail->phone) ? 'Mobile:- ' . $employeeDetail->phone : '' }})</h2>
+
                 </div>
                 <div class="col-sm-6 text-right">
                     <a class="btn btn-success" onclick="window.print();">Print</a>
@@ -41,10 +44,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <!-- Default box -->
         <div class="container-fluid">
             <div class="card">
+                <h5 style="text-align: center;font-weight:bold">RECEIVED PIECE HISTORY
+                    ({{ strtoupper($employeeDetail->name) }})</h5>
                 <div class="card-body">
-                    <h2>{{ $employeeDetail->name }}
-                        ({{ !empty($employeeDetail->code) ? 'Code:- ' . $employeeDetail->code . ',' : '' }}
-                        {{ !empty($employeeDetail->phone) ? 'Mobile:- ' . $employeeDetail->phone : '' }})</h2>
                     <table cellpadding="3" cellspacing='3' border="0" width="100%">
                         <thead style="background: #000;color:#ffffff">
                             <tr>

@@ -281,7 +281,7 @@ class EmployeeController extends Controller
                         ->first();
         if(empty($order))
         {
-            return redirect()->route('orders.index');
+            return redirect()->back();
         }
 
         $orderDetail = OrderItem::where('order_id',$order->id)->get();
