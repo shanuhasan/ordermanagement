@@ -55,7 +55,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="qty">Pieces<span style="color: red">*</span></label>
+                                    <label for="qty">Total Piece<span style="color: red">*</span></label>
                                     <input type="text" name="qty" id="qty" class="form-control only-number"
                                         placeholder="Pieces" value="{{ $order->qty }}">
                                     <p class="error"></p>
@@ -92,9 +92,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="received_qty">Received Piece</label>
+                                    <label for="received_qty">Received Piece ({{ $pendingItem }} Piece Pending)</label>
                                     <input type="text" name="received_qty" id="received_qty"
-                                        class="form-control only-number" placeholder="{{ $pendingItem }} Piece Pending">
+                                        class="form-control only-number" value="{{ $pendingItem }}">
                                     <p class="error"></p>
                                 </div>
                             </div>
