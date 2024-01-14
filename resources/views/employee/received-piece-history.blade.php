@@ -58,21 +58,29 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($items as $item)
-                                <tr style="border:1px solid #000">
-                                    <td style="border:1px solid #000;text-align:center"></td>
-                                    <td style="border:1px solid #000;text-align:center">
-                                        {{ date('d-m-Y', strtotime($item->created_at)) }}
-                                    </td>
-                                    <td style="border:1px solid #000;text-align:center">
-                                        {{ getOrder($item->order_id)->particular }}
-                                    <td style="border:1px solid #000;text-align:center">
-                                        {{ sizeName(getOrder($item->order_id)->size) }}
-                                    </td>
-                                    <td style="border:1px solid #000;text-align:center">{{ $item->qty }}
-                                    </td>
+                            @if ($items->isNotEmpty())
+                                @foreach ($items as $item)
+                                    <tr style="border:1px solid #000">
+                                        <td style="border:1px solid #000;text-align:center"></td>
+                                        <td style="border:1px solid #000;text-align:center">
+                                            {{ date('d-m-Y', strtotime($item->created_at)) }}
+                                        </td>
+                                        <td style="border:1px solid #000;text-align:center">
+                                            {{ getOrder($item->order_id)->particular }}
+                                        </td>
+                                        <td style="border:1px solid #000;text-align:center">
+                                            {{ sizeName(getOrder($item->order_id)->size) }}
+                                        </td>
+                                        <td style="border:1px solid #000;text-align:center">{{ $item->qty }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="5" style="text-align:center">Data not found.</td>
                                 </tr>
-                            @endforeach
+                            @endif
+
 
                         </tbody>
                     </table>

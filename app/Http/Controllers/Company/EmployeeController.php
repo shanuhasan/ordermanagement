@@ -245,6 +245,7 @@ class EmployeeController extends Controller
                     $rModel = new ReceivedItem();
                     $rModel->order_id = $model->id;
                     $rModel->company_id = $companyId;
+                    $rModel->employee_id = $request->employee_id;
                     $rModel->qty = $request->received_qty;
                     $rModel->save();
                 }
@@ -330,6 +331,7 @@ class EmployeeController extends Controller
                     $rModel = new ReceivedItem();
                     $rModel->order_id = $id;
                     $rModel->company_id = $companyId;
+                    $rModel->employee_id = $request->employee_id;
                     $rModel->qty = $request->received_qty;
                     $rModel->save();
                 }
@@ -439,6 +441,7 @@ class EmployeeController extends Controller
         $companyId = Auth::guard('web')->user()->company_id;
 
         $items = ReceivedItem::where('company_id', $companyId)
+                                ->where('employee_id', $employeeId)
                                 ->orderBy('id','DESC')
                                 ->get();
 
