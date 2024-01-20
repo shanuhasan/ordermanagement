@@ -335,13 +335,20 @@ class EmployeeController extends Controller
             $model->date = $request->date;
             if($model->save())
             {
-                if(!empty($request->received_qty) && ($request->received_qty <= $pendingQty))
+                $rModel = new ReceivedItem();
+                $rModel->order_id = $id;
+                $rModel->company_id = $companyId;
+                $rModel->employee_id = $request->employee_id;
+
+                if(!empty($request->received_qty) && $request->status == 'Pending' && ($request->received_qty <= $pendingQty))
                 {
-                    $rModel = new ReceivedItem();
-                    $rModel->order_id = $id;
-                    $rModel->company_id = $companyId;
-                    $rModel->employee_id = $request->employee_id;
                     $rModel->qty = $request->received_qty;
+                    $rModel->save();
+                }
+
+                if($request->status == 'Completed' && !empty($pendingQty) && $pendingQty > 0)
+                {
+                    $rModel->qty = $pendingQty;
                     $rModel->save();
                 }
             }
