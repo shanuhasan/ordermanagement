@@ -34,6 +34,7 @@ class ProfileController extends Controller
         {
             $user = User::find(Auth::user()->id);
             $user->name = $request->name;
+            $user->company_name = $request->company_name;
             $user->save();
 
             return redirect()->back()->with('success','Profile updated successfully.');

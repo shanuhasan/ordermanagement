@@ -36,7 +36,7 @@
             </ul>
             <a href="javascript:void(0);" class="ml-auto"
                 style="color:green;font-weight:bold;font-size:24px;text-align:center">
-                {{ Auth::user()->name }}
+                {{ !empty(Auth::user()->company_name) ? Auth::user()->company_name : Auth::user()->name }}
             </a>
             <div class="navbar-nav pl-2">
                 <!-- <ol class="breadcrumb p-0 m-0 bg-white">

@@ -60,6 +60,7 @@ class EmployeeController extends Controller
         if($validator->passes())
         {
             $model = new Employee();
+            $model->guid = GUIDv4();
             $model->name = $request->name;
             $model->phone = $request->phone;
             $model->code = $request->code;
