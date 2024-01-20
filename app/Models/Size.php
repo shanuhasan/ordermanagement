@@ -13,7 +13,7 @@ class Size extends Model
     static public function list()
     {
         $companyId = Auth::guard('web')->user()->company_id;
-        $model = self::where('company_id',$companyId)->where('status',1)->get();
+        $model = self::where('company_id',$companyId)->where('status',1)->where('is_deleted','!=',1)->get();
         return $model;
     }
 }

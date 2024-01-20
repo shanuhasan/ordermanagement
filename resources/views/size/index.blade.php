@@ -127,7 +127,7 @@
             if (confirm('Are you sure want to delete')) {
                 $.ajax({
                     url: newUrl,
-                    type: 'delete',
+                    type: 'get',
                     data: {},
                     dataType: 'json',
                     headers: {

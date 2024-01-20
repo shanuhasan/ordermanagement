@@ -14,7 +14,7 @@ class SizeController extends Controller
 
         $companyId = Auth::guard('web')->user()->company_id;
 
-        $sizes = Size::where('company_id',$companyId)->latest();
+        $sizes = Size::where('company_id',$companyId)->where('is_deleted','!=',1)->latest();
 
         if(!empty($request->get('keyword')))
         {
@@ -119,7 +119,8 @@ class SizeController extends Controller
                 'message'=>'Size not found.'
             ]);
         }
-        $model->delete();
+        $model->is_deleted = 1;
+        $model->save();
         $request->session()->flash('success','Size deleted successfully.');
         return response()->json([
             'status'=>true,
