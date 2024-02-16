@@ -16,7 +16,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                 color: #000;
             }
 
-            .main-footer {
+            .main-footer,
+            .years {
                 display: none
             }
         }
@@ -39,6 +40,38 @@ $employeeDetail = getEmployeeDetail($employeeId);
         </div>
         <!-- /.container-fluid -->
     </section>
+
+    <section class="content years">
+        <!-- Default box -->
+        <div class="container-fluid">
+            <div class="card">
+                <form action="" method="get">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="year">Year</label>
+                                    <select name="year" id="year" class="form-control">
+                                        <option value="">Select Year</option>
+                                        @foreach (years() as $key => $val)
+                                            <option value="{{ $key }}"
+                                                {{ Request::get('year') == $key ? 'selected' : '' }}>
+                                                {{ $val }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-success">Filter</button>
+                                <a href="{{ route('employee.order.receivedPiece', $employeeId) }}"
+                                    class="btn btn-danger">Reset</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.card -->
+    </section>
+
     <!-- Main content -->
     <section class="content">
         <!-- Default box -->

@@ -183,31 +183,43 @@ class EmployeeController extends Controller
 
         $orders = Order::latest()->where('employee_id',$id)
                         ->where('company_id',$companyId);
-                        
 
-        if(!empty($request->get('keyword')))
+        if(!empty($request->get('size')))
         {
-            $orders = $orders->where('particular','like','%'.$request->get('keyword').'%');
+            $orders = $orders->where('size', $request->get('size'));
         }
-        $orders = $orders->paginate(20);
-        $data['orders'] = $orders;
-        $data['employeeId'] = $id;
+
+        if(!empty($request->get('status')))
+        {
+            $orders = $orders->where('status', $request->get('status'));
+        }
 
         $totalAmount = Order::where('employee_id',$id)
-                            ->where('company_id',$companyId)
-                            ->sum('total_amount');
+                            ->where('company_id',$companyId);
 
         $employeeTotalPayment = OrderItem::where('employee_id',$id)
-                                        ->where('company_id',$companyId)
-                                        ->sum('amount');
+                                            ->where('company_id',$companyId);
 
-        // $employeePaymentHistory = OrderItem::latest()->where('employee_id',$id)
-        //                             ->where('company_id',$companyId)
-        //                             ->paginate(20);
+        if(!empty($request->get('year')))
+        {
+            $orders = $orders->whereYear('created_at', $request->get('year'));
+            $totalAmount = $totalAmount->whereYear('created_at', $request->get('year'));
+            $employeeTotalPayment = $employeeTotalPayment->whereYear('created_at', $request->get('year'));
+        }else{
+            $orders = $orders->whereYear('created_at', date('Y'));
+            $totalAmount = $totalAmount->whereYear('created_at', date('Y'));
+            $employeeTotalPayment = $employeeTotalPayment->whereYear('created_at', date('Y'));
+        }
 
+        $orders = $orders->paginate(20);
+        $totalAmount = $totalAmount->sum('total_amount');
+        $employeeTotalPayment = $employeeTotalPayment->sum('amount');
+
+
+        $data['orders'] = $orders;
+        $data['employeeId'] = $id;
         $data['totalAmount'] = $totalAmount;
         $data['employeeTotalPayment'] = $employeeTotalPayment;
-        // $data['employeePaymentHistory'] = $employeePaymentHistory;
 
         return view('employee.order',$data);
 
@@ -448,7 +460,7 @@ class EmployeeController extends Controller
         ]);
         
     }
-    public function receivedPieceHistory($employeeId)
+    public function receivedPieceHistory(Request $request, $employeeId)
     {
         if(empty(employeeExist($employeeId)))
         {
@@ -459,8 +471,17 @@ class EmployeeController extends Controller
 
         $items = ReceivedItem::where('company_id', $companyId)
                                 ->where('employee_id', $employeeId)
-                                ->orderBy('id','DESC')
-                                ->get();
+                                ->orderBy('id','DESC');
+                                
+
+        if(!empty($request->get('year')))
+        {
+            $items = $items->whereYear('created_at', $request->get('year'));
+        }else{
+            $items = $items->whereYear('created_at', date('Y'));
+        }
+
+        $items = $items->get();
 
         return view('employee.received-piece-history',[
             'items'=>$items,
@@ -469,7 +490,7 @@ class EmployeeController extends Controller
         
     }
 
-    public function orderPrint($employeeId)
+    public function orderPrint(Request $request, $employeeId)
     {
         if(empty(employeeExist($employeeId)))
         {
@@ -479,12 +500,22 @@ class EmployeeController extends Controller
         $companyId = Auth::guard('web')->user()->company_id;
 
         $orders = Order::latest()->where('employee_id',$employeeId)
-                        ->where('company_id',$companyId)
-                        ->get();
+                        ->where('company_id',$companyId);
 
         $paymentHistory = OrderItem::latest()->where('employee_id',$employeeId)
-                            ->where('company_id',$companyId)
-                            ->get();
+                            ->where('company_id',$companyId);
+
+        if(!empty($request->get('year')))
+        {
+            $orders = $orders->whereYear('created_at', $request->get('year'));
+            $paymentHistory = $paymentHistory->whereYear('created_at', $request->get('year'));
+        }else{
+            $orders = $orders->whereYear('created_at', date('Y'));
+            $paymentHistory = $paymentHistory->whereYear('created_at', date('Y'));
+        }
+
+        $orders = $orders->get();
+        $paymentHistory = $paymentHistory->get();
 
         return view('employee.print',[
             'orders'=>$orders,
@@ -539,20 +570,28 @@ class EmployeeController extends Controller
         }
         $data['employeeId'] = $id;
 
-        $totalAmount = Order::where('employee_id',$id)
-                            ->where('company_id',$companyId)
-                            ->sum('total_amount');
+        // $totalAmount = Order::where('employee_id',$id)
+        //                     ->where('company_id',$companyId)
+        //                     ->sum('total_amount');
 
-        $employeeTotalPayment = OrderItem::where('employee_id',$id)
-                    ->where('company_id',$companyId)
-                    ->sum('amount');
+        // $employeeTotalPayment = OrderItem::where('employee_id',$id)
+        //             ->where('company_id',$companyId)
+        //             ->sum('amount');
 
         $employeePaymentHistory = OrderItem::latest()->where('employee_id',$id)
-                                    ->where('company_id',$companyId)
-                                    ->paginate(20);
+                                    ->where('company_id',$companyId);
 
-        $data['totalAmount'] = $totalAmount;
-        $data['employeeTotalPayment'] = $employeeTotalPayment;
+        if(!empty($request->get('year')))
+        {
+            $employeePaymentHistory = $employeePaymentHistory->whereYear('created_at', $request->get('year'));
+        }else{
+            $employeePaymentHistory = $employeePaymentHistory->whereYear('created_at', date('Y'));
+        }
+
+        $employeePaymentHistory = $employeePaymentHistory->get();
+
+        // $data['totalAmount'] = $totalAmount;
+        // $data['employeeTotalPayment'] = $employeeTotalPayment;
         $data['employeePaymentHistory'] = $employeePaymentHistory;
 
         return view('employee.payment-history',$data);

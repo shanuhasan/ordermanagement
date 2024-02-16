@@ -19,7 +19,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                 color: #000;
             }
 
-            .main-footer {
+            .main-footer,
+            .years {
                 display: none
             }
         }
@@ -43,6 +44,37 @@ $employeeDetail = getEmployeeDetail($employeeId);
             </div>
         </div>
         <!-- /.container-fluid -->
+    </section>
+
+    <section class="content years">
+        <!-- Default box -->
+        <div class="container-fluid">
+            <div class="card">
+                <form action="" method="get">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="year">Year</label>
+                                    <select name="year" id="year" class="form-control">
+                                        <option value="">Select Year</option>
+                                        @foreach (years() as $key => $val)
+                                            <option value="{{ $key }}"
+                                                {{ Request::get('year') == $key ? 'selected' : '' }}>
+                                                {{ $val }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-success">Filter</button>
+                                <a href="{{ route('employee.order.payment.history', $employeeId) }}"
+                                    class="btn btn-danger">Reset</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.card -->
     </section>
 
 
@@ -69,7 +101,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                         <td style="border:1px solid #000;text-align:center">
                                             {{ date('d-m-Y h:i A', strtotime($item->created_at)) }}
                                         </td>
-                                        <td style="border:1px solid #000;text-align:center">{{ $item->payment_method }}</td>
+                                        <td style="border:1px solid #000;text-align:center">{{ $item->payment_method }}
+                                        </td>
                                         <td style="border:1px solid #000;text-align:center">₹{{ $item->amount }}</td>
                                     </tr>
                                     <?php $total += $item->amount; ?>
@@ -87,22 +120,15 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                 <th style="border:1px solid #000;text-align:center"></th>
                                 <th style="border:1px solid #000;text-align:center"><strong>Paid</strong></th>
                                 <th style="border:1px solid #000;text-align:center">
-                                    <strong>₹{{ $employeeTotalPayment }}</strong>
+                                    <strong>₹{{ $total }}</strong>
                                 </th>
                             </tr>
-                            {{-- <tr>
-                                <th style="border:1px solid #000;text-align:center"></th>
-                                <th style="border:1px solid #000;text-align:center"><strong>Remaining</strong></th>
-                                <th style="border:1px solid #000;text-align:center">
-                                    <strong>₹{{ $totalAmount - $employeeTotalPayment }}</strong>
-                                </th>
-                            </tr> --}}
                         </tfoot>
                     </table>
                 </div>
-                <div class="card-footer clearfix">
+                {{-- <div class="card-footer clearfix">
                     {{ $employeePaymentHistory->links('pagination::bootstrap-5') }}
-                </div>
+                </div> --}}
             </div>
         </div>
         <!-- /.card -->

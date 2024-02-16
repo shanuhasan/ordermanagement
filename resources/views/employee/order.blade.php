@@ -30,31 +30,68 @@ $employeeDetail = getEmployeeDetail($employeeId);
         </div>
         <!-- /.container-fluid -->
     </section>
+
+    <section class="content">
+        <!-- Default box -->
+        <div class="container-fluid">
+            <div class="card">
+                <form action="" method="get">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="size">Size</label>
+                                    <select name="size" id="size" class="form-control">
+                                        <option value="">Select Size</option>
+                                        @foreach (App\Models\Size::list() as $item)
+                                            <option value="{{ $item->id }}"
+                                                {{ Request::get('size') == $item->id ? 'selected' : '' }}>
+                                                {{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-success">Filter</button>
+                                <a href="{{ route('employee.order', $employeeId) }}" class="btn btn-danger">Reset</a>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="status">Status</label>
+                                    <select name="status" id="status" class="form-control">
+                                        <option value="">Select Status</option>
+                                        @foreach (itemStatus() as $key => $val)
+                                            <option value="{{ $key }}"
+                                                {{ Request::get('status') == $key ? 'selected' : '' }}>
+                                                {{ $val }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="year">Year</label>
+                                    <select name="year" id="year" class="form-control">
+                                        <option value="">Select Year</option>
+                                        @foreach (years() as $key => $val)
+                                            <option value="{{ $key }}"
+                                                {{ Request::get('year') == $key ? 'selected' : '' }}>
+                                                {{ $val }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.card -->
+    </section>
     <!-- Main content -->
     <section class="content">
         <!-- Default box -->
         <div class="container-fluid">
             @include('message')
             <div class="card">
-                <form action="" method="get">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <a href="{{ route('employee.order', $employeeId) }}" class="btn btn-danger">Reset</a>
-                        </div>
-                        <div class="card-tools">
-                            <div class="input-group input-group" style="width: 250px;">
-                                <input type="text" value="{{ Request::get('keyword') }}" name="keyword"
-                                    class="form-control float-right" placeholder="Search">
-
-                                <div class="input-group-append">
-                                    <button type="submit" class="btn btn-default">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
                 <div class="card-body table-responsive p-0">
                     <table class="table table-hover text-nowrap">
                         <thead>
@@ -145,7 +182,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                     </table>
                 </div>
                 <div class="card-footer clearfix">
-                    {{ $orders->links('pagination::bootstrap-5') }}
+                    {!! $orders->appends(request()->input())->links('pagination::bootstrap-5') !!}
                 </div>
             </div>
         </div>

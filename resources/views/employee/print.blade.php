@@ -16,7 +16,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                 color: #000;
             }
 
-            .main-footer {
+            .main-footer,
+            .years {
                 display: none
             }
         }
@@ -34,12 +35,42 @@ $employeeDetail = getEmployeeDetail($employeeId);
         </div>
         <!-- /.container-fluid -->
     </section>
+
+    <section class="content years">
+        <!-- Default box -->
+        <div class="container-fluid">
+            <div class="card">
+                <form action="" method="get">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="year">Year</label>
+                                    <select name="year" id="year" class="form-control">
+                                        <option value="">Select Year</option>
+                                        @foreach (years() as $key => $val)
+                                            <option value="{{ $key }}"
+                                                {{ Request::get('year') == $key ? 'selected' : '' }}>
+                                                {{ $val }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-success">Filter</button>
+                                <a href="{{ route('employee.order.print', $employeeId) }}" class="btn btn-danger">Reset</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.card -->
+    </section>
     <!-- Main content -->
     <section class="content">
         <!-- Default box -->
         <div class="container-fluid">
             <div class="card">
-                <h5 style="text-align: center;font-weight:bold">HISTORY
+                <h5 class="mt-2 mb-0" style="text-align: center;font-weight:bold">HISTORY
                     ({{ strtoupper($employeeDetail->name) }})</h5>
                 <div class="card-body">
                     <table cellpadding="3" cellspacing='3' border="0" width="100%">
@@ -86,10 +117,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             </tr>
                         </tfoot>
                     </table>
-                </div>
 
-                <div class="card-body">
-                    <h5 style="text-align: center;font-weight:bold">PAYMENT HISTORY</h5>
+                    {{-- payment history --}}
+                    <h5 class="mt-2" style="text-align: center;font-weight:bold">PAYMENT HISTORY</h5>
                     <table cellpadding="3" cellspacing='3' border="0" width="100%">
                         <thead style="background: #000;color:#ffffff">
                             <tr>
@@ -153,6 +183,10 @@ $employeeDetail = getEmployeeDetail($employeeId);
                     </table>
                     <button class="no-print btn btn-success mt-2" onclick="window.print();">Print</button>
                     <a href="{{ route('employee.order', $employeeId) }}" class="no-print btn btn-info mt-2">Back</a>
+                </div>
+
+                <div class="card-body">
+
                 </div>
             </div>
         </div>

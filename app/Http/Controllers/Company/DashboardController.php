@@ -24,15 +24,19 @@ class DashboardController extends Controller
         //                         ->sum('qty');
 
         $totalComplete = ReceivedItem::where('company_id',$companyId)
+                                    ->whereYear('created_at', date('Y'))
                                     ->sum('qty');
 
         $totalPending = Order::where('company_id',$companyId)
-                            ->sum('qty');
+                                    ->whereYear('created_at', date('Y'))
+                                    ->sum('qty');
 
         $totalAmount = Order::where('company_id',$companyId)
+                            ->whereYear('created_at', date('Y'))
                             ->sum('total_amount');
 
         $paidAmount = OrderItem::where('company_id',$companyId)
+                                ->whereYear('created_at', date('Y'))
                                 ->sum('amount');
 
         return view('dashboard',[
