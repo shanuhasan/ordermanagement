@@ -24,15 +24,21 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('employee.index') }}" class="nav-link @yield('employee')">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>Employee</p>
+                    <a href="{{ route('item.index') }}" class="nav-link @yield('item')">
+                        <i class="nav-icon fab fa-product-hunt"></i>
+                        <p>Items</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('size.index') }}" class="nav-link @yield('size')">
                         <i class="nav-icon fas fa-list"></i>
                         <p>Size</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('employee.index') }}" class="nav-link @yield('employee')">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Employee</p>
                     </a>
                 </li>
                 {{-- <li class="nav-item">

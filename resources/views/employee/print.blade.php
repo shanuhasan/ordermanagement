@@ -93,7 +93,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                     <td style="border:1px solid #000;text-align:center">
                                         {{ !empty($item->date) ? date('d-m-Y', strtotime($item->date)) : date('d-m-Y h:i A', strtotime($item->created_at)) }}
                                     </td>
-                                    <td style="border:1px solid #000;text-align:center">{{ $item->particular }}
+                                    <td style="border:1px solid #000;text-align:center">
+                                        {{ !empty($item->item_id) ? getItemName($item->item_id) : $item->particular }}
                                     <td style="border:1px solid #000;text-align:center">{{ $item->qty }}
                                     </td>
                                     <td style="border:1px solid #000;text-align:center">₹{{ $item->rate }}</td>

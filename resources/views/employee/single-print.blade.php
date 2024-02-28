@@ -65,7 +65,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                             {{ date('d-m-Y', strtotime($item->created_at)) }}
                                         </td>
                                         <td style="border:1px solid #000;text-align:center">
-                                            {{ getOrder($item->order_id)->particular }}
+                                            {{-- {{ getOrder($item->order_id)->particular }} --}}
+                                            {{ !empty(getOrder($item->order_id)->item_id) ? getItemName(getOrder($item->order_id)->item_id) : getOrder($item->order_id)->particular }}
                                         </td>
                                         <td style="border:1px solid #000;text-align:center">
                                             {{ sizeName(getOrder($item->order_id)->size) }}

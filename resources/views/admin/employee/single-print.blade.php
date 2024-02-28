@@ -55,7 +55,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                 <td style="border:1px solid #000;text-align:center"></td>
                                 <td style="border:1px solid #000;text-align:center">
                                     {{ date('d-m-Y', strtotime($order->created_at)) }}</td>
-                                <td style="border:1px solid #000;text-align:center">{{ $order->particular }}
+                                <td style="border:1px solid #000;text-align:center">
+                                    {{ !empty($order->item_id) ? getItemName($order->item_id) : $order->particular }}
                                 <td style="border:1px solid #000;text-align:center">{{ $order->qty }}
                                 </td>
                                 <td style="border:1px solid #000;text-align:center">₹{{ $order->rate }}</td>

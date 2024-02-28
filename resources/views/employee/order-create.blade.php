@@ -30,14 +30,28 @@ $employeeDetail = getEmployeeDetail($employeeId);
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-3">
+                            {{-- <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="particular">Particular<span style="color: red">*</span></label>
                                     <input type="text" name="particular" id="particular"
                                         class="form-control text-to-upper" placeholder="Particular">
                                     <p class="error"></p>
                                 </div>
+                            </div> --}}
+
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="item_id">Particular/Items<span style="color: red">*</span></label>
+                                    <select name="item_id" id="item_id" class="form-control">
+                                        <option value="">Select Item</option>
+                                        @foreach (App\Models\Item::list() as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <p class="error"></p>
+                                </div>
                             </div>
+
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="size">Size<span style="color: red">*</span></label>

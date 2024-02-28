@@ -80,7 +80,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td>{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
-                                        <td>{{ $order->particular }}</td>
+                                        <td>{{ !empty($order->item_id) ? getItemName($order->item_id) : $order->particular }}
+                                        </td>
                                         <td>{{ $order->qty }}</td>
                                         <td>₹{{ $order->rate }}</td>
                                         <td>₹{{ $order->total_amount }}</td>

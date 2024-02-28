@@ -74,7 +74,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td>{{ date('d-m-Y', strtotime($item->created_at)) }} </td>
-                                        <td>{{ getOrder($item->order_id)->particular }} </td>
+                                        {{-- <td>{{ getOrder($item->order_id)->particular }} </td> --}}
+                                        <td> {{ !empty(getOrder($item->order_id)->item_id) ? getItemName(getOrder($item->order_id)->item_id) : getOrder($item->order_id)->particular }}
+                                        </td>
                                         <td>{{ sizeName(getOrder($item->order_id)->size) }}</td>
                                         <td>{{ $item->qty }}</td>
                                         {{-- <td> </td> --}}

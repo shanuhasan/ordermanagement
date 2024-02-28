@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('employee_id')->nullable();
             $table->string('company_id')->nullable();
-            $table->string('particular');
+            $table->string('particular')->nullable();
             $table->integer('qty')->nullable();
             $table->integer('rate')->nullable();          
             $table->double('total_amount',10,2);

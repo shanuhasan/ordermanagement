@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Company\ItemController;
 use App\Http\Controllers\Company\SizeController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -77,6 +78,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/employee/{employee_id}/edit',[EmployeeController::class,'edit'])->name('employee.edit');
     Route::put('/employee/{employee_id}',[EmployeeController::class,'update'])->name('employee.update');
     Route::get('/employee/{employee_id}',[EmployeeController::class,'destroy'])->name('employee.delete');
+
+    //items management
+    Route::get('/item', [ItemController ::class, 'index'])->name('item.index');
+    Route::get('/item/create',[ItemController ::class,'create'])->name('item.create');
+    Route::post('/item/store',[ItemController ::class,'store'])->name('item.store');
+    Route::get('/item/{item_id}/edit',[ItemController ::class,'edit'])->name('item.edit');
+    Route::put('/item/{item_id}',[ItemController ::class,'update'])->name('item.update');
+    Route::get('/item/{item_id}',[ItemController ::class,'destroy'])->name('item.delete');
 
     //size management
     Route::get('/size', [SizeController::class, 'index'])->name('size.index');

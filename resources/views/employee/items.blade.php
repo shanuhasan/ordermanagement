@@ -125,7 +125,7 @@
                                             {{ date('d-m-Y h:i A', strtotime($order->created_at)) }}
                                         </td>
                                         <td>
-                                            {{ $order->particular }}
+                                            {{ !empty($order->item_id) ? getItemName($order->item_id) : $order->particular }}
                                         </td>
                                         <td>{{ getEmployeeDetail($order->employee_id)->name }}</td>
                                         <td>{{ sizeName($order->size) }}</td>

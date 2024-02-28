@@ -98,7 +98,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             <tr>
                                 <th>#</th>
                                 <th>Date</th>
-                                <th>Particular</th>
+                                <th>Particular/Item</th>
                                 <th>Size</th>
                                 <th>Total Piece</th>
                                 <th>Received Piece</th>
@@ -134,7 +134,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                         <td>
                                             <a
                                                 href="{{ route('employee.order.edit', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
-                                                {{ $order->particular }}
+                                                {{ !empty($order->item_id) ? getItemName($order->item_id) : $order->particular }}
                                             </a>
                                         </td>
                                         <td>{{ sizeName($order->size) }}</td>

@@ -109,6 +109,8 @@
     <script src="{{ asset('admin-assets/plugins/select2/js/select2.min.js') }}"></script>
     <script src="{{ asset('admin-assets/js/datetimepicker.js') }}"></script>
     <script src="{{ asset('admin-assets/js/datepicker.js') }}"></script>
+    <script src="{{ asset('admin-assets/js/chosen-select/chosen.jquery.js') }}"></script>
+    <script src="{{ asset('admin-assets/js/common.js') }}"></script>
 
     <script type="text/javascript">
         $.ajaxSetup({

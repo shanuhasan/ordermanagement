@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Models\Item;
 use App\Models\Size;
 use App\Models\Order;
 use App\Models\Company;
@@ -115,6 +116,17 @@ function sizeName($id)
         return '';
     }
     return $size->name;
+}
+
+function getItemName($id)
+{
+    $item =  Item::find($id);
+    
+    if(empty($item))
+    {
+        return '';
+    }
+    return $item->name;
 }
 
 
