@@ -34,8 +34,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             {{-- <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="particular">Particular<span style="color: red">*</span></label>
-                                    <input type="text" name="particular" id="particular" class="form-control"
-                                        placeholder="Particular" value="{{ $order->particular }}">
+                                    <input type="text" name="particular" id="particular"
+                                        class="form-control text-to-upper" placeholder="Particular"
+                                        value="{{ $order->particular }}">
                                     <p class="error"></p>
                                 </div>
                             </div> --}}

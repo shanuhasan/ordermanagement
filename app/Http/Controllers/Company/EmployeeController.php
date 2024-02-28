@@ -55,6 +55,7 @@ class EmployeeController extends Controller
             'name'=>'required|min:3',
             'phone'=>'required|numeric',
             'status'=>'required',
+            'code'=>'required|unique:employees',
         ]);
 
         if($validator->passes())
@@ -118,6 +119,7 @@ class EmployeeController extends Controller
             'name'=>'required|min:3',
             'phone'=>'required|numeric',
             'status'=>'required',
+            'code'=>'required|unique:employees,code,'.$id.',id',
         ]);
 
         if($validator->passes()){
