@@ -23,11 +23,11 @@
         <!-- Default box -->
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-4 col-6">
+                <div class="col-lg-3 col-6">
                     <div class="small-box card">
                         <div class="inner">
                             <h3>{{ $totalEmployee }}</h3>
-                            <p>Total Employee</p>
+                            <strong>Total Employee</strong>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
@@ -37,33 +37,42 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-6">
+                <div class="col-lg-3 col-6">
                     <div class="small-box card">
                         <div class="inner">
-                            <h3>{{ number_format($totalComplete) }}</h3>
-                            <p>Completed Pcs.</p>
+                            <h3>{{ number_format($totalPcs) }}</h3>
+                            <strong>Total Piece</strong>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="{{ route('items.index', ['status' => 'Completed']) }}"
-                            class="small-box-footer text-dark">More info
-                            <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp</a>
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-6">
+                <div class="col-lg-3 col-6">
                     <div class="small-box card">
                         <div class="inner">
-                            <h3>{{ number_format($totalPending) }}</h3>
-                            <p>Pending Pcs.</p>
+                            <h3>{{ number_format($totalComplete) }}</h3>
+                            <strong>Complete Piece</strong>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="{{ route('items.index', ['status' => 'Pending']) }}"
-                            class="small-box-footer text-dark">More info
-                            <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <div class="small-box card">
+                        <div class="inner">
+                            <h3>{{ number_format($totalPending) }}</h3>
+                            <strong>Pending Piece</strong>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp</a>
                     </div>
                 </div>
 

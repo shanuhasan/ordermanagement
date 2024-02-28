@@ -27,7 +27,7 @@ class DashboardController extends Controller
                                     ->whereYear('created_at', date('Y'))
                                     ->sum('qty');
 
-        $totalPending = Order::where('company_id',$companyId)
+        $totalPcs = Order::where('company_id',$companyId)
                                     ->whereYear('created_at', date('Y'))
                                     ->sum('qty');
 
@@ -41,8 +41,9 @@ class DashboardController extends Controller
 
         return view('dashboard',[
             'totalEmployee'=>$totalEmployee,
+            'totalPcs'=>$totalPcs,
             'totalComplete'=>$totalComplete,
-            'totalPending'=>$totalPending - $totalComplete,
+            'totalPending'=>$totalPcs - $totalComplete,
             'totalAmount'=>$totalAmount,
             'paidAmount'=>$paidAmount,
         ]);
