@@ -25,9 +25,9 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="name">Name</label>
+                                    <label for="name">Name<span style="color: red">*</span></label>
                                     <input type="text" name="name" id="name" class="form-control text-to-upper"
                                         placeholder="Name">
                                     <p class="error"></p>
