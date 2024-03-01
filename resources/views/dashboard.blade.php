@@ -4,6 +4,12 @@
 @section('dashboard', 'active')
 @section('content')
 
+    <style>
+        .inner {
+            text-align: center;
+        }
+    </style>
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
@@ -27,7 +33,7 @@
                     <div class="small-box card">
                         <div class="inner">
                             <h3>{{ $totalEmployee }}</h3>
-                            <strong>Total Employee</strong>
+                            <h4><strong>Total Employee</strong></h4>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
@@ -41,7 +47,7 @@
                     <div class="small-box card">
                         <div class="inner">
                             <h3>{{ number_format($totalPcs) }}</h3>
-                            <strong>Total Piece</strong>
+                            <h4><strong>Total Piece</strong></h4>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -54,7 +60,7 @@
                     <div class="small-box card">
                         <div class="inner">
                             <h3>{{ number_format($totalComplete) }}</h3>
-                            <strong>Complete Piece</strong>
+                            <h4><strong>Complete Piece</strong></h4>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -67,7 +73,7 @@
                     <div class="small-box card">
                         <div class="inner">
                             <h3>{{ number_format($totalPending) }}</h3>
-                            <strong>Pending Piece</strong>
+                            <h4><strong>Pending Piece</strong></h4>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -80,7 +86,7 @@
                     <div class="small-box card">
                         <div class="inner" style="background:rgb(255, 147, 6);color:#fff">
                             <h3>₹{{ number_format($totalAmount) }}</h3>
-                            <p>Total Amount</p>
+                            <h4><strong>Total Amount</strong></h4>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -93,7 +99,7 @@
                     <div class="small-box card">
                         <div class="inner" style="background:green;color:#fff">
                             <h3>₹{{ number_format($paidAmount) }}</h3>
-                            <p>Paid Amount</p>
+                            <h4><strong>Paid Amount</strong></h4>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -106,7 +112,7 @@
                     <div class="small-box card">
                         <div class="inner" style="background:red;color:#fff">
                             <h3>₹{{ number_format($totalAmount - $paidAmount) }}</h3>
-                            <p>Remaining Amount</p>
+                            <h4><strong>Remaining Amount</strong></h4>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -114,58 +120,6 @@
                         <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
                     </div>
                 </div>
-
-                {{-- <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner">
-                            <h3>${{ number_format($totalRevenue, 2) }}</h3>
-                            <p>Total Sale</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer">&nbsp;</a>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner">
-                            <h3>${{ number_format($totalRevenueCurrentMonth, 2) }}</h3>
-                            <p>Total Sale This Month</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer">&nbsp;</a>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner">
-                            <h3>${{ number_format($totalRevenueLastMonth, 2) }}</h3>
-                            <p>Total Sale Last Month ({{ $lastMonth }})</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer">&nbsp;</a>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner">
-                            <h3>${{ number_format($totalRevenueLastThirtyDays, 2) }}</h3>
-                            <p>Total Sale Last 30 Days</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer">&nbsp;</a>
-                    </div>
-                </div> --}}
             </div>
         </div>
         <!-- /.card -->
