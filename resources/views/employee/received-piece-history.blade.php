@@ -77,9 +77,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <!-- Default box -->
         <div class="container-fluid">
             <div class="card">
-                <h5 style="text-align: center;font-weight:bold">RECEIVED PIECE HISTORY
-                    ({{ strtoupper($employeeDetail->name) }})</h5>
                 <div class="card-body">
+                    <h5 style="text-align: center;font-weight:bold">RECEIVED PIECE HISTORY
+                        ({{ strtoupper($employeeDetail->name) }})</h5>
                     <table cellpadding="3" cellspacing='3' border="0" width="100%">
                         <thead style="background: #000;color:#ffffff">
                             <tr>
