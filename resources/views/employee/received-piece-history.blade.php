@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Print')
+@section('title', 'Received Pieces History')
 @section('employee', 'active')
 <?php
 $employeeDetail = getEmployeeDetail($employeeId);

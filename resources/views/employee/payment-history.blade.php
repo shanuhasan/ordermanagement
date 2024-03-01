@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Employee Orders')
+@section('title', 'Payment History')
 @section('employee', 'active')
 
 

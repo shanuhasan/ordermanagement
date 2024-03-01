@@ -19,12 +19,12 @@ $employeeDetail = getEmployeeDetail($employeeId);
                     </h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('employee.order.create', $employeeId) }}" class="btn btn-primary">Add</a>
                     <a href="{{ route('employee.order.receivedPiece', $employeeId) }}" class="btn btn-success">Received Piece
                         History</a>
                     <a href="{{ route('employee.order.payment.history', $employeeId) }}" class="btn btn-info">Payment
                         History</a>
                     <a href="{{ route('employee.order.print', $employeeId) }}" class="btn btn-success">Print</a>
+                    <a href="{{ route('employee.order.create', $employeeId) }}" class="btn btn-primary">Add</a>
                 </div>
             </div>
         </div>

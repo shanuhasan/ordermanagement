@@ -31,6 +31,10 @@ $employeeDetail = getEmployeeDetail($employeeId);
                         ({{ !empty($employeeDetail->code) ? 'Code:- ' . $employeeDetail->code . ',' : '' }}
                         {{ !empty($employeeDetail->phone) ? 'Mobile:- ' . $employeeDetail->phone : '' }})</h2>
                 </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-success" onclick="window.print();">Print</a>
+                    <a class="btn btn-primary" href="{{ route('employee.order', $employeeId) }}">Back</a>
+                </div>
             </div>
         </div>
         <!-- /.container-fluid -->
@@ -182,8 +186,6 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             </tr>
                         </tfoot>
                     </table>
-                    <button class="no-print btn btn-success mt-2" onclick="window.print();">Print</button>
-                    <a href="{{ route('employee.order', $employeeId) }}" class="no-print btn btn-info mt-2">Back</a>
                 </div>
 
                 <div class="card-body">
