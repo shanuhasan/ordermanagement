@@ -75,7 +75,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <div class="container-fluid">
             <div class="card">
                 <div class="card-body">
-                    <h5 style="text-align: center;font-weight:bold">HISTORY
+                    <h5 style="font-weight:bold">HISTORY
                         ({{ strtoupper($employeeDetail->name) }})</h5>
                     <table cellpadding="3" cellspacing='3' border="0" width="100%">
                         <thead style="background: #000;color:#ffffff">
@@ -124,7 +124,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                     </table>
 
                     {{-- payment history --}}
-                    <h5 class="mt-2" style="text-align: center;font-weight:bold">PAYMENT HISTORY</h5>
+                    <h5 class="mt-2" style="font-weight:bold">PAYMENT HISTORY</h5>
                     <table cellpadding="3" cellspacing='3' border="0" width="100%">
                         <thead style="background: #000;color:#ffffff">
                             <tr>
