@@ -28,7 +28,7 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="name">Name*</label>
-                                    <input type="text" name="name" id="name" class="form-control"
+                                    <input type="text" name="name" id="name" class="form-control text-to-upper"
                                         placeholder="Name">
                                     <p class="error"></p>
                                 </div>
@@ -36,7 +36,7 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="code">Code</label>
-                                    <input type="text" name="code" id="code" class="form-control"
+                                    <input type="text" name="code" id="code" class="form-control text-to-upper"
                                         placeholder="Code">
                                     <p class="error"></p>
                                 </div>
@@ -44,8 +44,8 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="phone">Phone*</label>
-                                    <input type="phone" name="phone" id="phone" class="form-control"
-                                        placeholder="Phone">
+                                    <input type="phone" name="phone" id="phone" class="form-control only-number"
+                                        placeholder="Phone" maxlength="10">
                                     <p class="error"></p>
                                 </div>
                             </div>

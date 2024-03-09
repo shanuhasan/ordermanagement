@@ -36,7 +36,7 @@
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="code">Code</label>
-                                    <input type="text" name="code" class="form-control only-number" placeholder="Code"
+                                    <input type="text" name="code" class="form-control" placeholder="Code"
                                         value="{{ Request::get('code') }}">
                                 </div>
                             </div>
@@ -44,7 +44,7 @@
                                 <div class="mb-3">
                                     <label for="phone">Phone</label>
                                     <input type="text" name="phone" class="form-control only-number"
-                                        placeholder="Phone" value="{{ Request::get('phone') }}">
+                                        placeholder="Phone" maxlength="10" value="{{ Request::get('phone') }}">
                                 </div>
                             </div>
                         </div>

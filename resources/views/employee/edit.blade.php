@@ -29,7 +29,7 @@
                                 <div class="mb-3">
                                     <label for="name">Name*</label>
                                     <input type="text" name="name" id="name" value="{{ $employee->name }}"
-                                        class="form-control" placeholder="Name">
+                                        class="form-control text-to-upper" placeholder="Name">
                                     <p></p>
                                 </div>
                             </div>
@@ -37,7 +37,7 @@
                                 <div class="mb-3">
                                     <label for="code">Code</label>
                                     <input type="text" name="code" id="code" value="{{ $employee->code }}"
-                                        class="form-control" placeholder="Code">
+                                        class="form-control text-to-upper" placeholder="Code">
                                     <p class="error"></p>
                                 </div>
                             </div>
@@ -45,7 +45,7 @@
                                 <div class="mb-3">
                                     <label for="phone">Phone*</label>
                                     <input type="phone" name="phone" id="phone" value="{{ $employee->phone }}"
-                                        class="form-control" placeholder="Phone">
+                                        class="form-control only-number" maxlength="10" placeholder="Phone">
                                     <p class="error"></p>
                                 </div>
                             </div>
