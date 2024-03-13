@@ -252,6 +252,7 @@ class EmployeeController extends Controller
             $model->company_id = $companyId;
             $model->employee_id = $request->employee_id;
             $model->particular = $request->particular;
+            $model->item_id = $request->item_id;
             $model->size = $request->size;
             $model->qty = $request->qty;
             $model->rate = $request->rate;
