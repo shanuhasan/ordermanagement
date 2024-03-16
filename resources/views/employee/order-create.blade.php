@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Add New')
+@section('title', 'Add')
 @section('employee', 'active')
 
 @section('content')
@@ -8,7 +8,12 @@
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>{{ $employee->name }} ({{ $employee->phone }}) Add</h1>
+                    <h3>
+                        {{ $employee->name }}
+                        ({{ !empty($employee->code) ? 'Code:- ' . $employee->code . ',' : '' }}
+                        {{ !empty($employee->phone) ? 'Mobile:- ' . $employee->phone : ' ' }})
+                        Add
+                    </h3>
                 </div>
                 <div class="col-sm-6 text-right">
                     <a href="{{ route('employee.order', $employee->guid) }}" class="btn btn-primary">Back</a>

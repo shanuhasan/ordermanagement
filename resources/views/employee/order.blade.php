@@ -8,11 +8,11 @@
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>
+                    <h3>
                         {{ $employee->name }}
                         ({{ !empty($employee->code) ? 'Code:- ' . $employee->code . ',' : '' }}
                         {{ !empty($employee->phone) ? 'Mobile:- ' . $employee->phone : ' ' }})
-                    </h1>
+                    </h3>
                 </div>
                 <div class="col-sm-6 text-right">
                     <a href="{{ route('employee.order.receivedPiece', $employee->guid) }}" class="btn btn-success">Received
@@ -47,8 +47,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-success">Filter</button>
-                                <a href="{{ route('employee.order', $employee->guid) }}" class="btn btn-danger">Reset</a>
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
@@ -77,6 +75,8 @@
                                 </div>
                             </div>
                         </div>
+                        <button type="submit" class="btn btn-success">Filter</button>
+                        <a href="{{ route('employee.order', $employee->guid) }}" class="btn btn-danger">Reset</a>
                     </div>
                 </form>
             </div>
@@ -93,17 +93,17 @@
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Date</th>
-                                <th>Particular/Item</th>
-                                <th>Size</th>
-                                <th>Total Piece</th>
-                                <th>Received Piece</th>
-                                <th>Pending Piece</th>
-                                <th>Rate</th>
-                                <th>Total Amount</th>
-                                <th>Status</th>
-                                <th width="100">Action</th>
+                                <th style="text-align:center">#</th>
+                                <th style="text-align:center">Date</th>
+                                <th style="text-align:center">Particular/Item</th>
+                                <th style="text-align:center">Size</th>
+                                <th style="text-align:center">Total Piece</th>
+                                <th style="text-align:center">Received Piece</th>
+                                <th style="text-align:center">Pending Piece</th>
+                                <th style="text-align:center">Rate</th>
+                                <th style="text-align:center">Total Amount</th>
+                                <th style="text-align:center">Status</th>
+                                <th style="text-align:center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -121,39 +121,39 @@
                                     }
                                     ?>
                                     <tr>
-                                        <td>{{ $i++ }}</td>
-                                        <td>
+                                        <td style="text-align:center">{{ $i++ }}</td>
+                                        <td style="text-align:center">
                                             <a
                                                 href="{{ route('employee.order.edit', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
                                                 {{ !empty($order->date) ? date('d-m-Y', strtotime($order->date)) : date('d-m-Y h:i A', strtotime($order->created_at)) }}
                                             </a>
                                         </td>
-                                        <td>
+                                        <td style="text-align:center">
                                             <a
                                                 href="{{ route('employee.order.edit', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
                                                 {{ !empty($order->item_id) ? getItemName($order->item_id) : $order->particular }}
                                             </a>
                                         </td>
-                                        <td>{{ sizeName($order->size) }}</td>
-                                        <td>{{ $order->qty }}</td>
-                                        <td>{{ receivedItems($order->id) }}</td>
-                                        <td>{{ $order->qty - receivedItems($order->id) }}</td>
-                                        <td>₹{{ $order->rate }}</td>
-                                        <td>
+                                        <td style="text-align:center">{{ sizeName($order->size) }}</td>
+                                        <td style="text-align:center">{{ $order->qty }}</td>
+                                        <td style="text-align:center">{{ receivedItems($order->id) }}</td>
+                                        <td style="text-align:center">{{ $order->qty - receivedItems($order->id) }}</td>
+                                        <td style="text-align:center">₹{{ $order->rate }}</td>
+                                        <td style="text-align:center">
                                             <a
                                                 href="{{ route('employee.order.edit', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
                                                 ₹{{ $order->total_amount }}
                                             </a>
                                         </td>
                                         <td
-                                            style="{{ $order->status == 'Pending' ? 'background:red;color:#fff;font-weight:bold;' : 'background:green;color:#fff;font-weight:bold;' }}">
+                                            style="{{ $order->status == 'Pending' ? 'text-align:center;background:red;color:#fff;font-weight:bold;' : 'text-align:center;background:green;color:#fff;font-weight:bold;' }}">
                                             @if ($order->status == 'Pending')
                                                 Pending
                                             @else
                                                 Completed
                                             @endif
                                         </td>
-                                        <td>
+                                        <td style="text-align:center">
                                             {{-- <a
                                                 href="{{ route('employee.order.edit', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
                                                 <i class="fa fa-edit" aria-hidden="true"></i>

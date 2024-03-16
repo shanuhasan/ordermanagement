@@ -23,7 +23,7 @@
                 <li class="nav-item">
                     <a href="{{ route('item.index') }}" class="nav-link @yield('item')">
                         <i class="nav-icon fab fa-product-hunt"></i>
-                        <p>Items</p>
+                        <p>Particular/Items</p>
                     </a>
                 </li>
                 <li class="nav-item">

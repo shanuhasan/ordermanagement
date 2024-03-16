@@ -64,12 +64,12 @@
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th>S.No</th>
-                                <th>Name</th>
-                                <th>Code</th>
-                                <th>Phone</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th style="text-align:center">#</th>
+                                <th style="text-align:center">Name</th>
+                                <th style="text-align:center">Code</th>
+                                <th style="text-align:center">Phone</th>
+                                <th style="text-align:center">Status</th>
+                                <th style="text-align:center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -78,20 +78,20 @@
                                 <?php $i = 1; ?>
                                 @foreach ($employees as $employee)
                                     <tr>
-                                        <td>{{ $i++ }}</td>
-                                        <td>
+                                        <td style="text-align:center">{{ $i++ }}</td>
+                                        <td style="text-align:center">
                                             <a href="{{ route('employee.order', $employee->guid) }}"><strong>{{ $employee->name }}</strong>
                                             </a>
                                         </td>
-                                        <td>
+                                        <td style="text-align:center">
                                             <a href="{{ route('employee.order', $employee->guid) }}"><strong>{{ $employee->code }}</strong>
                                             </a>
                                         </td>
-                                        <td>
+                                        <td style="text-align:center">
                                             <a href="{{ route('employee.order', $employee->guid) }}"><strong>{{ $employee->phone }}</strong>
                                             </a>
                                         </td>
-                                        <td>
+                                        <td style="text-align:center">
                                             @if ($employee->status == 1)
                                                 <svg class="text-success-500 h-6 w-6 text-success"
                                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -110,7 +110,7 @@
                                             @endif
 
                                         </td>
-                                        <td>
+                                        <td style="text-align:center">
                                             <a href="{{ route('employee.edit', $employee->guid) }}">
                                                 <svg class="filament-link-icon w-4 h-4 mr-1"
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
