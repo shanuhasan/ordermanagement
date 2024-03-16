@@ -1,9 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Print')
 @section('employee', 'active')
-<?php
-$employeeDetail = getEmployeeDetail($employeeId);
-?>
+
 @section('content')
     <style>
         @media print {
@@ -26,13 +24,15 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h2>{{ $employeeDetail->name }}
-                        ({{ !empty($employeeDetail->code) ? 'Code:- ' . $employeeDetail->code . ',' : '' }}
-                        {{ !empty($employeeDetail->phone) ? 'Mobile:- ' . $employeeDetail->phone : '' }})</h2>
+                    <h3>
+                        {{ $employee->name }}
+                        ({{ !empty($employee->code) ? 'Code:- ' . $employee->code . ',' : '' }}
+                        {{ !empty($employee->phone) ? 'Mobile:- ' . $employee->phone : '' }})
+                    </h3>
                 </div>
                 <div class="col-sm-6 text-right">
                     <a class="btn btn-success" onclick="window.print();">Print</a>
-                    <a href="{{ route('employee.order', $employeeId) }}" class="btn btn-primary">Back</a>
+                    <a href="{{ route('employee.order', $employee->guid) }}" class="btn btn-primary">Back</a>
                 </div>
             </div>
         </div>
@@ -43,9 +43,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <!-- Default box -->
         <div class="container-fluid">
             <div class="card">
-                <h5 style="text-align: center;font-weight:bold">RECEIVED PIECE HISTORY
-                    ({{ strtoupper($employeeDetail->name) }})</h5>
                 <div class="card-body">
+                    <h5 style="font-weight:bold">RECEIVED PIECE HISTORY
+                        ({{ strtoupper($employee->name) }})</h5>
                     <table cellpadding="3" cellspacing='3' border="0" width="100%">
                         <thead style="background: #000;color:#ffffff">
                             <tr>
@@ -57,10 +57,14 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $total = 0;
+                                $i = 1;
+                            @endphp
                             @if ($items->isNotEmpty())
                                 @foreach ($items as $item)
                                     <tr style="border:1px solid #000">
-                                        <td style="border:1px solid #000;text-align:center"></td>
+                                        <td style="border:1px solid #000;text-align:center">{{ $i++ }}</td>
                                         <td style="border:1px solid #000;text-align:center">
                                             {{ date('d-m-Y', strtotime($item->created_at)) }}
                                         </td>
@@ -74,15 +78,27 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                         <td style="border:1px solid #000;text-align:center">{{ $item->qty }}
                                         </td>
                                     </tr>
+                                    @php
+                                        $total = $total + $item->qty;
+                                    @endphp
                                 @endforeach
                             @else
                                 <tr>
-                                    <td colspan="5" style="text-align:center">Data not found.</td>
+                                    <td colspan="5" style="border:1px solid #000;text-align:center">Data not found.</td>
                                 </tr>
                             @endif
-
-
                         </tbody>
+                        @if ($items->isNotEmpty())
+                            <tfoot>
+                                <tr>
+                                    <th style="border:1px solid #000;text-align:center"></th>
+                                    <th style="border:1px solid #000;text-align:center"></th>
+                                    <th style="border:1px solid #000;text-align:center"></th>
+                                    <th style="border:1px solid #000;text-align:center">Total</th>
+                                    <th style="border:1px solid #000;text-align:center">{{ $total }}</th>
+                                </tr>
+                            </tfoot>
+                        @endif
                     </table>
                 </div>
             </div>

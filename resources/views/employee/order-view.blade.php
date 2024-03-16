@@ -2,28 +2,24 @@
 @section('title', 'View')
 @section('employee', 'active')
 
-
-<?php
-$employeeDetail = getEmployeeDetail($employeeId);
-?>
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>
-                        {{ $employeeDetail->name }}
-                        ({{ !empty($employeeDetail->code) ? 'Code:- ' . $employeeDetail->code . ',' : '' }}
-                        {{ !empty($employeeDetail->phone) ? 'Mobile:- ' . $employeeDetail->phone : ' ' }})
-                    </h1>
+                    <h3>
+                        {{ $employee->name }}
+                        ({{ !empty($employee->code) ? 'Code:- ' . $employee->code . ',' : '' }}
+                        {{ !empty($employee->phone) ? 'Mobile:- ' . $employee->phone : ' ' }})
+                    </h3>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('employee.order.singleprint', ['employeeId' => $employeeId, 'orderId' => $orderId]) }}"
+                    <a href="{{ route('employee.order.singleprint', ['employeeId' => $employee->guid, 'orderId' => $orderId]) }}"
                         class="btn btn-success">
                         Print
                     </a>
-                    <a href="{{ route('employee.order', $employeeId) }}" class="btn btn-primary">Back</a>
+                    <a href="{{ route('employee.order', $employee->guid) }}" class="btn btn-primary">Back</a>
                 </div>
             </div>
         </div>
@@ -60,7 +56,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             <tr>
                                 <th>#</th>
                                 <th>Date</th>
-                                <th>Particular</th>
+                                <th>Particular/Items</th>
                                 <th>Size</th>
                                 <th>Received Piece</th>
                                 {{-- <th>Action</th> --}}

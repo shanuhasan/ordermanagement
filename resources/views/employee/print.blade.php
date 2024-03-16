@@ -1,9 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Print')
 @section('employee', 'active')
-<?php
-$employeeDetail = getEmployeeDetail($employeeId);
-?>
+
 @section('content')
     <style>
         @media print {
@@ -27,13 +25,13 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h2>{{ $employeeDetail->name }}
-                        ({{ !empty($employeeDetail->code) ? 'Code:- ' . $employeeDetail->code . ',' : '' }}
-                        {{ !empty($employeeDetail->phone) ? 'Mobile:- ' . $employeeDetail->phone : '' }})</h2>
+                    <h2>{{ $employee->name }}
+                        ({{ !empty($employee->code) ? 'Code:- ' . $employee->code . ',' : '' }}
+                        {{ !empty($employee->phone) ? 'Mobile:- ' . $employee->phone : '' }})</h2>
                 </div>
                 <div class="col-sm-6 text-right">
                     <a class="btn btn-success" onclick="window.print();">Print</a>
-                    <a class="btn btn-primary" href="{{ route('employee.order', $employeeId) }}">Back</a>
+                    <a class="btn btn-primary" href="{{ route('employee.order', $employee->guid) }}">Back</a>
                 </div>
             </div>
         </div>
@@ -59,10 +57,10 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                         @endforeach
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-success">Filter</button>
-                                <a href="{{ route('employee.order.print', $employeeId) }}" class="btn btn-danger">Reset</a>
                             </div>
                         </div>
+                        <button type="submit" class="btn btn-success">Filter</button>
+                        <a href="{{ route('employee.order.print', $employee->guid) }}" class="btn btn-danger">Reset</a>
                     </div>
                 </form>
             </div>
@@ -76,7 +74,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
             <div class="card">
                 <div class="card-body">
                     <h5 style="font-weight:bold">HISTORY
-                        ({{ strtoupper($employeeDetail->name) }})</h5>
+                        ({{ strtoupper($employee->name) }})</h5>
                     <table cellpadding="3" cellspacing='3' border="0" width="100%">
                         <thead style="background: #000;color:#ffffff">
                             <tr>

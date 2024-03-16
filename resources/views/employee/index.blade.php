@@ -80,15 +80,15 @@
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td>
-                                            <a href="{{ route('employee.order', $employee->id) }}"><strong>{{ $employee->name }}</strong>
+                                            <a href="{{ route('employee.order', $employee->guid) }}"><strong>{{ $employee->name }}</strong>
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="{{ route('employee.order', $employee->id) }}"><strong>{{ $employee->code }}</strong>
+                                            <a href="{{ route('employee.order', $employee->guid) }}"><strong>{{ $employee->code }}</strong>
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="{{ route('employee.order', $employee->id) }}"><strong>{{ $employee->phone }}</strong>
+                                            <a href="{{ route('employee.order', $employee->guid) }}"><strong>{{ $employee->phone }}</strong>
                                             </a>
                                         </td>
                                         <td>

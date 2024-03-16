@@ -2,10 +2,6 @@
 @section('title', 'Employee Orders')
 @section('employee', 'active')
 
-
-<?php
-$employeeDetail = getEmployeeDetail($employeeId);
-?>
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -13,18 +9,19 @@ $employeeDetail = getEmployeeDetail($employeeId);
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>
-                        {{ $employeeDetail->name }}
-                        ({{ !empty($employeeDetail->code) ? 'Code:- ' . $employeeDetail->code . ',' : '' }}
-                        {{ !empty($employeeDetail->phone) ? 'Mobile:- ' . $employeeDetail->phone : ' ' }})
+                        {{ $employee->name }}
+                        ({{ !empty($employee->code) ? 'Code:- ' . $employee->code . ',' : '' }}
+                        {{ !empty($employee->phone) ? 'Mobile:- ' . $employee->phone : ' ' }})
                     </h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('employee.order.receivedPiece', $employeeId) }}" class="btn btn-success">Received Piece
+                    <a href="{{ route('employee.order.receivedPiece', $employee->guid) }}" class="btn btn-success">Received
+                        Piece
                         History</a>
-                    <a href="{{ route('employee.order.payment.history', $employeeId) }}" class="btn btn-info">Payment
+                    <a href="{{ route('employee.order.payment.history', $employee->guid) }}" class="btn btn-info">Payment
                         History</a>
-                    <a href="{{ route('employee.order.print', $employeeId) }}" class="btn btn-success">Print</a>
-                    <a href="{{ route('employee.order.create', $employeeId) }}" class="btn btn-primary">Add</a>
+                    <a href="{{ route('employee.order.print', $employee->guid) }}" class="btn btn-success">Print</a>
+                    <a href="{{ route('employee.order.create', $employee->guid) }}" class="btn btn-primary">Add</a>
                 </div>
             </div>
         </div>
@@ -51,7 +48,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-success">Filter</button>
-                                <a href="{{ route('employee.order', $employeeId) }}" class="btn btn-danger">Reset</a>
+                                <a href="{{ route('employee.order', $employee->guid) }}" class="btn btn-danger">Reset</a>
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
@@ -127,13 +124,13 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                         <td>{{ $i++ }}</td>
                                         <td>
                                             <a
-                                                href="{{ route('employee.order.edit', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
+                                                href="{{ route('employee.order.edit', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
                                                 {{ !empty($order->date) ? date('d-m-Y', strtotime($order->date)) : date('d-m-Y h:i A', strtotime($order->created_at)) }}
                                             </a>
                                         </td>
                                         <td>
                                             <a
-                                                href="{{ route('employee.order.edit', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
+                                                href="{{ route('employee.order.edit', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
                                                 {{ !empty($order->item_id) ? getItemName($order->item_id) : $order->particular }}
                                             </a>
                                         </td>
@@ -144,7 +141,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                         <td>₹{{ $order->rate }}</td>
                                         <td>
                                             <a
-                                                href="{{ route('employee.order.edit', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
+                                                href="{{ route('employee.order.edit', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
                                                 ₹{{ $order->total_amount }}
                                             </a>
                                         </td>
@@ -157,18 +154,18 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                             @endif
                                         </td>
                                         <td>
-                                            <a
-                                                href="{{ route('employee.order.edit', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
+                                            {{-- <a
+                                                href="{{ route('employee.order.edit', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
                                                 <i class="fa fa-edit" aria-hidden="true"></i>
-                                            </a>
+                                            </a> --}}
                                             <a
-                                                href="{{ route('employee.order.singleprint', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
+                                                href="{{ route('employee.order.singleprint', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
                                                 <i class="fa fa-print" aria-hidden="true"></i>
                                             </a>
-                                            <a
-                                                href="{{ route('employee.order.view', ['employeeId' => $employeeId, 'orderId' => $order->id]) }}">
+                                            {{-- <a
+                                                href="{{ route('employee.order.view', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
-                                            </a>
+                                            </a> --}}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -198,7 +195,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                     <div class="col-md-8">
                         <form action="{{ route('employee.order.payment') }}" method="post">
                             @csrf
-                            <input type="hidden" value="{{ $employeeId }}" name="employee_id" id="employee_id">
+                            <input type="hidden" value="{{ $employee->id }}" name="employee_id" id="employee_id">
                             <div class="card">
                                 <h5 style="text-align: center;font-weight:bold;background:gray;">ADVANCE AMOUNT</h5>
                                 <div class="card-body">
@@ -267,11 +264,4 @@ $employeeDetail = getEmployeeDetail($employeeId);
             <!-- /.card -->
         </section>
     @endif
-
-
-
-@endsection
-
-
-@section('script')
 @endsection

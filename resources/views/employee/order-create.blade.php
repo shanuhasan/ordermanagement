@@ -2,19 +2,16 @@
 @section('title', 'Add New')
 @section('employee', 'active')
 
-<?php
-$employeeDetail = getEmployeeDetail($employeeId);
-?>
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>{{ $employeeDetail->name }} ({{ $employeeDetail->phone }}) Add</h1>
+                    <h1>{{ $employee->name }} ({{ $employee->phone }}) Add</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('employee.order', $employeeId) }}" class="btn btn-primary">Back</a>
+                    <a href="{{ route('employee.order', $employee->guid) }}" class="btn btn-primary">Back</a>
                 </div>
             </div>
         </div>
@@ -26,19 +23,10 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <div class="container-fluid">
             <form action="" id="employeeForm" method="post">
                 @csrf
-                <input type="hidden" value="{{ $employeeId }}" name="employee_id">
+                <input type="hidden" value="{{ $employee->id }}" name="employee_id">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            {{-- <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="particular">Particular<span style="color: red">*</span></label>
-                                    <input type="text" name="particular" id="particular"
-                                        class="form-control text-to-upper" placeholder="Particular">
-                                    <p class="error"></p>
-                                </div>
-                            </div> --}}
-
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="item_id">Particular/Items<span style="color: red">*</span><span><a
@@ -109,11 +97,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                 </div>
                             </div> --}}
                         </div>
+                        <button type="submit" class="btn btn-success">Create</button>
+                        <a href="{{ route('employee.order', $employee->guid) }}" class="btn btn-info">Cancel</a>
                     </div>
-                </div>
-                <div class="pb-5 pt-3">
-                    <button type="submit" class="btn btn-primary">Create</button>
-                    <a href="{{ route('employee.order', $employeeId) }}" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </form>
         </div>
@@ -136,7 +122,7 @@ $employeeDetail = getEmployeeDetail($employeeId);
                 success: function(response) {
                     $('button[type=submit]').prop('disabled', false);
                     if (response['status'] == true) {
-                        window.location.href = "{{ route('employee.order', $employeeId) }}";
+                        window.location.href = "{{ route('employee.order', $employee->guid) }}";
                         $('.error').removeClass('invalid-feedback').html('');
                         $('input[type="text"],input[type="number"],select').removeClass('is-invalid');
                     } else {

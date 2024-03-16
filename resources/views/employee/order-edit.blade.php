@@ -1,21 +1,19 @@
 @extends('layouts.app')
 @section('title', 'Edit Item')
 @section('employee', 'active')
-<?php
-$employeeDetail = getEmployeeDetail($employeeId);
-?>
+
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>{{ $employeeDetail->name }}
-                        ({{ !empty($employeeDetail->code) ? 'Code:- ' . $employeeDetail->code . ',' : '' }}
-                        {{ !empty($employeeDetail->phone) ? 'Mobile:- ' . $employeeDetail->phone : '' }})</h1>
+                    <h1>{{ $employee->name }}
+                        ({{ !empty($employee->code) ? 'Code:- ' . $employee->code . ',' : '' }}
+                        {{ !empty($employee->phone) ? 'Mobile:- ' . $employee->phone : '' }})</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('employee.order', $employeeId) }}" class="btn btn-primary">Back</a>
+                    <a href="{{ route('employee.order', $employee->guid) }}" class="btn btn-primary">Back</a>
                 </div>
             </div>
         </div>
@@ -27,20 +25,10 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <div class="container-fluid">
             <form action="" id="employeeForm" method="post">
                 @csrf
-                <input type="hidden" value="{{ $employeeId }}" name="employee_id">
+                <input type="hidden" value="{{ $employee->id }}" name="employee_id">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            {{-- <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="particular">Particular<span style="color: red">*</span></label>
-                                    <input type="text" name="particular" id="particular"
-                                        class="form-control text-to-upper" placeholder="Particular"
-                                        value="{{ $order->particular }}">
-                                    <p class="error"></p>
-                                </div>
-                            </div> --}}
-
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="item_id">Particular/Items<span style="color: red">*</span><span><a
@@ -118,11 +106,9 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                 </div>
                             </div>
                         </div>
+                        <button type="submit" class="btn btn-success">Update</button>
+                        <a href="{{ route('employee.order', $employee->guid) }}" class="btn btn-info">Cancel</a>
                     </div>
-                </div>
-                <div class="pb-5 pt-3">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                    <a href="{{ route('employee.order', $employeeId) }}" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </form>
         </div>
@@ -146,13 +132,13 @@ $employeeDetail = getEmployeeDetail($employeeId);
                     $('button[type=submit]').prop('disabled', false);
                     if (response['status'] == true) {
 
-                        window.location.href = "{{ route('employee.order', $employeeId) }}";
+                        window.location.href = "{{ route('employee.order', $employee->guid) }}";
                         $('.error').removeClass('invalid-feedback').html('');
                         $('input[type="text"],input[type="number"],select').removeClass('is-invalid');
                     } else {
 
                         if (response['notFound'] == true) {
-                            window.location.href = "{{ route('employee.order', $employeeId) }}";
+                            window.location.href = "{{ route('employee.order', $employee->guid) }}";
                         }
 
                         var errors = response['errors'];

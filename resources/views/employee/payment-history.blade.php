@@ -2,10 +2,6 @@
 @section('title', 'Payment History')
 @section('employee', 'active')
 
-
-<?php
-$employeeDetail = getEmployeeDetail($employeeId);
-?>
 @section('content')
 
     <style>
@@ -31,15 +27,15 @@ $employeeDetail = getEmployeeDetail($employeeId);
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>
-                        {{ $employeeDetail->name }}
-                        ({{ !empty($employeeDetail->code) ? 'Code:- ' . $employeeDetail->code . ',' : '' }}
-                        {{ !empty($employeeDetail->phone) ? 'Mobile:- ' . $employeeDetail->phone : ' ' }})
-                    </h1>
+                    <h3>
+                        {{ $employee->name }}
+                        ({{ !empty($employee->code) ? 'Code:- ' . $employee->code . ',' : '' }}
+                        {{ !empty($employee->phone) ? 'Mobile:- ' . $employee->phone : ' ' }})
+                    </h3>
                 </div>
                 <div class="col-sm-6 text-right">
                     <a onclick="window.print();" class="btn btn-success">Print </a>
-                    <a href="{{ route('employee.order', $employeeId) }}" class="btn btn-primary">Back</a>
+                    <a href="{{ route('employee.order', $employee->guid) }}" class="btn btn-primary">Back</a>
                 </div>
             </div>
         </div>
@@ -65,11 +61,11 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                         @endforeach
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-success">Filter</button>
-                                <a href="{{ route('employee.order.payment.history', $employeeId) }}"
-                                    class="btn btn-danger">Reset</a>
                             </div>
                         </div>
+                        <button type="submit" class="btn btn-success">Filter</button>
+                        <a href="{{ route('employee.order.payment.history', $employee->guid) }}"
+                            class="btn btn-danger">Reset</a>
                     </div>
                 </form>
             </div>
@@ -84,21 +80,24 @@ $employeeDetail = getEmployeeDetail($employeeId);
             <div class="card">
                 <div class="card-body">
                     <h5 style="font-weight:bold">PAYMENT HISTORY
-                        ({{ strtoupper($employeeDetail->name) }})
+                        ({{ strtoupper($employee->name) }})
                     </h5>
                     <table cellpadding="3" cellspacing='3' border="0" width="100%">
                         <thead style="background: #000;color:#ffffff">
                             <tr>
+                                <th style="border:1px solid #000;text-align:center">#</th>
                                 <th style="border:1px solid #000;text-align:center">Date</th>
                                 <th style="border:1px solid #000;text-align:center">Pament Method</th>
                                 <th style="border:1px solid #000;text-align:center">Amount</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $total = 0; ?>
+                            <?php $total = 0;
+                            $i = 1; ?>
                             @if ($employeePaymentHistory->isNotEmpty())
                                 @foreach ($employeePaymentHistory as $item)
                                     <tr>
+                                        <td style="border:1px solid #000;text-align:center">{{ $i++ }}</td>
                                         <td style="border:1px solid #000;text-align:center">
                                             {{ date('d-m-Y h:i A', strtotime($item->created_at)) }}
                                         </td>
@@ -116,10 +115,11 @@ $employeeDetail = getEmployeeDetail($employeeId);
                                 </tr>
                             @endif
                         </tbody>
-                        <tfoot style="background: #000;color:#ffffff">
+                        <tfoot>
                             <tr>
                                 <th style="border:1px solid #000;text-align:center"></th>
-                                <th style="border:1px solid #000;text-align:center"><strong>Paid</strong></th>
+                                <th style="border:1px solid #000;text-align:center"></th>
+                                <th style="border:1px solid #000;text-align:center"><strong>Total Paid</strong></th>
                                 <th style="border:1px solid #000;text-align:center">
                                     <strong>₹{{ $total }}</strong>
                                 </th>
@@ -127,14 +127,8 @@ $employeeDetail = getEmployeeDetail($employeeId);
                         </tfoot>
                     </table>
                 </div>
-                {{-- <div class="card-footer clearfix">
-                    {{ $employeePaymentHistory->links('pagination::bootstrap-5') }}
-                </div> --}}
             </div>
         </div>
         <!-- /.card -->
     </section>
-
-
-
 @endsection
