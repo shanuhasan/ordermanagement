@@ -150,17 +150,26 @@
                                         </td>
                                         <td
                                             style="{{ $order->status == 'Pending' ? 'text-align:center;background:red;color:#fff;font-weight:bold;' : 'text-align:center;background:green;color:#fff;font-weight:bold;' }}">
-                                            @if ($order->status == 'Pending')
-                                                Pending
-                                            @else
-                                                Completed
-                                            @endif
+                                            <a style="color: #fff"
+                                                href="{{ route('employee.order.edit', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
+                                                @if ($order->status == 'Pending')
+                                                    Pending
+                                                @else
+                                                    Completed
+                                                @endif
+                                            </a>
                                         </td>
                                         <td style="text-align:center">
-                                            {{-- <a
+                                            <a
                                                 href="{{ route('employee.order.edit', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
-                                                <i class="fa fa-edit" aria-hidden="true"></i>
-                                            </a> --}}
+                                                <svg class="filament-link-icon w-4 h-4 mr-1"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                    fill="currentColor" aria-hidden="true">
+                                                    <path
+                                                        d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+                                                    </path>
+                                                </svg>
+                                            </a>
                                             <a
                                                 href="{{ route('employee.order.singleprint', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
                                                 <i class="fa fa-print" aria-hidden="true"></i>
