@@ -32,7 +32,7 @@
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="item_id">Particular/Items<span style="color: red">*</span><span><a
-                                                href="{{ route('item.create') }}">(Add Item)</a></span></label>
+                                                href="{{ route('item.create') }}"> (Add Item)</a></span></label>
                                     <select name="item_id" id="item_id" class="form-control">
                                         <option value="">Select Item</option>
                                         @foreach (App\Models\Item::list() as $item)
@@ -47,7 +47,8 @@
 
                             <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="size">Size<span style="color: red">*</span></label>
+                                    <label for="size">Size<span style="color: red">*</span><span><a
+                                                href="{{ route('size.create') }}"> (Add Size)</a></span></label>
                                     <select name="size" id="size" class="form-control">
                                         <option value="">Select Size</option>
                                         @foreach (App\Models\Size::list() as $item)
