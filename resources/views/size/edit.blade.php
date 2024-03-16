@@ -25,7 +25,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="name">Name</label>
                                     <input type="text" name="name" id="name" value="{{ $size->name }}"
@@ -33,7 +33,7 @@
                                     <p></p>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="status">Status</label>
                                     <select name="status" id="status" class="form-control">
@@ -43,11 +43,9 @@
                                 </div>
                             </div>
                         </div>
+                        <button type="submit" class="btn btn-success">Update</button>
+                        <a href="{{ route('size.index') }}" class="btn btn-info">Cancel</a>
                     </div>
-                </div>
-                <div class="pb-5 pt-3">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                    <a href="{{ route('size.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </form>
         </div>
@@ -63,7 +61,7 @@
             var elements = $(this);
             $('button[type=submit]').prop('disabled', true);
             $.ajax({
-                url: "{{ route('size.update', $size->id) }}",
+                url: "{{ route('size.update', $size->guid) }}",
                 type: 'put',
                 data: elements.serializeArray(),
                 dataType: 'json',

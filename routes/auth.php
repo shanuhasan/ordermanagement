@@ -91,9 +91,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/size', [SizeController::class, 'index'])->name('size.index');
     Route::get('/size/create', [SizeController::class, 'create'])->name('size.create');
     Route::post('/size/store', [SizeController::class, 'store'])->name('size.store');
-    Route::get('/size/{size_id}/edit', [SizeController::class, 'edit'])->name('size.edit');
-    Route::put('/size/{size_id}', [SizeController::class, 'update'])->name('size.update');
-    Route::get('/size/{size_id}', [SizeController::class, 'destroy'])->name('size.delete');
+    Route::get('/size/{guid}/edit', [SizeController::class, 'edit'])->name('size.edit');
+    Route::put('/size/{guid}', [SizeController::class, 'update'])->name('size.update');
+    Route::get('/size/{guid}', [SizeController::class, 'destroy'])->name('size.delete');
 
     Route::get('/employee/order/{id}', [EmployeeController::class, 'order'])->name('employee.order');
     Route::get('/employee/order/{id}/create', [EmployeeController::class, 'orderCreate'])->name('employee.order.create');

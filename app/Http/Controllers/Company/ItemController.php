@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Company;
 
 use App\Models\Item;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Company\AppController;
 
@@ -38,6 +37,7 @@ class ItemController extends AppController
             $model = new Item();
             $model->guid = GUIDv4();
             $model->name = $request->name;
+            $model->status = $request->status;
             $model->company_id = $this->companyId;
             $model->save();
 
@@ -84,6 +84,7 @@ class ItemController extends AppController
 
             $model->company_id = $this->companyId;
             $model->name = $request->name;
+            $model->status = $request->status;
             $model->save();
 
             $request->session()->flash('success', 'Item updated successfully.');

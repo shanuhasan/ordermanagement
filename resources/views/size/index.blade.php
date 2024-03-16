@@ -10,7 +10,7 @@
                     <h1>Size</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('size.create') }}" class="btn btn-primary">New Size</a>
+                    <a href="{{ route('size.create') }}" class="btn btn-primary">Add Size</a>
                 </div>
             </div>
         </div>
@@ -45,6 +45,7 @@
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
+                                <th width="60">#</th>
                                 <th>Name</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -53,8 +54,12 @@
                         <tbody>
 
                             @if ($sizes->isNotEmpty())
+                                @php
+                                    $i = 1;
+                                @endphp
                                 @foreach ($sizes as $size)
                                     <tr>
+                                        <td>{{ $i++ }}</td>
                                         <td>{{ $size->name }}</td>
                                         <td>
                                             @if ($size->status == 1)
@@ -76,7 +81,7 @@
 
                                         </td>
                                         <td>
-                                            <a href="{{ route('size.edit', $size->id) }}">
+                                            <a href="{{ route('size.edit', $size->guid) }}">
                                                 <svg class="filament-link-icon w-4 h-4 mr-1"
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                     fill="currentColor" aria-hidden="true">
@@ -85,7 +90,7 @@
                                                     </path>
                                                 </svg>
                                             </a>
-                                            <a href="javascript:void()" onclick="deleteSize({{ $size->id }})"
+                                            <a href="javascript:void()" onclick="deleteSize('{{ $size->guid }}')"
                                                 class="text-danger w-4 h-4 mr-1">
                                                 <svg wire:loading.remove.delay="" wire:target=""
                                                     class="filament-link-icon w-4 h-4 mr-1"

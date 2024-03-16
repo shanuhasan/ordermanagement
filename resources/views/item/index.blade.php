@@ -59,7 +59,7 @@
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td>{{ $item->name }}</td>
-                                        {{-- <td>
+                                        <td>
                                             @if ($item->status == 1)
                                                 <svg class="text-success-500 h-6 w-6 text-success"
                                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -77,7 +77,7 @@
                                                 </svg>
                                             @endif
 
-                                        </td> --}}
+                                        </td>
                                         <td>
                                             <a href="{{ route('item.edit', $item->guid) }}">
                                                 <svg class="filament-link-icon w-4 h-4 mr-1"

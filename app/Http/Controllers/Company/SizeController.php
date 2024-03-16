@@ -12,10 +12,7 @@ class SizeController extends AppController
 {
     public function index(Request $request)
     {
-
-        $companyId = Auth::guard('web')->user()->company_id;
-
-        $sizes = Size::where('company_id', $companyId)->where('is_deleted', '!=', 1)->latest();
+        $sizes = Size::where('company_id', $this->companyId)->where('is_deleted', '!=', 1)->latest();
 
         if (!empty($request->get('keyword'))) {
             $sizes = $sizes->where('name', 'like', '%' . $request->get('keyword') . '%');
@@ -33,15 +30,15 @@ class SizeController extends AppController
 
     public function store(Request $request)
     {
-        $companyId = Auth::guard('web')->user()->company_id;
         $validator = Validator::make($request->all(), [
             'name' => 'required',
         ]);
         if ($validator->passes()) {
 
             $model = new Size();
+            $model->guid = GUIDv4();
             $model->name = $request->name;
-            $model->company_id = $companyId;
+            $model->company_id = $this->companyId;
             $model->status = $request->status;
             $model->save();
 
@@ -57,11 +54,9 @@ class SizeController extends AppController
             ]);
         }
     }
-    public function edit($sizeId, Request $request)
+    public function edit($guid, Request $request)
     {
-
-        $companyId = Auth::guard('web')->user()->company_id;
-        $size = Size::where('id', $sizeId)->where('company_id', $companyId)->first();
+        $size = Size::findByGuidAndCompanyId($guid, $this->companyId);
         if (empty($size)) {
             return redirect()->route('size.index');
         }
@@ -69,11 +64,9 @@ class SizeController extends AppController
         return view('size.edit', compact('size'));
     }
 
-    public function update($sizeId, Request $request)
+    public function update($guid, Request $request)
     {
-        $companyId = Auth::guard('web')->user()->company_id;
-
-        $model = Size::where('id', $sizeId)->where('company_id', $companyId)->first();
+        $model = Size::findByGuidAndCompanyId($guid, $this->companyId);
         if (empty($model)) {
             $request->session()->flash('error', 'Size not found.');
             return response()->json([
@@ -89,7 +82,7 @@ class SizeController extends AppController
 
         if ($validator->passes()) {
 
-            $model->company_id = $companyId;
+            $model->company_id = $this->companyId;
             $model->name = $request->name;
             $model->status = $request->status;
             $model->save();
@@ -106,11 +99,10 @@ class SizeController extends AppController
             ]);
         }
     }
-    public function destroy($sizeId, Request $request)
-    {
 
-        $companyId = Auth::guard('web')->user()->company_id;
-        $model = Size::where('id', $sizeId)->where('company_id', $companyId)->first();
+    public function destroy($guid, Request $request)
+    {
+        $model = Size::findByGuidAndCompanyId($guid, $this->companyId);
         if (empty($model)) {
             $request->session()->flash('error', 'Size not found.');
             return response()->json([

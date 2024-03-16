@@ -25,7 +25,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="name">Name<span style="color: red">*</span></label>
                                     <input type="text" name="name" id="name" value="{{ $item->name }}"
@@ -33,12 +33,19 @@
                                     <p></p>
                                 </div>
                             </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="status">Status</label>
+                                    <select name="status" id="status" class="form-control">
+                                        <option {{ $item->status == 1 ? 'selected' : '' }} value="1">Active</option>
+                                        <option {{ $item->status == 0 ? 'selected' : '' }} value="0">Block</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
+                        <button type="submit" class="btn btn-success">Update</button>
+                        <a href="{{ route('item.index') }}" class="btn btn-info">Cancel</a>
                     </div>
-                </div>
-                <div class="pb-5 pt-3">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                    <a href="{{ route('item.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </form>
         </div>
