@@ -201,4 +201,41 @@ class UserController extends Controller
             'message' => 'User deleted successfully.'
         ]);
     }
+
+    public function deletedUser(Request $request)
+    {
+        $users = User::where('is_deleted', '=', '1')->orderBy('id', 'DESC');
+
+        if (!empty($request->get('keyword'))) {
+            $users = $users->where('name', 'like', '%' . $request->get('keyword') . '%');
+        }
+
+        $users = $users->paginate(10);
+
+        return view('admin.user.delete', [
+            'users' => $users
+        ]);
+    }
+
+    public function restore($guid, Request $request)
+    {
+        $model = User::findByGuid($guid);
+        if (empty($model)) {
+            $request->session()->flash('error', 'User not found.');
+            return response()->json([
+                'status' => true,
+                'message' => 'User not found.'
+            ]);
+        }
+
+        $model->is_deleted = 0;
+        $model->save();
+
+        $request->session()->flash('success', 'User Restore successfully.');
+
+        return response()->json([
+            'status' => true,
+            'message' => 'User Restore successfully.'
+        ]);
+    }
 }

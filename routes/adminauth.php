@@ -76,6 +76,9 @@ Route::group(['middleware' => ['auth:admin'], 'prefix' => 'admin', 'as' => 'admi
     Route::put('/company/{guid}', [CompanyController::class, 'update'])->name('company.update');
     Route::get('/company/{guid}', [CompanyController::class, 'destroy'])->name('company.delete');
 
+    Route::get('/deleted-company', [CompanyController::class, 'deletedCompany'])->name('company.delete.index');
+    Route::get('/restore-company/{guid}', [CompanyController::class, 'restore'])->name('company.restore');
+
     //user management
     Route::get('/user', [UserController::class, 'index'])->name('user.index');
     Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
@@ -83,6 +86,9 @@ Route::group(['middleware' => ['auth:admin'], 'prefix' => 'admin', 'as' => 'admi
     Route::get('/user/{guid}/edit', [UserController::class, 'edit'])->name('user.edit');
     Route::put('/user/{guid}', [UserController::class, 'update'])->name('user.update');
     Route::get('/user/{guid}', [UserController::class, 'destroy'])->name('user.delete');
+
+    Route::get('/deleted-user', [UserController::class, 'deletedUser'])->name('user.delete.index');
+    Route::get('/restore-user/{guid}', [UserController::class, 'restore'])->name('user.restore');
 
     //employee management
     Route::get('/employee', [EmployeeController::class, 'index'])->name('employee.index');

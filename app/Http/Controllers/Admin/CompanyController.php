@@ -179,4 +179,41 @@ class CompanyController extends Controller
             'message' => 'Company deleted successfully.'
         ]);
     }
+
+    public function deletedCompany(Request $request)
+    {
+        $companies = Company::where('is_deleted', '=', '1')->orderBy('id', 'DESC');
+
+        if (!empty($request->get('keyword'))) {
+            $companies = $companies->where('name', 'like', '%' . $request->get('keyword') . '%');
+        }
+
+        $companies = $companies->paginate(10);
+
+        return view('admin.company.delete', [
+            'companies' => $companies
+        ]);
+    }
+
+    public function restore($guid, Request $request)
+    {
+        $model = Company::findByGuid($guid);
+        if (empty($model)) {
+            $request->session()->flash('error', 'Company not found.');
+            return response()->json([
+                'status' => true,
+                'message' => 'Company not found.'
+            ]);
+        }
+
+        $model->is_deleted = 0;
+        $model->save();
+
+        $request->session()->flash('success', 'Company Restore successfully.');
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Company Restore successfully.'
+        ]);
+    }
 }
