@@ -88,7 +88,7 @@
         <!-- /.content-wrapper -->
         <footer class="main-footer">
 
-            <strong>Copyright &copy; {{ date('Y') }} Musheeda Solution All rights reserved.
+            <strong>Copyright &copy; {{ date('Y') }} All rights reserved.
         </footer>
 
     </div>
