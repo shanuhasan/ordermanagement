@@ -15,6 +15,7 @@
                     </h3>
                 </div>
                 <div class="col-sm-6 text-right">
+                    <a href="{{ route('employee.order.amount', $employee->guid) }}" class="btn btn-warning">Advance Amount</a>
                     <a href="{{ route('employee.order.receivedPiece', $employee->guid) }}" class="btn btn-success">Received
                         Piece
                         History</a>
@@ -35,7 +36,7 @@
                 <form action="" method="get">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="size">Size</label>
                                     <select name="size" id="size" class="form-control">
@@ -48,7 +49,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="status">Status</label>
                                     <select name="status" id="status" class="form-control">
@@ -61,14 +62,16 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="year">Year</label>
                                     <select name="year" id="year" class="form-control">
                                         <option value="">Select Year</option>
                                         @foreach (years() as $key => $val)
-                                            <option value="{{ $key }}"
-                                                {{ Request::get('year') == $key ? 'selected' : '' }}>
+                                            <?php
+                                            $year = !empty(Request::get('year')) ? Request::get('year') : date('Y');
+                                            ?>
+                                            <option value="{{ $key }}" {{ $year == $key ? 'selected' : '' }}>
                                                 {{ $val }}</option>
                                         @endforeach
                                     </select>
@@ -187,7 +190,7 @@
     </section>
     <!-- /.content -->
 
-    @if ($orders->isNotEmpty())
+    {{-- @if ($orders->isNotEmpty())
         <section class="content">
             <!-- Default box -->
             <div class="container-fluid">
@@ -263,5 +266,5 @@
             </div>
             <!-- /.card -->
         </section>
-    @endif
+    @endif --}}
 @endsection

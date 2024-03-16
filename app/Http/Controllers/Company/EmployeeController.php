@@ -190,7 +190,7 @@ class EmployeeController extends AppController
             $employeeTotalPayment = $employeeTotalPayment->whereYear('created_at', date('Y'));
         }
 
-        $orders = $orders->paginate(20);
+        $orders = $orders->paginate(50);
         $totalAmount = $totalAmount->sum('total_amount');
         $employeeTotalPayment = $employeeTotalPayment->sum('amount');
 
@@ -505,5 +505,32 @@ class EmployeeController extends AppController
         $data['employeePaymentHistory'] = $employeePaymentHistory;
 
         return view('employee.payment-history', $data);
+    }
+
+    public function amount($guid, Request $request)
+    {
+        $employee = Employee::findByGuid($guid);
+
+        $totalAmount = Order::where('employee_id', $employee->id)
+            ->where('company_id', $this->companyId);
+        $employeeTotalPayment = OrderItem::where('employee_id', $employee->id)
+            ->where('company_id', $this->companyId);
+
+        if (!empty($request->get('year'))) {
+            $totalAmount = $totalAmount->whereYear('created_at', $request->get('year'));
+            $employeeTotalPayment = $employeeTotalPayment->whereYear('created_at', $request->get('year'));
+        } else {
+            $totalAmount = $totalAmount->whereYear('created_at', date('Y'));
+            $employeeTotalPayment = $employeeTotalPayment->whereYear('created_at', date('Y'));
+        }
+
+        $totalAmount = $totalAmount->sum('total_amount');
+        $employeeTotalPayment = $employeeTotalPayment->sum('amount');
+
+        $data['employee'] = $employee;
+        $data['totalAmount'] = $totalAmount;
+        $data['employeeTotalPayment'] = $employeeTotalPayment;
+
+        return view('employee.amount', $data);
     }
 }

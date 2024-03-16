@@ -106,6 +106,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/employee-order-print/{employeeId}', [EmployeeController::class, 'orderPrint'])->name('employee.order.print');
 
     Route::get('/employee/order/payment-history/{id}', [EmployeeController::class, 'paymentHistory'])->name('employee.order.payment.history');
+    Route::get('/employee/order/amount/{guid}', [EmployeeController::class, 'amount'])->name('employee.order.amount');
 
 
     //items

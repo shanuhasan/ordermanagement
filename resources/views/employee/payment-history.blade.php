@@ -55,8 +55,10 @@
                                     <select name="year" id="year" class="form-control">
                                         <option value="">Select Year</option>
                                         @foreach (years() as $key => $val)
-                                            <option value="{{ $key }}"
-                                                {{ Request::get('year') == $key ? 'selected' : '' }}>
+                                            <?php
+                                            $year = !empty(Request::get('year')) ? Request::get('year') : date('Y');
+                                            ?>
+                                            <option value="{{ $key }}" {{ $year == $key ? 'selected' : '' }}>
                                                 {{ $val }}</option>
                                         @endforeach
                                     </select>
