@@ -12,10 +12,7 @@ class ItemController extends AppController
 {
     public function index(Request $request)
     {
-
-        $companyId = Auth::guard('web')->user()->company_id;
-
-        $items = Item::where('company_id', $companyId)->where('status', '=', 1)->latest();
+        $items = Item::where('company_id', $this->companyId)->where('is_deleted', '!=', 1)->latest();
 
         if (!empty($request->get('keyword'))) {
             $items = $items->where('name', 'like', '%' . $request->get('keyword') . '%');
@@ -33,15 +30,15 @@ class ItemController extends AppController
 
     public function store(Request $request)
     {
-        $companyId = Auth::guard('web')->user()->company_id;
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:items',
         ]);
         if ($validator->passes()) {
 
             $model = new Item();
+            $model->guid = GUIDv4();
             $model->name = $request->name;
-            $model->company_id = $companyId;
+            $model->company_id = $this->companyId;
             $model->save();
 
             $request->session()->flash('success', 'Item added successfully.');
@@ -56,11 +53,10 @@ class ItemController extends AppController
             ]);
         }
     }
-    public function edit($itemId, Request $request)
+    public function edit($guid, Request $request)
     {
+        $item = Item::findByGuidAndCompanyId($guid, $this->companyId);
 
-        $companyId = Auth::guard('web')->user()->company_id;
-        $item = Item::where('id', $itemId)->where('company_id', $companyId)->first();
         if (empty($item)) {
             return redirect()->route('item.index');
         }
@@ -68,11 +64,9 @@ class ItemController extends AppController
         return view('item.edit', compact('item'));
     }
 
-    public function update($itemId, Request $request)
+    public function update($guid, Request $request)
     {
-        $companyId = Auth::guard('web')->user()->company_id;
-
-        $model = Item::where('id', $itemId)->where('company_id', $companyId)->first();
+        $model = Item::findByGuidAndCompanyId($guid, $this->companyId);
         if (empty($model)) {
             $request->session()->flash('error', 'Item not found.');
             return response()->json([
@@ -88,7 +82,7 @@ class ItemController extends AppController
 
         if ($validator->passes()) {
 
-            $model->company_id = $companyId;
+            $model->company_id = $this->companyId;
             $model->name = $request->name;
             $model->save();
 
@@ -104,11 +98,10 @@ class ItemController extends AppController
             ]);
         }
     }
-    public function destroy($itemId, Request $request)
-    {
 
-        $companyId = Auth::guard('web')->user()->company_id;
-        $model = Item::where('id', $itemId)->where('company_id', $companyId)->first();
+    public function destroy($guid, Request $request)
+    {
+        $model = Item::findByGuidAndCompanyId($guid, $this->companyId);
         if (empty($model)) {
             $request->session()->flash('error', 'Item not found.');
             return response()->json([
@@ -116,7 +109,7 @@ class ItemController extends AppController
                 'message' => 'Item not found.'
             ]);
         }
-        $model->status = 0;
+        $model->is_deleted = 1;
         $model->save();
         $request->session()->flash('success', 'Item deleted successfully.');
         return response()->json([

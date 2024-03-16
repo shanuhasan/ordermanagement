@@ -10,7 +10,7 @@
                     <h1>Items</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('item.create') }}" class="btn btn-primary">New Item</a>
+                    <a href="{{ route('item.create') }}" class="btn btn-primary">Add Item</a>
                 </div>
             </div>
         </div>
@@ -45,9 +45,9 @@
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th width="60">#</th>
                                 <th>Name</th>
-                                <th>Status</th>
+                                {{-- <th>Status</th> --}}
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -59,7 +59,7 @@
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td>{{ $item->name }}</td>
-                                        <td>
+                                        {{-- <td>
                                             @if ($item->status == 1)
                                                 <svg class="text-success-500 h-6 w-6 text-success"
                                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -77,9 +77,9 @@
                                                 </svg>
                                             @endif
 
-                                        </td>
+                                        </td> --}}
                                         <td>
-                                            <a href="{{ route('item.edit', $item->id) }}">
+                                            <a href="{{ route('item.edit', $item->guid) }}">
                                                 <svg class="filament-link-icon w-4 h-4 mr-1"
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                     fill="currentColor" aria-hidden="true">
@@ -88,7 +88,7 @@
                                                     </path>
                                                 </svg>
                                             </a>
-                                            <a href="javascript:void()" onclick="deleteItem({{ $item->id }})"
+                                            <a href="javascript:void()" onclick="deleteItem('{{ $item->guid }}')"
                                                 class="text-danger w-4 h-4 mr-1">
                                                 <svg wire:loading.remove.delay="" wire:target=""
                                                     class="filament-link-icon w-4 h-4 mr-1"
