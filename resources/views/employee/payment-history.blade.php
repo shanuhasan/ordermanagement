@@ -109,9 +109,7 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <td></td>
-                                    <td style="text-align:center">Data not found.</td>
-                                    <td></td>
+                                    <td colspan="4" style="border:1px solid #000;text-align:center">Data not found.</td>
                                 </tr>
                             @endif
                         </tbody>
