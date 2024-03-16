@@ -7,59 +7,57 @@ use App\Models\Employee;
 use App\Models\OrderItem;
 use App\Models\ReceivedItem;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Company\AppController;
 
-class EmployeeController extends Controller
+class EmployeeController extends AppController
 {
     public function index(Request $request)
     {
         $companyId = Auth::guard('web')->user()->company_id;
         $employees = Employee::latest()
-                                ->where('company_id',$companyId)
-                                ->where('is_deleted','!=','1')
-                                ->where('status','=','1');
+            ->where('company_id', $companyId)
+            ->where('is_deleted', '!=', '1')
+            ->where('status', '=', '1');
 
-        if(!empty($request->get('name')))
-        {
-            $employees = $employees->where('name','like','%'.$request->get('name').'%');
+        if (!empty($request->get('name'))) {
+            $employees = $employees->where('name', 'like', '%' . $request->get('name') . '%');
         }
 
-        if(!empty($request->get('code')))
-        {
-            $employees = $employees->where('code','=',$request->get('code'));
+        if (!empty($request->get('code'))) {
+            $employees = $employees->where('code', '=', $request->get('code'));
         }
 
-        if(!empty($request->get('phone')))
-        {
-            $employees = $employees->where('phone','like','%'.$request->get('phone').'%');
+        if (!empty($request->get('phone'))) {
+            $employees = $employees->where('phone', 'like', '%' . $request->get('phone') . '%');
         }
 
         $employees = $employees->paginate(20);
 
-        return view('employee.index',[
-            'employees'=>$employees
+        return view('employee.index', [
+            'employees' => $employees
         ]);
     }
 
-    public function create(){
+    public function create()
+    {
 
         return view('employee.create');
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
 
-        $validator = Validator::make($request->all(),[
-            'name'=>'required|min:3',
-            'phone'=>'required|numeric',
-            'status'=>'required',
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:3',
+            'phone' => 'required|numeric',
+            'status' => 'required',
             // 'code'=>'required|unique:employees',
         ]);
 
-        if($validator->passes())
-        {
+        if ($validator->passes()) {
             $model = new Employee();
             $model->guid = GUIDv4();
             $model->name = $request->name;
@@ -70,59 +68,57 @@ class EmployeeController extends Controller
             $model->status = $request->status;
             $model->save();
 
-            session()->flash('success','Employee added successfully.');
+            session()->flash('success', 'Employee added successfully.');
             return response()->json([
-                'status'=>true
+                'status' => true
             ]);
-        }else{
+        } else {
             return response()->json([
-                'status'=>false,
-                'errors'=>$validator->errors()
+                'status' => false,
+                'errors' => $validator->errors()
             ]);
         }
     }
 
-    public function edit($id , Request $request){
-        if(empty(employeeExist($id)))
-        {
+    public function edit($id, Request $request)
+    {
+        if (empty(employeeExist($id))) {
             return redirect()->route('employee.index');
         }
 
         $employee = Employee::find($id);
-        if(empty($employee))
-        {
+        if (empty($employee)) {
             return redirect()->route('employee.index');
         }
 
-        return view('employee.edit',compact('employee'));        
+        return view('employee.edit', compact('employee'));
     }
 
-    public function update($id, Request $request){
+    public function update($id, Request $request)
+    {
 
-        if(empty(employeeExist($id)))
-        {
+        if (empty(employeeExist($id))) {
             return redirect()->route('employee.index');
         }
 
         $model = Employee::find($id);
-        if(empty($model))
-        {
-            $request->session()->flash('error','Employee not found.');
+        if (empty($model)) {
+            $request->session()->flash('error', 'Employee not found.');
             return response()->json([
-                'status'=>false,
-                'notFound'=>true,
-                'message'=>'Employee not found.'
+                'status' => false,
+                'notFound' => true,
+                'message' => 'Employee not found.'
             ]);
         }
 
-        $validator = Validator::make($request->all(),[
-            'name'=>'required|min:3',
-            'phone'=>'required|numeric',
-            'status'=>'required',
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:3',
+            'phone' => 'required|numeric',
+            'status' => 'required',
             // 'code'=>'required|unique:employees,code,'.$id.',id',
         ]);
 
-        if($validator->passes()){
+        if ($validator->passes()) {
 
             $model->name = $request->name;
             $model->phone = $request->phone;
@@ -132,82 +128,75 @@ class EmployeeController extends Controller
             $model->status = $request->status;
             $model->save();
 
-            $request->session()->flash('success','Employee updated successfully.');
+            $request->session()->flash('success', 'Employee updated successfully.');
             return response()->json([
-                'status'=>true,
-                'message'=>'Employee updated successfully.'  
+                'status' => true,
+                'message' => 'Employee updated successfully.'
             ]);
-
-        }else{
+        } else {
             return response()->json([
-                'status'=>false,
-                'errors'=>$validator->errors()  
+                'status' => false,
+                'errors' => $validator->errors()
             ]);
         }
     }
 
-    public function destroy($id, Request $request){
-        
-        if(empty(employeeExist($id)))
-        {
+    public function destroy($id, Request $request)
+    {
+
+        if (empty(employeeExist($id))) {
             return redirect()->route('employee.index');
         }
         $model = Employee::find($id);
-        if(empty($model))
-        {
-            $request->session()->flash('error','Employee not found.');
+        if (empty($model)) {
+            $request->session()->flash('error', 'Employee not found.');
             return response()->json([
-                'status'=>true,
-                'message'=>'Employee not found.'
+                'status' => true,
+                'message' => 'Employee not found.'
             ]);
         }
 
         $model->is_deleted = 1;
         $model->save();
 
-        $request->session()->flash('success','Employee deleted successfully.');
+        $request->session()->flash('success', 'Employee deleted successfully.');
 
         return response()->json([
-            'status'=>true,
-            'message'=>'Employee deleted successfully.'
+            'status' => true,
+            'message' => 'Employee deleted successfully.'
         ]);
-
     }
 
-    public function order($id,Request $request)
+    public function order($id, Request $request)
     {
         $companyId = Auth::guard('web')->user()->company_id;
 
-        if(empty(employeeExist($id)))
-        {
+        if (empty(employeeExist($id))) {
             return redirect()->route('employee.index');
         }
 
-        $orders = Order::latest()->where('employee_id',$id)
-                        ->where('company_id',$companyId);
+        $orders = Order::latest()->where('employee_id', $id)
+            ->where('company_id', $companyId);
 
-        if(!empty($request->get('size')))
-        {
+        if (!empty($request->get('size'))) {
             $orders = $orders->where('size', $request->get('size'));
         }
 
-        if(!empty($request->get('status')))
-        {
+        if (!empty($request->get('status'))) {
             $orders = $orders->where('status', $request->get('status'));
         }
 
-        $totalAmount = Order::where('employee_id',$id)
-                            ->where('company_id',$companyId);
+        $totalAmount = Order::where('employee_id', $id)
+            ->where('company_id', $companyId);
 
-        $employeeTotalPayment = OrderItem::where('employee_id',$id)
-                                            ->where('company_id',$companyId);
+        $employeeTotalPayment = OrderItem::where('employee_id', $id)
+            ->where('company_id', $companyId);
 
-        if(!empty($request->get('year')))
-        {
+        if (!empty($request->get('year'))) {
             $orders = $orders->whereYear('created_at', $request->get('year'));
             $totalAmount = $totalAmount->whereYear('created_at', $request->get('year'));
             $employeeTotalPayment = $employeeTotalPayment->whereYear('created_at', $request->get('year'));
-        }else{
+        } else {
             $orders = $orders->whereYear('created_at', date('Y'));
             $totalAmount = $totalAmount->whereYear('created_at', date('Y'));
             $employeeTotalPayment = $employeeTotalPayment->whereYear('created_at', date('Y'));
@@ -223,31 +212,31 @@ class EmployeeController extends Controller
         $data['totalAmount'] = $totalAmount;
         $data['employeeTotalPayment'] = $employeeTotalPayment;
 
-        return view('employee.order',$data);
-
+        return view('employee.order', $data);
     }
 
-    public function orderCreate($id){
-        if(empty(employeeExist($id)))
-        {
+    public function orderCreate($id)
+    {
+        if (empty(employeeExist($id))) {
             return redirect()->route('employee.index');
         }
         $employeeId = $id;
-        return view('employee.order-create',compact('employeeId'));
+        return view('employee.order-create', compact('employeeId'));
     }
 
-    public function orderStore(Request $request){
+    public function orderStore(Request $request)
+    {
         $companyId = Auth::guard('web')->user()->company_id;
 
-        $validator = Validator::make($request->all(),[
-            'employee_id'=>'required',
-            'item_id'=>'required',
-            'size'=>'required',
-            'qty'=>'required',
-            'rate'=>'required',
+        $validator = Validator::make($request->all(), [
+            'employee_id' => 'required',
+            'item_id' => 'required',
+            'size' => 'required',
+            'qty' => 'required',
+            'rate' => 'required',
         ]);
 
-        if($validator->passes()){
+        if ($validator->passes()) {
             $model = new Order();
             $model->company_id = $companyId;
             $model->employee_id = $request->employee_id;
@@ -260,10 +249,8 @@ class EmployeeController extends Controller
             $model->date = $request->date;
             $model->total_amount = $request->qty * $request->rate;
 
-            if($model->save())
-            {
-                if($request->status == 'Completed')
-                {
+            if ($model->save()) {
+                if ($request->status == 'Completed') {
                     $rModel = new ReceivedItem();
                     $rModel->order_id = $model->id;
                     $rModel->company_id = $companyId;
@@ -279,35 +266,33 @@ class EmployeeController extends Controller
             //     $model->save();
             // }
 
-            session()->flash('success','Add New added successfully.');
+            session()->flash('success', 'Add New added successfully.');
             return response()->json([
-                'status'=>true,
-                'employeeId'=>$request->employee_id,
+                'status' => true,
+                'employeeId' => $request->employee_id,
             ]);
-
-        }else{
+        } else {
             return response()->json([
-                'status'=>false,
-                'errors'=>$validator->errors()
+                'status' => false,
+                'errors' => $validator->errors()
             ]);
         }
     }
 
-    public function orderEdit($employeeId,$orderId){
+    public function orderEdit($employeeId, $orderId)
+    {
 
-        if(empty(employeeExist($employeeId)))
-        {
+        if (empty(employeeExist($employeeId))) {
             return redirect()->route('employee.index');
         }
-        $order = Order::where('id',$orderId)
-                        ->where('employee_id',$employeeId)
-                        ->first();
-        if(empty($order))
-        {
+        $order = Order::where('id', $orderId)
+            ->where('employee_id', $employeeId)
+            ->first();
+        if (empty($order)) {
             return redirect()->back();
         }
 
-        $orderDetail = OrderItem::where('order_id',$order->id)->get();
+        $orderDetail = OrderItem::where('order_id', $order->id)->get();
 
         $pendingQty = $order->qty - receivedItems($orderId);
 
@@ -316,29 +301,28 @@ class EmployeeController extends Controller
         $data['employeeId'] = $employeeId;
         $data['pendingItem'] = $pendingQty;
 
-        return view('employee.order-edit',$data);
-        
+        return view('employee.order-edit', $data);
     }
 
-    public function orderUpdate($id, Request $request){
+    public function orderUpdate($id, Request $request)
+    {
 
         $companyId = Auth::guard('web')->user()->company_id;
         $model = Order::find($id);
         $pendingQty = $model->qty - receivedItems($id);
-        if(empty($model))
-        {
-            return redirect()->route('employee.index')->with('error','Order not found.');
+        if (empty($model)) {
+            return redirect()->route('employee.index')->with('error', 'Order not found.');
         }
 
-        $validator = Validator::make($request->all(),[
-            'employee_id'=>'required',
-            'item_id'=>'required',
-            'size'=>'required',
-            'qty'=>'required',
-            'rate'=>'required',
+        $validator = Validator::make($request->all(), [
+            'employee_id' => 'required',
+            'item_id' => 'required',
+            'size' => 'required',
+            'qty' => 'required',
+            'rate' => 'required',
         ]);
 
-        if($validator->passes()){
+        if ($validator->passes()) {
 
             $model->company_id = $companyId;
             $model->employee_id = $request->employee_id;
@@ -350,82 +334,73 @@ class EmployeeController extends Controller
             $model->total_amount = $request->qty * $request->rate;
             $model->status = $request->status;
             $model->date = $request->date;
-            if($model->save())
-            {
+            if ($model->save()) {
                 $rModel = new ReceivedItem();
                 $rModel->order_id = $id;
                 $rModel->company_id = $companyId;
                 $rModel->employee_id = $request->employee_id;
 
-                if(!empty($request->received_qty) && $request->status == 'Pending' && ($request->received_qty <= $pendingQty))
-                {
+                if (!empty($request->received_qty) && $request->status == 'Pending' && ($request->received_qty <= $pendingQty)) {
                     $rModel->qty = $request->received_qty;
                     $rModel->save();
                 }
 
-                if($request->status == 'Completed' && !empty($pendingQty) && $pendingQty > 0)
-                {
+                if ($request->status == 'Completed' && !empty($pendingQty) && $pendingQty > 0) {
                     $rModel->qty = $pendingQty;
                     $rModel->save();
                 }
             }
 
-            if($request->qty == receivedItems($id))
-            {
+            if ($request->qty == receivedItems($id)) {
                 $model->status = 'Completed';
                 $model->save();
             }
 
-            session()->flash('success','Updated successfully.');
+            session()->flash('success', 'Updated successfully.');
             return response()->json([
-                'status'=>true,
-                'employeeId'=>$request->employee_id,
+                'status' => true,
+                'employeeId' => $request->employee_id,
             ]);
-
-        }else{
+        } else {
             return response()->json([
-                'status'=>false,
-                'errors'=>$validator->errors()
+                'status' => false,
+                'errors' => $validator->errors()
             ]);
         }
     }
 
-    public function orderView($employeeId,$orderId){
+    public function orderView($employeeId, $orderId)
+    {
 
-        if(empty(employeeExist($employeeId)))
-        {
+        if (empty(employeeExist($employeeId))) {
             return redirect()->route('employee.index');
         }
 
         $companyId = Auth::guard('web')->user()->company_id;
 
-        $items = ReceivedItem::where('order_id',$orderId)
-                                ->where('company_id', $companyId)
-                                    ->paginate(30);
+        $items = ReceivedItem::where('order_id', $orderId)
+            ->where('company_id', $companyId)
+            ->paginate(30);
 
-        return view('employee.order-view',[
+        return view('employee.order-view', [
             'items' => $items,
-            'employeeId'=>$employeeId,
-            'orderId'=>$orderId
+            'employeeId' => $employeeId,
+            'orderId' => $orderId
         ]);
-        
     }
 
     public function orderPayment(Request $request)
     {
-        if(empty(employeeExist($request->employee_id)))
-        {
+        if (empty(employeeExist($request->employee_id))) {
             return redirect()->route('employee.index');
         }
         $companyId = Auth::guard('web')->user()->company_id;
-        $validator = Validator::make($request->all(),[
-            'amount'=>'required|numeric',
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|numeric',
         ]);
 
-        if($validator->passes())
-        {
-            if(!empty($request->amount) && $request->amount > 0)
-            {
+        if ($validator->passes()) {
+            if (!empty($request->amount) && $request->amount > 0) {
                 $model = new OrderItem();
                 $model->company_id = $companyId;
                 $model->employee_id = $request->employee_id;
@@ -433,17 +408,15 @@ class EmployeeController extends Controller
                 $model->payment_method = $request->payment_method;
                 $model->save();
             }
-            return redirect()->back()->with('success','Payment updated successfully.');
-        }else{
+            return redirect()->back()->with('success', 'Payment updated successfully.');
+        } else {
             return Redirect::back()->withErrors($validator);
         }
-        
     }
 
-    public function singlePrint($employeeId,$orderId)
+    public function singlePrint($employeeId, $orderId)
     {
-        if(empty(employeeExist($employeeId)))
-        {
+        if (empty(employeeExist($employeeId))) {
             return redirect()->route('employee.index');
         }
 
@@ -454,66 +427,60 @@ class EmployeeController extends Controller
         //                 ->where('id',$orderId)
         //                 ->first();
 
-        $items = ReceivedItem::where('order_id',$orderId)
-                                ->where('company_id', $companyId)
-                                ->get();
+        $items = ReceivedItem::where('order_id', $orderId)
+            ->where('company_id', $companyId)
+            ->get();
 
-        return view('employee.single-print',[
-            'items'=>$items,
-            'employeeId'=>$employeeId,
+        return view('employee.single-print', [
+            'items' => $items,
+            'employeeId' => $employeeId,
         ]);
-        
     }
     public function receivedPieceHistory(Request $request, $employeeId)
     {
-        if(empty(employeeExist($employeeId)))
-        {
+        if (empty(employeeExist($employeeId))) {
             return redirect()->route('employee.index');
         }
 
         $companyId = Auth::guard('web')->user()->company_id;
 
         $items = ReceivedItem::where('company_id', $companyId)
-                                ->where('employee_id', $employeeId)
-                                ->orderBy('id','DESC');
-                                
+            ->where('employee_id', $employeeId)
+            ->orderBy('id', 'DESC');
 
-        if(!empty($request->get('year')))
-        {
+
+        if (!empty($request->get('year'))) {
             $items = $items->whereYear('created_at', $request->get('year'));
-        }else{
+        } else {
             $items = $items->whereYear('created_at', date('Y'));
         }
 
         $items = $items->get();
 
-        return view('employee.received-piece-history',[
-            'items'=>$items,
-            'employeeId'=>$employeeId,
+        return view('employee.received-piece-history', [
+            'items' => $items,
+            'employeeId' => $employeeId,
         ]);
-        
     }
 
     public function orderPrint(Request $request, $employeeId)
     {
-        if(empty(employeeExist($employeeId)))
-        {
+        if (empty(employeeExist($employeeId))) {
             return redirect()->route('employee.index');
         }
 
         $companyId = Auth::guard('web')->user()->company_id;
 
-        $orders = Order::latest()->where('employee_id',$employeeId)
-                        ->where('company_id',$companyId);
+        $orders = Order::latest()->where('employee_id', $employeeId)
+            ->where('company_id', $companyId);
 
-        $paymentHistory = OrderItem::latest()->where('employee_id',$employeeId)
-                            ->where('company_id',$companyId);
+        $paymentHistory = OrderItem::latest()->where('employee_id', $employeeId)
+            ->where('company_id', $companyId);
 
-        if(!empty($request->get('year')))
-        {
+        if (!empty($request->get('year'))) {
             $orders = $orders->whereYear('created_at', $request->get('year'));
             $paymentHistory = $paymentHistory->whereYear('created_at', $request->get('year'));
-        }else{
+        } else {
             $orders = $orders->whereYear('created_at', date('Y'));
             $paymentHistory = $paymentHistory->whereYear('created_at', date('Y'));
         }
@@ -521,12 +488,11 @@ class EmployeeController extends Controller
         $orders = $orders->get();
         $paymentHistory = $paymentHistory->get();
 
-        return view('employee.print',[
-            'orders'=>$orders,
-            'paymentHistory'=>$paymentHistory,
-            'employeeId'=>$employeeId,
+        return view('employee.print', [
+            'orders' => $orders,
+            'paymentHistory' => $paymentHistory,
+            'employeeId' => $employeeId,
         ]);
-        
     }
 
     public function items(Request $request)
@@ -534,42 +500,36 @@ class EmployeeController extends Controller
         $companyId = Auth::guard('web')->user()->company_id;
 
         $orders = Order::latest()
-                        ->where('company_id',$companyId);
+            ->where('company_id', $companyId);
 
-        if(!empty($request->get('date')))
-        {
-            $orders = $orders->whereDate('created_at','=',$request->get('date'));
+        if (!empty($request->get('date'))) {
+            $orders = $orders->whereDate('created_at', '=', $request->get('date'));
         }
 
-        if(!empty($request->get('particular')))
-        {
-            $orders = $orders->where('particular','like', '%'.$request->get('particular').'%');
+        if (!empty($request->get('particular'))) {
+            $orders = $orders->where('particular', 'like', '%' . $request->get('particular') . '%');
         }
 
-        if(!empty($request->get('employee_id')))
-        {
-            $orders = $orders->where('employee_id','=', $request->get('employee_id'));
+        if (!empty($request->get('employee_id'))) {
+            $orders = $orders->where('employee_id', '=', $request->get('employee_id'));
         }
 
-        if(!empty($request->get('status')))
-        {
-            $orders = $orders->where('status','=', $request->get('status'));
+        if (!empty($request->get('status'))) {
+            $orders = $orders->where('status', '=', $request->get('status'));
         }
-        
+
         $orders = $orders->paginate(20);
 
         $data['orders'] = $orders;
 
-        return view('employee.items',$data);
-
+        return view('employee.items', $data);
     }
 
-    public function paymentHistory($id,Request $request)
+    public function paymentHistory($id, Request $request)
     {
         $companyId = Auth::guard('web')->user()->company_id;
 
-        if(empty(employeeExist($id)))
-        {
+        if (empty(employeeExist($id))) {
             return redirect()->route('employee.index');
         }
         $data['employeeId'] = $id;
@@ -582,13 +542,12 @@ class EmployeeController extends Controller
         //             ->where('company_id',$companyId)
         //             ->sum('amount');
 
-        $employeePaymentHistory = OrderItem::latest()->where('employee_id',$id)
-                                    ->where('company_id',$companyId);
+        $employeePaymentHistory = OrderItem::latest()->where('employee_id', $id)
+            ->where('company_id', $companyId);
 
-        if(!empty($request->get('year')))
-        {
+        if (!empty($request->get('year'))) {
             $employeePaymentHistory = $employeePaymentHistory->whereYear('created_at', $request->get('year'));
-        }else{
+        } else {
             $employeePaymentHistory = $employeePaymentHistory->whereYear('created_at', date('Y'));
         }
 
@@ -598,7 +557,6 @@ class EmployeeController extends Controller
         // $data['employeeTotalPayment'] = $employeeTotalPayment;
         $data['employeePaymentHistory'] = $employeePaymentHistory;
 
-        return view('employee.payment-history',$data);
-
+        return view('employee.payment-history', $data);
     }
 }

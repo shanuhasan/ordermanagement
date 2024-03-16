@@ -13,10 +13,10 @@ use Illuminate\Support\Facades\Mail;
 function employeeExist($id)
 {
     $companyId = Auth::guard('web')->user()->company_id;
-    $exist = Employee::where('id',$id)
-                ->where('company_id',$companyId)
-                ->where('is_deleted','!=','1')
-                ->first();
+    $exist = Employee::where('id', $id)
+        ->where('company_id', $companyId)
+        ->where('is_deleted', '!=', '1')
+        ->first();
 
     return $exist;
 }
@@ -24,9 +24,8 @@ function employeeExist($id)
 function getEmployeeDetail($id)
 {
     $employee =  Employee::find($id);
-    
-    if(empty($employee))
-    {
+
+    if (empty($employee)) {
         return 'NA';
     }
     return $employee;
@@ -35,8 +34,8 @@ function getEmployeeDetail($id)
 function getStatus()
 {
     $list = [
-        '0'=>'Pending',
-        '1'=>'Complete',
+        '0' => 'Pending',
+        '1' => 'Complete',
     ];
     return $list;
 }
@@ -44,8 +43,8 @@ function getStatus()
 function itemStatus()
 {
     $list = [
-        'Pending'=>'Pending',
-        'Completed'=>'Completed',
+        'Pending' => 'Pending',
+        'Completed' => 'Completed',
     ];
     return $list;
 }
@@ -53,11 +52,11 @@ function itemStatus()
 function getSize()
 {
     $list = [
-        'S'=>'S',
-        'M'=>'M',
-        'L'=>'L',
-        'XL'=>'XL',
-        'XXL'=>'XXL',
+        'S' => 'S',
+        'M' => 'M',
+        'L' => 'L',
+        'XL' => 'XL',
+        'XXL' => 'XXL',
     ];
     return $list;
 }
@@ -65,13 +64,13 @@ function getSize()
 function years()
 {
     $list = [
-        '2024'=>'2024',
-        '2025'=>'2025',
-        '2026'=>'2026',
-        '2027'=>'2027',
-        '2028'=>'2028',
-        '2029'=>'2029',
-        '2030'=>'2030',
+        '2024' => '2024',
+        '2025' => '2025',
+        '2026' => '2026',
+        '2027' => '2027',
+        '2028' => '2028',
+        '2029' => '2029',
+        '2030' => '2030',
     ];
     return $list;
 }
@@ -79,18 +78,17 @@ function years()
 function paymentMethod()
 {
     $list = [
-        'Cash'=>'Cash',
-        'Online'=>'Online',
+        'Cash' => 'Cash',
+        'Online' => 'Online',
     ];
     return $list;
 }
 
 function getCompany()
 {
-    $company =  Company::where('status',1)->get();
-    
-    if(empty($company))
-    {
+    $company =  Company::where('status', 1)->get();
+
+    if (empty($company)) {
         return '';
     }
     return $company;
@@ -99,9 +97,8 @@ function getCompany()
 function companyName($id)
 {
     $company =  Company::find($id);
-    
-    if(empty($company))
-    {
+
+    if (empty($company)) {
         return '';
     }
     return $company->name;
@@ -110,9 +107,8 @@ function companyName($id)
 function sizeName($id)
 {
     $size =  Size::find($id);
-    
-    if(empty($size))
-    {
+
+    if (empty($size)) {
         return '';
     }
     return $size->name;
@@ -121,9 +117,8 @@ function sizeName($id)
 function getItemName($id)
 {
     $item =  Item::find($id);
-    
-    if(empty($item))
-    {
+
+    if (empty($item)) {
         return '';
     }
     return $item->name;
@@ -132,10 +127,9 @@ function getItemName($id)
 
 function receivedItems($orderId)
 {
-    $items =  ReceivedItem::where('order_id',$orderId)->sum('qty');
-    
-    if(empty($items))
-    {
+    $items =  ReceivedItem::where('order_id', $orderId)->sum('qty');
+
+    if (empty($items)) {
         return 0;
     }
     return $items;
@@ -144,15 +138,14 @@ function receivedItems($orderId)
 function getOrder($id)
 {
     $order =  Order::find($id);
-    
-    if(empty($order))
-    {
+
+    if (empty($order)) {
         return [];
     }
     return $order;
 }
 
-function GUIDv4 ($trim = true)
+function GUIDv4($trim = true)
 {
     // Windows
     if (function_exists('com_create_guid') === true) {
@@ -171,17 +164,24 @@ function GUIDv4 ($trim = true)
     }
 
     // Fallback (PHP 4.2+)
-    mt_srand((double)microtime() * 10000);
+    mt_srand((float)microtime() * 10000);
     $charid = strtolower(md5(uniqid(rand(), true)));
     $hyphen = chr(45);                  // "-"
     $lbrace = $trim ? "" : chr(123);    // "{"
     $rbrace = $trim ? "" : chr(125);    // "}"
-    $guidv4 = $lbrace.
-              substr($charid,  0,  8).$hyphen.
-              substr($charid,  8,  4).$hyphen.
-              substr($charid, 12,  4).$hyphen.
-              substr($charid, 16,  4).$hyphen.
-              substr($charid, 20, 12).
-              $rbrace;
+    $guidv4 = $lbrace .
+        substr($charid,  0,  8) . $hyphen .
+        substr($charid,  8,  4) . $hyphen .
+        substr($charid, 12,  4) . $hyphen .
+        substr($charid, 16,  4) . $hyphen .
+        substr($charid, 20, 12) .
+        $rbrace;
     return $guidv4;
+}
+
+function pre($data)
+{
+    echo "<pre>";
+    print_r($data);
+    die;
 }

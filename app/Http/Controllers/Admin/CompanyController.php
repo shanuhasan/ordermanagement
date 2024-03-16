@@ -12,48 +12,50 @@ use Illuminate\Support\Facades\Validator;
 
 class CompanyController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
+        $companies = Company::where('is_deleted', '!=', '1')->orderBy('id', 'DESC');
 
-        $companies = Company::latest();
-
-        if(!empty($request->get('keyword')))
-        {
-            $companies = $companies->where('name','like','%'.$request->get('keyword').'%');
+        if (!empty($request->get('keyword'))) {
+            $companies = $companies->where('name', 'like', '%' . $request->get('keyword') . '%');
         }
 
         $companies = $companies->paginate(10);
 
-        return view('admin.company.index',compact('companies'));
+        return view('admin.company.index', compact('companies'));
     }
-    
-    public function create(){
+
+    public function create()
+    {
         return view('admin.company.create');
     }
 
-    public function store(Request $request){
-        
-        $validator = Validator::make($request->all(),[
-            'name'=>'required',
-            'slug'=>'required|unique:companies',
+    public function store(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'slug' => 'required|unique:companies',
         ]);
-        if($validator->passes()){
+        if ($validator->passes()) {
 
             $model = new Company();
+            $model->guid = GUIDv4();
             $model->name = $request->name;
             $model->slug = $request->slug;
             $model->status = $request->status;
             $model->save();
 
             //save image
-            if(!empty($request->image_id)){
+            if (!empty($request->image_id)) {
                 $media = Media::find($request->image_id);
-                $extArray = explode('.',$media->name);
+                $extArray = explode('.', $media->name);
                 $ext = last($extArray);
 
-                $newImageName = $model->id .time(). '.'.$ext;
-                $sPath = public_path().'/media/'.$media->name;
-                $dPath = public_path().'/uploads/company/'.$newImageName;
-                File::copy($sPath,$dPath);
+                $newImageName = $model->id . time() . '.' . $ext;
+                $sPath = public_path() . '/media/' . $media->name;
+                $dPath = public_path() . '/uploads/company/' . $newImageName;
+                File::copy($sPath, $dPath);
 
                 //generate thumb
                 // $dPath = public_path().'/uploads/company/thumb/'.$newImageName;
@@ -66,52 +68,48 @@ class CompanyController extends Controller
 
                 $model->image = $newImageName;
                 $model->save();
-                
             }
 
-            $request->session()->flash('success','Comapny added successfully.');
+            $request->session()->flash('success', 'Comapny added successfully.');
             return response()->json([
-                'status'=>true,
-                'message'=>'Comapny added successfully.'  
+                'status' => true,
+                'message' => 'Comapny added successfully.'
             ]);
-
-        }else{
+        } else {
             return response()->json([
-                'status'=>false,
-                'errors'=>$validator->errors()  
+                'status' => false,
+                'errors' => $validator->errors()
             ]);
         }
     }
-    public function edit($categoryId , Request $request){
-
-        $company = Company::find($categoryId);
-        if(empty($company))
-        {
+    public function edit($guid, Request $request)
+    {
+        $company = Company::findByGuid($guid);
+        if (empty($company)) {
             return redirect()->route('admin.company.index');
         }
 
-        return view('admin.company.edit',compact('company'));
-        
+        return view('admin.company.edit', compact('company'));
     }
-    public function update($comapnyId, Request $request){
+    public function update($guid, Request $request)
+    {
 
-        $model = Company::find($comapnyId);
-        if(empty($model))
-        {
-            $request->session()->flash('error','Company not found.');
+        $model = Company::findByGuid($guid);
+        if (empty($model)) {
+            $request->session()->flash('error', 'Company not found.');
             return response()->json([
-                'status'=>false,
-                'notFound'=>true,
-                'message'=>'Company not found.'
+                'status' => false,
+                'notFound' => true,
+                'message' => 'Company not found.'
             ]);
         }
 
-        $validator = Validator::make($request->all(),[
-            'name'=>'required',
-            'slug'=>'required|unique:companies,slug,'.$model->id.',id',
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'slug' => 'required|unique:companies,slug,' . $model->id . ',id',
         ]);
 
-        if($validator->passes()){
+        if ($validator->passes()) {
 
             $model->name = $request->name;
             $model->slug = $request->slug;
@@ -121,15 +119,15 @@ class CompanyController extends Controller
             $oldImage = $model->image;
 
             //save image
-            if(!empty($request->image_id)){
+            if (!empty($request->image_id)) {
                 $media = Media::find($request->image_id);
-                $extArray = explode('.',$media->name);
+                $extArray = explode('.', $media->name);
                 $ext = last($extArray);
 
-                $newImageName = $model->id .time(). '.'.$ext;
-                $sPath = public_path().'/media/'.$media->name;
-                $dPath = public_path().'/uploads/company/'.$newImageName;
-                File::copy($sPath,$dPath);
+                $newImageName = $model->id . time() . '.' . $ext;
+                $sPath = public_path() . '/media/' . $media->name;
+                $dPath = public_path() . '/uploads/company/' . $newImageName;
+                File::copy($sPath, $dPath);
 
                 //generate thumb
                 // $dPath = public_path().'/uploads/company/thumb/'.$newImageName;
@@ -145,45 +143,40 @@ class CompanyController extends Controller
 
                 //delete old image
                 // File::delete(public_path().'/uploads/company/thumb/'.$oldImage);
-                File::delete(public_path().'/uploads/company/'.$oldImage);
-                
+                File::delete(public_path() . '/uploads/company/' . $oldImage);
             }
 
-            $request->session()->flash('success','Company updated successfully.');
+            $request->session()->flash('success', 'Company updated successfully.');
             return response()->json([
-                'status'=>true,
-                'message'=>'Company updated successfully.'  
+                'status' => true,
+                'message' => 'Company updated successfully.'
             ]);
-
-        }else{
+        } else {
             return response()->json([
-                'status'=>false,
-                'errors'=>$validator->errors()  
+                'status' => false,
+                'errors' => $validator->errors()
             ]);
         }
     }
-    public function destroy($categoryId, Request $request){
-        $model = Company::find($categoryId);
-        if(empty($model))
-        {
-            $request->session()->flash('error','Company not found.');
+    public function destroy($guid, Request $request)
+    {
+        $model = Company::findByGuid($guid);
+        if (empty($model)) {
+            $request->session()->flash('error', 'Company not found.');
             return response()->json([
-                'status'=>true,
-                'message'=>'Company not found.'
+                'status' => true,
+                'message' => 'Company not found.'
             ]);
         }
 
-        $model->delete();
+        $model->is_deleted = 1;
+        $model->save();
 
-        // File::delete(public_path().'/uploads/company/thumb/'.$model->image);
-        File::delete(public_path().'/uploads/company/'.$model->image);
-
-        $request->session()->flash('success','Company deleted successfully.');
+        $request->session()->flash('success', 'Company deleted successfully.');
 
         return response()->json([
-            'status'=>true,
-            'message'=>'Company deleted successfully.'
+            'status' => true,
+            'message' => 'Company deleted successfully.'
         ]);
-
     }
 }

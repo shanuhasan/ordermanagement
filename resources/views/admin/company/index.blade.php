@@ -81,7 +81,7 @@
 
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.company.edit', $company->id) }}">
+                                            <a href="{{ route('admin.company.edit', $company->guid) }}">
                                                 <svg class="filament-link-icon w-4 h-4 mr-1"
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                     fill="currentColor" aria-hidden="true">
@@ -90,7 +90,7 @@
                                                     </path>
                                                 </svg>
                                             </a>
-                                            <a href="javascript:void()" onclick="deleteCompany({{ $company->id }})"
+                                            <a href="javascript:void()" onclick="deleteCompany('{{ $company->guid }}')"
                                                 class="text-danger w-4 h-4 mr-1">
                                                 <svg wire:loading.remove.delay="" wire:target=""
                                                     class="filament-link-icon w-4 h-4 mr-1"
@@ -132,7 +132,7 @@
             if (confirm('Are you sure want to delete')) {
                 $.ajax({
                     url: newUrl,
-                    type: 'delete',
+                    type: 'get',
                     data: {},
                     dataType: 'json',
                     headers: {

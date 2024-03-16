@@ -89,7 +89,7 @@
             var elements = $(this);
             $('button[type=submit]').prop('disabled', true);
             $.ajax({
-                url: "{{ route('admin.company.update', $company->id) }}",
+                url: "{{ route('admin.company.update', $company->guid) }}",
                 type: 'put',
                 data: elements.serializeArray(),
                 dataType: 'json',

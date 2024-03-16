@@ -42,4 +42,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    static public function findByGuid($guid)
+    {
+        return self::where('guid', $guid)->first();
+    }
 }
