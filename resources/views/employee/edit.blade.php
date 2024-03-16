@@ -27,7 +27,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="name">Name*</label>
+                                    <label for="name">Name<span style="color: red">*</span></label>
                                     <input type="text" name="name" id="name" value="{{ $employee->name }}"
                                         class="form-control text-to-upper" placeholder="Name">
                                     <p></p>
@@ -43,7 +43,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="phone">Phone*</label>
+                                    <label for="phone">Phone<span style="color: red">*</span></label>
                                     <input type="phone" name="phone" id="phone" value="{{ $employee->phone }}"
                                         class="form-control only-number" maxlength="10" placeholder="Phone">
                                     <p class="error"></p>
@@ -51,7 +51,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="status">Status*</label>
+                                    <label for="status">Status<span style="color: red">*</span></label>
                                     <select name="status" id="status" class="form-control">
                                         <option {{ $employee->status == 1 ? 'selected' : '' }} value="1">Active
                                         </option>
@@ -60,11 +60,9 @@
                                 </div>
                             </div>
                         </div>
+                        <button type="submit" class="btn btn-success">Update</button>
+                        <a href="{{ route('employee.index') }}" class="btn btn-info">Cancel</a>
                     </div>
-                </div>
-                <div class="pb-5 pt-3">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                    <a href="{{ route('employee.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </form>
         </div>
@@ -80,7 +78,7 @@
             var elements = $(this);
             $('button[type=submit]').prop('disabled', true);
             $.ajax({
-                url: "{{ route('employee.update', $employee->id) }}",
+                url: "{{ route('employee.update', $employee->guid) }}",
                 type: 'put',
                 data: elements.serializeArray(),
                 dataType: 'json',

@@ -16,9 +16,8 @@ class EmployeeController extends AppController
 {
     public function index(Request $request)
     {
-        $companyId = Auth::guard('web')->user()->company_id;
         $employees = Employee::latest()
-            ->where('company_id', $companyId)
+            ->where('company_id', $this->companyId)
             ->where('is_deleted', '!=', '1')
             ->where('status', '=', '1');
 
@@ -43,13 +42,11 @@ class EmployeeController extends AppController
 
     public function create()
     {
-
         return view('employee.create');
     }
 
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:3',
             'phone' => 'required|numeric',
@@ -64,7 +61,7 @@ class EmployeeController extends AppController
             $model->phone = $request->phone;
             $model->code = $request->code;
             $model->address = $request->address;
-            $model->company_id = Auth::guard('web')->user()->company_id;
+            $model->company_id = $this->companyId;
             $model->status = $request->status;
             $model->save();
 
@@ -80,13 +77,10 @@ class EmployeeController extends AppController
         }
     }
 
-    public function edit($id, Request $request)
+    public function edit($guid, Request $request)
     {
-        if (empty(employeeExist($id))) {
-            return redirect()->route('employee.index');
-        }
+        $employee = Employee::findByGuidAndCompanyId($guid, $this->companyId);
 
-        $employee = Employee::find($id);
         if (empty($employee)) {
             return redirect()->route('employee.index');
         }
@@ -94,14 +88,14 @@ class EmployeeController extends AppController
         return view('employee.edit', compact('employee'));
     }
 
-    public function update($id, Request $request)
+    public function update($guid, Request $request)
     {
 
-        if (empty(employeeExist($id))) {
-            return redirect()->route('employee.index');
-        }
+        // if (empty(employeeExist($id))) {
+        //     return redirect()->route('employee.index');
+        // }
 
-        $model = Employee::find($id);
+        $model = Employee::findByGuidAndCompanyId($guid, $this->companyId);
         if (empty($model)) {
             $request->session()->flash('error', 'Employee not found.');
             return response()->json([
@@ -124,7 +118,7 @@ class EmployeeController extends AppController
             $model->phone = $request->phone;
             $model->code = $request->code;
             $model->address = $request->address;
-            $model->company_id = Auth::guard('web')->user()->company_id;
+            $model->company_id = $this->companyId;
             $model->status = $request->status;
             $model->save();
 
@@ -141,13 +135,10 @@ class EmployeeController extends AppController
         }
     }
 
-    public function destroy($id, Request $request)
+    public function destroy($guid, Request $request)
     {
+        $model = Employee::findByGuidAndCompanyId($guid, $this->companyId);
 
-        if (empty(employeeExist($id))) {
-            return redirect()->route('employee.index');
-        }
-        $model = Employee::find($id);
         if (empty($model)) {
             $request->session()->flash('error', 'Employee not found.');
             return response()->json([

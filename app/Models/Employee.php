@@ -14,22 +14,32 @@ class Employee extends Model
     {
         $companyId = Auth::guard('web')->user()->company_id;
 
-        return self::where('status',1)
-                        ->where('company_id',$companyId)
-                        ->where('is_deleted','!=',1)
-                        ->orderBy('name','ASC')
-                        ->get();
+        return self::where('status', 1)
+            ->where('company_id', $companyId)
+            ->where('is_deleted', '!=', 1)
+            ->orderBy('name', 'ASC')
+            ->get();
     }
 
     static public function getSingleEmployee($id)
     {
         $companyId = Auth::guard('web')->user()->company_id;
 
-        return self::where('status',1)
-                        ->where('id',$id)
-                        ->where('company_id',$companyId)
-                        ->where('is_deleted','!=',1)
-                        ->orderBy('name','ASC')
-                        ->first();
+        return self::where('status', 1)
+            ->where('id', $id)
+            ->where('company_id', $companyId)
+            ->where('is_deleted', '!=', 1)
+            ->orderBy('name', 'ASC')
+            ->first();
+    }
+
+    static public function findByGuid($guid)
+    {
+        return self::where('guid', $guid)->first();
+    }
+
+    static public function findByGuidAndCompanyId($guid, $companyId)
+    {
+        return self::where('guid', $guid)->where('company_id', $companyId)->first();
     }
 }
