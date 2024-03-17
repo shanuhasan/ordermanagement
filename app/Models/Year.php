@@ -13,4 +13,9 @@ class Year extends Model
     {
         return  self::get();
     }
+
+    static public function findByGuid($guid)
+    {
+        return self::where('guid', $guid)->first();
+    }
 }

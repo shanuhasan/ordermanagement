@@ -4,6 +4,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\YearController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\EmployeeController;
@@ -12,7 +13,6 @@ use App\Http\Controllers\Admin\UploadImageController;
 use App\Http\Controllers\Admin\Auth\PasswordController;
 use App\Http\Controllers\Admin\Auth\NewPasswordController;
 use App\Http\Controllers\Admin\Auth\VerifyEmailController;
-use App\Http\Controllers\Admin\Auth\RegisteredUserController;
 use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Admin\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
@@ -89,6 +89,14 @@ Route::group(['middleware' => ['auth:admin'], 'prefix' => 'admin', 'as' => 'admi
 
     Route::get('/deleted-user', [UserController::class, 'deletedUser'])->name('user.delete.index');
     Route::get('/restore-user/{guid}', [UserController::class, 'restore'])->name('user.restore');
+
+    //year management
+    Route::get('/year', [YearController::class, 'index'])->name('year.index');
+    Route::get('/year/create', [YearController::class, 'create'])->name('year.create');
+    Route::post('/year/store', [YearController::class, 'store'])->name('year.store');
+    Route::get('/year/{guid}/edit', [YearController::class, 'edit'])->name('year.edit');
+    Route::put('/year/{guid}', [YearController::class, 'update'])->name('year.update');
+    Route::delete('/year/{guid}', [YearController::class, 'destroy'])->name('year.delete');
 
     //employee management
     Route::get('/employee', [EmployeeController::class, 'index'])->name('employee.index');

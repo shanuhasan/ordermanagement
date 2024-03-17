@@ -31,12 +31,12 @@
                         <p>Users</p>
                     </a>
                 </li>
-                {{-- <li class="nav-item">
-                    <a href="{{ route('admin.employee.index') }}" class="nav-link @yield('employee')">
-                        <i class="nav-icon fas fa-user-tie"></i>
-                        <p>Employee</p>
+                <li class="nav-item">
+                    <a href="{{ route('admin.year.index') }}" class="nav-link @yield('year')">
+                        <i class="nav-icon fas fa-calendar"></i>
+                        <p>Years</p>
                     </a>
-                </li> --}}
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
