@@ -39,11 +39,6 @@
                 style="color:green;font-weight:bold;font-size:24px;text-align:center">
                 {{ !empty(Auth::user()->company_name) ? Auth::user()->company_name : Auth::user()->name }}
             </a>
-            <div class="navbar-nav pl-2">
-                <!-- <ol class="breadcrumb p-0 m-0 bg-white">
-      <li class="breadcrumb-item active">Dashboard</li>
-     </ol> -->
-            </div>
 
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
@@ -88,8 +83,8 @@
         </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-
-            <strong>Copyright &copy; {{ date('Y') }} All rights reserved.
+            <strong>Copyright &copy; {{ date('Y') }} All rights reserved. Developed By <a
+                    href="https://musheeda.com" target="_blank">Musheeda</a></strong>
         </footer>
 
     </div>
