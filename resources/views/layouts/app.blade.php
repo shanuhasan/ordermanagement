@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-assets/css/datetimepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-assets/css/datepicker.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('admin-assets/css/chosen.css') }}"> --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
@@ -109,8 +110,8 @@
     <script src="{{ asset('admin-assets/plugins/select2/js/select2.min.js') }}"></script>
     <script src="{{ asset('admin-assets/js/datetimepicker.js') }}"></script>
     <script src="{{ asset('admin-assets/js/datepicker.js') }}"></script>
-    <script src="{{ asset('admin-assets/js/chosen-select/chosen.jquery.js') }}"></script>
-    <script src="{{ asset('admin-assets/js/common.js') }}"></script>
+    {{-- <script src="{{ asset('admin-assets/js/chosen-select/chosen.jquery.js') }}"></script> --}}
+    {{-- <script src="{{ asset('admin-assets/js/common.js') }}"></script> --}}
 
     <script type="text/javascript">
         $.ajaxSetup({

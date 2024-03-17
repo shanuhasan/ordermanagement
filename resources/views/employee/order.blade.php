@@ -19,9 +19,10 @@
                     <a href="{{ route('employee.order.receivedPiece', $employee->guid) }}" class="btn btn-success">Received
                         Piece
                         History</a>
-                    <a href="{{ route('employee.order.payment.history', $employee->guid) }}" class="btn btn-info">Payment
+                    <a href="{{ route('employee.order.payment.history', $employee->guid) }}"
+                        class="btn btn-secondary">Payment
                         History</a>
-                    <a href="{{ route('employee.order.print', $employee->guid) }}" class="btn btn-success">Print</a>
+                    <a href="{{ route('employee.order.print', $employee->guid) }}" class="btn btn-info">Print</a>
                     <a href="{{ route('employee.order.create', $employee->guid) }}" class="btn btn-primary">Add</a>
                 </div>
             </div>
@@ -67,12 +68,13 @@
                                     <label for="year">Year</label>
                                     <select name="year" id="year" class="form-control">
                                         <option value="">Select Year</option>
-                                        @foreach (years() as $key => $val)
+                                        @foreach (\App\Models\Year::getYear() as $val)
                                             <?php
                                             $year = !empty(Request::get('year')) ? Request::get('year') : date('Y');
                                             ?>
-                                            <option value="{{ $key }}" {{ $year == $key ? 'selected' : '' }}>
-                                                {{ $val }}</option>
+                                            <option value="{{ $val->name }}"
+                                                {{ $year == $val->name ? 'selected' : '' }}>
+                                                {{ $val->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -174,10 +176,6 @@
                                                 href="{{ route('employee.order.singleprint', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
                                                 <i class="fa fa-print" aria-hidden="true"></i>
                                             </a>
-                                            {{-- <a
-                                                href="{{ route('employee.order.view', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
-                                                <i class="fa fa-eye" aria-hidden="true"></i>
-                                            </a> --}}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -197,83 +195,4 @@
         </div>
         <!-- /.card -->
     </section>
-    <!-- /.content -->
-
-    {{-- @if ($orders->isNotEmpty())
-        <section class="content">
-            <!-- Default box -->
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-8">
-                        <form action="{{ route('employee.order.payment') }}" method="post">
-                            @csrf
-                            <input type="hidden" value="{{ $employee->id }}" name="employee_id" id="employee_id">
-                            <div class="card">
-                                <h5 style="text-align: center;font-weight:bold;background:gray;">ADVANCE AMOUNT</h5>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="rate">Advance Amount</label>
-                                                <input type="text" name="amount"
-                                                    class="form-control only-number @error('amount') is-invalid	@enderror"
-                                                    placeholder="Advance Amount">
-                                                @error('amount')
-                                                    <p class="invalid-feedback">{{ $message }}</p>
-                                                @enderror
-                                            </div>
-                                            <button type="submit" class="btn btn-success">Submit</button>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="rate">Payment Method</label>
-                                                <select name="payment_method" id="payment_method" class="form-control">
-                                                    @foreach (paymentMethod() as $key => $item)
-                                                        <option value="{{ $key }}">{{ $item }}</option>
-                                                    @endforeach
-                                                </select>
-                                                <p class="error"></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-md-4">
-                        <section class="content">
-                            <div class="container-fluid">
-                                <div class="card">
-                                    <div class="card-body table-responsive p-0">
-                                        <table class="table table-hover text-nowrap table-bordered">
-                                            <tbody>
-                                                <tr style="font-size:24px">
-                                                    <td><strong>Total Amount</strong></td>
-                                                    <td align="right"><strong>₹{{ $totalAmount }}</strong></td>
-                                                </tr>
-                                                <tr style="background-color: green; color:#fff;font-size:24px">
-                                                    <td><strong>Paid Amount</strong></td>
-                                                    <td align="right">
-                                                        <strong>₹{{ $employeeTotalPayment }}</strong>
-                                                    </td>
-                                                </tr>
-                                                <tr style="background-color: red; color:#fff;font-size:24px">
-                                                    <td><strong>Remaining Amount</strong></td>
-                                                    <td align="right">
-                                                        <strong>₹{{ $totalAmount - $employeeTotalPayment }}</strong>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-
-            </div>
-            <!-- /.card -->
-        </section>
-    @endif --}}
 @endsection

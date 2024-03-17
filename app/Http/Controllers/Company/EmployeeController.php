@@ -174,31 +174,16 @@ class EmployeeController extends AppController
             $orders = $orders->where('status', $request->get('status'));
         }
 
-        $totalAmount = Order::where('employee_id', $id)
-            ->where('company_id', $this->companyId);
-
-        $employeeTotalPayment = OrderItem::where('employee_id', $id)
-            ->where('company_id', $this->companyId);
-
         if (!empty($request->get('year'))) {
             $orders = $orders->whereYear('created_at', $request->get('year'));
-            $totalAmount = $totalAmount->whereYear('created_at', $request->get('year'));
-            $employeeTotalPayment = $employeeTotalPayment->whereYear('created_at', $request->get('year'));
         } else {
             $orders = $orders->whereYear('created_at', date('Y'));
-            $totalAmount = $totalAmount->whereYear('created_at', date('Y'));
-            $employeeTotalPayment = $employeeTotalPayment->whereYear('created_at', date('Y'));
         }
 
         $orders = $orders->paginate(50);
-        $totalAmount = $totalAmount->sum('total_amount');
-        $employeeTotalPayment = $employeeTotalPayment->sum('amount');
-
 
         $data['orders'] = $orders;
         $data['employee'] = $employee;
-        $data['totalAmount'] = $totalAmount;
-        $data['employeeTotalPayment'] = $employeeTotalPayment;
 
         return view('employee.order', $data);
     }

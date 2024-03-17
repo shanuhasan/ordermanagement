@@ -36,12 +36,12 @@
                                     <label for="year">Year</label>
                                     <select name="year" id="year" class="form-control">
                                         <option value="">Select Year</option>
-                                        @foreach (years() as $key => $val)
+                                        @foreach (\App\Models\Year::getYear() as $val)
                                             <?php
                                             $year = !empty(Request::get('year')) ? Request::get('year') : date('Y');
                                             ?>
-                                            <option value="{{ $key }}" {{ $year == $key ? 'selected' : '' }}>
-                                                {{ $val }}</option>
+                                            <option value="{{ $val->name }}" {{ $year == $val->name ? 'selected' : '' }}>
+                                                {{ $val->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
