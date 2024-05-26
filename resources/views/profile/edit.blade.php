@@ -37,6 +37,22 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
+                                    <label for="email">Email</label>
+                                    <input type="email" readonly disabled name="email" id="email"
+                                        class="form-control" placeholder="Email" value="{{ $user->email }}">
+                                    <p class="error"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="phone">Phone</label>
+                                    <input type="text" name="phone" maxlength="10" id="phone"
+                                        class="form-control only-number" placeholder="Phone" value="{{ $user->phone }}">
+                                    <p class="error"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
                                     <label for="company_name">Company Name</label>
                                     <input type="text" name="company_name" id="company_name"
                                         class="form-control @error('company_name') is-invalid	@enderror text-to-upper"
@@ -46,15 +62,6 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="email">Email</label>
-                                    <input type="email" readonly disabled name="email" id="email"
-                                        class="form-control" placeholder="Email" value="{{ $user->email }}">
-                                    <p class="error"></p>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>

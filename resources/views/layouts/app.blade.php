@@ -37,7 +37,9 @@
             </ul>
             <a href="javascript:void(0);" class="ml-auto"
                 style="color:green;font-weight:bold;font-size:24px;text-align:center">
-                {{ !empty(Auth::user()->company_id) ? companyName(Auth::user()->company_id) : Auth::user()->company_name }}
+                {{-- {{ !empty(Auth::user()->company_id) ? companyName(Auth::user()->company_id) : Auth::user()->company_name }} --}}
+
+                {{ !empty(Auth::user()->company_name) ? Auth::user()->company_name : companyName(Auth::user()->company_id) }}
             </a>
 
             <ul class="navbar-nav ml-auto">

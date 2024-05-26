@@ -17,28 +17,28 @@ class ProfileController extends Controller
     public function edit()
     {
         $userId = Auth::user()->id;
-        $user = User::where('id',$userId)->first();
+        $user = User::where('id', $userId)->first();
 
         return view('profile.edit', [
-            'user'=>$user,
+            'user' => $user,
         ]);
     }
 
     public function updateProfile(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'name'=>'required'
+        $validator = Validator::make($request->all(), [
+            'name' => 'required'
         ]);
 
-        if($validator->passes())
-        {
+        if ($validator->passes()) {
             $user = User::find(Auth::user()->id);
             $user->name = $request->name;
             $user->company_name = $request->company_name;
+            $user->phone = $request->phone;
             $user->save();
 
-            return redirect()->back()->with('success','Profile updated successfully.');
-        }else{
+            return redirect()->back()->with('success', 'Profile updated successfully.');
+        } else {
             return Redirect::back()->withErrors($validator);
         }
     }
@@ -46,34 +46,29 @@ class ProfileController extends Controller
     public function changePassword()
     {
         return view('profile.change-password');
-
     }
 
     public function changePasswordProcess(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'old_password'=>'required',
-            'new_password'=>'required|min:5',
-            'confirm_password'=>'required|same:new_password',
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required',
+            'new_password' => 'required|min:5',
+            'confirm_password' => 'required|same:new_password',
         ]);
 
-        if($validator->passes())
-        {
-            $user = User::select('id','password')->where('id',Auth::user()->id)->first();
+        if ($validator->passes()) {
+            $user = User::select('id', 'password')->where('id', Auth::user()->id)->first();
 
-            if (!Hash::check($request->old_password,$user->password))
-            {
-                return redirect()->back()->with('error','Your old password is incorrect, please try again.');    
+            if (!Hash::check($request->old_password, $user->password)) {
+                return redirect()->back()->with('error', 'Your old password is incorrect, please try again.');
             }
 
-            User::where('id',Auth::user()->id)->update(['password'=>Hash::make($request->new_password)]);
+            User::where('id', Auth::user()->id)->update(['password' => Hash::make($request->new_password)]);
 
-            return redirect()->back()->with('success','You have successfully change your password.');
-
-        }else{
+            return redirect()->back()->with('success', 'You have successfully change your password.');
+        } else {
             return Redirect::back()->withErrors($validator);
         }
-
     }
 
 
