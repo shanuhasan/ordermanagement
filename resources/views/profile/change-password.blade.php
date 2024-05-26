@@ -62,11 +62,9 @@
                                 </div>
                             </div>
                         </div>
+                        <button type="submit" class="btn btn-success">Save</button>
+                        <a href="{{ route('dashboard') }}" class="btn btn-info">Cancel</a>
                     </div>
-                </div>
-                <div class="pb-5 pt-3">
-                    <button type="submit" class="btn btn-success">Change</button>
-                    <a href="{{ route('dashboard') }}" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </form>
         </div>

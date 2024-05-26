@@ -63,10 +63,8 @@
                                 </div>
                             </div>
                         </div>
+                        <button type="submit" class="btn btn-success">Update</button>
                     </div>
-                </div>
-                <div class="pb-5 pt-3">
-                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
         </div>
