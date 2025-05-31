@@ -77,11 +77,11 @@
                                             </a>
                                         </td>
                                         <td style="text-align:center">
-                                            <a href="{{ route('employee.order', $employee->guid) }}"><strong>{{ $employee->code }}</strong>
+                                            <a href="{{ route('master.order', $employee->guid) }}"><strong>{{ $employee->code }}</strong>
                                             </a>
                                         </td>
                                         <td style="text-align:center">
-                                            <a href="{{ route('employee.order', $employee->guid) }}"><strong>{{ $employee->phone }}</strong>
+                                            <a href="{{ route('master.order', $employee->guid) }}"><strong>{{ $employee->phone }}</strong>
                                             </a>
                                         </td>
                                         <td style="text-align:center">
