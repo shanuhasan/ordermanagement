@@ -170,6 +170,10 @@ class EmployeeController extends AppController
             $orders = $orders->where('size', $request->get('size'));
         }
 
+        if (!empty($request->get('item'))) {
+            $orders = $orders->where('item_id', $request->get('item'));
+        }
+
         if (!empty($request->get('status'))) {
             $orders = $orders->where('status', $request->get('status'));
         }

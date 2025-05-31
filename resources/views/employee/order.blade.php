@@ -7,20 +7,12 @@
     <section class="content-header">
         <div class="container-fluid my-2">
             <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h3>
-                        {{ $employee->name }}
-                        ({{ !empty($employee->code) ? 'Code:- ' . $employee->code . ',' : '' }}
-                        {{ !empty($employee->phone) ? 'Mobile:- ' . $employee->phone : ' ' }})
-                    </h3>
-                </div>
-                <div class="col-sm-6 text-right">
+                <div class="col-md-12 text-right">
                     <a href="{{ route('employee.order.amount', $employee->guid) }}" class="btn btn-warning">Advance Amount</a>
                     <a href="{{ route('employee.order.receivedPiece', $employee->guid) }}" class="btn btn-success">Received
                         Piece
                         History</a>
-                    <a href="{{ route('employee.order.payment.history', $employee->guid) }}"
-                        class="btn btn-secondary">Payment
+                    <a href="{{ route('employee.order.payment.history', $employee->guid) }}" class="btn btn-secondary">Payment
                         History</a>
                     <a href="{{ route('employee.order.print', $employee->guid) }}" class="btn btn-info">Print</a>
                     <a href="{{ route('employee.order.create', $employee->guid) }}" class="btn btn-primary">Add</a>
@@ -28,6 +20,19 @@
             </div>
         </div>
         <!-- /.container-fluid -->
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-body text-center" style="background-color: green; color:#fff">
+                    <h5>
+                        {{ $employee->name }}
+                        ({{ !empty($employee->code) ? 'Code:- ' . $employee->code . ',' : '' }}
+                        {{ !empty($employee->phone) ? 'Mobile:- ' . $employee->phone : ' ' }})
+                    </h5>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section class="content">
@@ -37,7 +42,20 @@
                 <form action="" method="get">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="item">Item</label>
+                                    <select name="item" id="item" class="form-control">
+                                        <option value="">Select Item</option>
+                                        @foreach (App\Models\Item::list() as $item)
+                                            <option value="{{ $item->id }}"
+                                                {{ Request::get('item') == $item->id ? 'selected' : '' }}>
+                                                {{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="size">Size</label>
                                     <select name="size" id="size" class="form-control">
@@ -50,7 +68,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="status">Status</label>
                                     <select name="status" id="status" class="form-control">
@@ -63,7 +81,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="year">Year</label>
                                     <select name="year" id="year" class="form-control">

@@ -27,11 +27,11 @@
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h3>
+                    {{-- <h3>
                         {{ $employee->name }}
                         ({{ !empty($employee->code) ? 'Code:- ' . $employee->code . ',' : '' }}
                         {{ !empty($employee->phone) ? 'Mobile:- ' . $employee->phone : ' ' }})
-                    </h3>
+                    </h3> --}}
                 </div>
                 <div class="col-sm-6 text-right">
                     <a onclick="window.print();" class="btn btn-success">Print </a>
@@ -40,6 +40,20 @@
             </div>
         </div>
         <!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-body text-center" style="background-color: green; color:#fff">
+                    <h5>
+                        {{ $employee->name }}
+                        ({{ !empty($employee->code) ? 'Code:- ' . $employee->code . ',' : '' }}
+                        {{ !empty($employee->phone) ? 'Mobile:- ' . $employee->phone : ' ' }})
+                    </h5>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section class="content years">

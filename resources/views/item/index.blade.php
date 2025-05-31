@@ -47,7 +47,7 @@
                             <tr>
                                 <th width="60">#</th>
                                 <th>Name</th>
-                                {{-- <th>Status</th> --}}
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>

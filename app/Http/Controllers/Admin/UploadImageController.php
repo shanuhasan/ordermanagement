@@ -14,16 +14,15 @@ class UploadImageController extends Controller
 
         // dd($image);
 
-        if(!empty($image))
-        {
+        if (!empty($image)) {
             $ext = $image->getClientOriginalExtension();
-            $newName = time().'.'.$ext;
+            $newName = time() . '.' . $ext;
 
             $media = new Media();
             $media->name = $newName;
             $media->save();
 
-            $image->move(public_path().'/media',$newName);
+            $image->move(public_path() . '/media', $newName);
 
             //generate thumb
 
@@ -33,16 +32,15 @@ class UploadImageController extends Controller
             // $image = Image::make($sourcePath);
             // $image->fit(300,250);
             // $image->save($dPath);
-            
+
 
 
             return response()->json([
-                'status'=>true,
-                'image_id'=>$media->id,
+                'status' => true,
+                'image_id' => $media->id,
                 // 'imagePath'=>asset('media/thumb/'.$newName),
-                'message'=>'Image uploaded successfully'
+                'message' => 'Image uploaded successfully'
             ]);
-            
         }
     }
 }
