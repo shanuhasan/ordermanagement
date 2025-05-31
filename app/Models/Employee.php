@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Employee extends Model
 {
+    const EMPLOYEE = 1;
+    const CONTRACTOR = 2;
     use HasFactory;
 
     static public function getEmployee()

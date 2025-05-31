@@ -1,16 +1,16 @@
-@extends('admin.layouts.app')
-@section('title', 'Employee')
-@section('employee', 'active')
+@extends('layouts.app')
+@section('title', 'Contractor / Thekedar')
+@section('contractor', 'active')
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Employee</h1>
+                    <h1>Contractor / Thekedar</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('admin.employee.create') }}" class="btn btn-primary">New Employee</a>
+                    <a href="{{ route('employee.contractor.create') }}" class="btn btn-primary">Add Contractor</a>
                 </div>
             </div>
         </div>
@@ -30,25 +30,24 @@
                                     <input type="text" name="name" class="form-control" placeholder="Name"
                                         value="{{ Request::get('name') }}">
                                 </div>
-                                <button type="submit" class="btn btn-success">Filter</button>
-                                <a href="{{ route('admin.employee.index') }}" class="btn btn-danger">Reset</a>
                             </div>
-
                             <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="company">Company</label>
-                                    <select name="company" id="" class="form-control">
-                                        <option value="">select</option>
-                                        @foreach (getCompany() as $item)
-                                            <option value="{{ $item->id }}"
-                                                {{ Request::get('company') == $item->id ? 'selected' : '' }}>
-                                                {{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="code">Code</label>
+                                    <input type="text" name="code" class="form-control" placeholder="Code"
+                                        value="{{ Request::get('code') }}">
                                 </div>
                             </div>
-
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="phone">Phone</label>
+                                    <input type="text" name="phone" class="form-control only-number"
+                                        placeholder="Phone" maxlength="10" value="{{ Request::get('phone') }}">
+                                </div>
+                            </div>
                         </div>
+                        <button type="submit" class="btn btn-success">Filter</button>
+                        <a href="{{ route('employee.contractor') }}" class="btn btn-danger">Reset</a>
                     </div>
                 </form>
             </div>
@@ -61,35 +60,16 @@
         <div class="container-fluid">
             @include('message')
             <div class="card">
-                {{-- <form action="" method="get">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <a href="{{ route('admin.employee.index') }}" class="btn btn-danger">Reset</a>
-                        </div>
-                        <div class="card-tools">
-                            <div class="input-group input-group" style="width: 250px;">
-                                <input type="text" value="{{ Request::get('keyword') }}" name="keyword"
-                                    class="form-control float-right" placeholder="Search">
-
-                                <div class="input-group-append">
-                                    <button type="submit" class="btn btn-default">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form> --}}
                 <div class="card-body table-responsive p-0">
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th width="60">S.No</th>
-                                <th>Name</th>
-                                <th>Phone</th>
-                                <th>Company</th>
-                                <th width="100">Status</th>
-                                <th width="100">Action</th>
+                                <th style="text-align:center">#</th>
+                                <th style="text-align:center">Name</th>
+                                <th style="text-align:center">Code</th>
+                                <th style="text-align:center">Phone</th>
+                                <th style="text-align:center">Status</th>
+                                <th style="text-align:center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -98,15 +78,20 @@
                                 <?php $i = 1; ?>
                                 @foreach ($employees as $employee)
                                     <tr>
-                                        <td><a
-                                                href="{{ route('admin.employee.order', $employee->id) }}">{{ $i++ }}</a>
+                                        <td style="text-align:center">{{ $i++ }}</td>
+                                        <td style="text-align:center">
+                                            <a href="{{ route('employee.order', $employee->guid) }}"><strong>{{ $employee->name }}</strong>
+                                            </a>
                                         </td>
-                                        <td><a
-                                                href="{{ route('admin.employee.order', $employee->id) }}">{{ $employee->name }}</a>
+                                        <td style="text-align:center">
+                                            <a href="{{ route('employee.order', $employee->guid) }}"><strong>{{ $employee->code }}</strong>
+                                            </a>
                                         </td>
-                                        <td>{{ $employee->phone }}</td>
-                                        <td>{{ companyName($employee->company_id) }}</td>
-                                        <td>
+                                        <td style="text-align:center">
+                                            <a href="{{ route('employee.order', $employee->guid) }}"><strong>{{ $employee->phone }}</strong>
+                                            </a>
+                                        </td>
+                                        <td style="text-align:center">
                                             @if ($employee->status == 1)
                                                 <svg class="text-success-500 h-6 w-6 text-success"
                                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -125,16 +110,26 @@
                                             @endif
 
                                         </td>
-                                        <td>
-                                            <a href="{{ route('admin.employee.order', $employee->id) }}">
-                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                        <td style="text-align:center">
+                                            <a href="{{ route('employee.edit', $employee->guid) }}">
+                                                <svg class="filament-link-icon w-4 h-4 mr-1"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                    fill="currentColor" aria-hidden="true">
+                                                    <path
+                                                        d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+                                                    </path>
+                                                </svg>
                                             </a>
-                                            <a href="{{ route('admin.employee.edit', $employee->id) }}">
-                                                <i class="fa fa-edit" aria-hidden="true"></i>
-                                            </a>
-                                            <a href="javascript:void()" onclick="deleteEmployee({{ $employee->id }})"
+                                            <a href="javascript:void()" onclick="deleteEmployee('{{ $employee->guid }}')"
                                                 class="text-danger w-4 h-4 mr-1">
-                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                                <svg wire:loading.remove.delay="" wire:target=""
+                                                    class="filament-link-icon w-4 h-4 mr-1"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                    fill="currentColor" aria-hidden="true">
+                                                    <path ath fill-rule="evenodd"
+                                                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
                                             </a>
                                         </td>
                                     </tr>
@@ -161,7 +156,7 @@
 @section('script')
     <script>
         function deleteEmployee(id) {
-            var url = "{{ route('admin.employee.delete', 'ID') }}";
+            var url = "{{ route('employee.delete', 'ID') }}";
             var newUrl = url.replace('ID', id);
 
             if (confirm('Are you sure want to delete')) {
@@ -175,7 +170,7 @@
                     },
                     success: function(response) {
                         if (response['status']) {
-                            window.location.href = "{{ route('admin.employee.index') }}";
+                            window.location.href = "{{ route('employee.contractor') }}";
                         }
                     }
                 });

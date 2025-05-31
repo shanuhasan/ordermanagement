@@ -19,6 +19,7 @@ class EmployeeController extends AppController
         $employees = Employee::latest()
             ->where('company_id', $this->companyId)
             ->where('is_deleted', '!=', '1')
+            ->where('type', '=', Employee::EMPLOYEE)
             ->where('status', '=', '1');
 
         if (!empty($request->get('name'))) {
@@ -33,16 +34,81 @@ class EmployeeController extends AppController
             $employees = $employees->where('phone', 'like', '%' . $request->get('phone') . '%');
         }
 
-        $employees = $employees->paginate(20);
+        $employees = $employees->paginate(100);
 
         return view('employee.index', [
             'employees' => $employees
         ]);
     }
 
+    public function contractor(Request $request)
+    {
+        $employees = Employee::latest()
+            ->where('company_id', $this->companyId)
+            ->where('is_deleted', '!=', '1')
+            ->where('type', '=', Employee::CONTRACTOR)
+            ->where('status', '=', '1');
+
+        if (!empty($request->get('name'))) {
+            $employees = $employees->where('name', 'like', '%' . $request->get('name') . '%');
+        }
+
+        if (!empty($request->get('code'))) {
+            $employees = $employees->where('code', '=', $request->get('code'));
+        }
+
+        if (!empty($request->get('phone'))) {
+            $employees = $employees->where('phone', 'like', '%' . $request->get('phone') . '%');
+        }
+
+        $employees = $employees->paginate(100);
+
+        return view('employee.contractor', [
+            'employees' => $employees
+        ]);
+    }
+
+    public function createContractor()
+    {
+        return view('employee.create-contractor');
+    }
+
     public function create()
     {
         return view('employee.create');
+    }
+
+    public function storeContractor(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:3',
+            'phone' => 'required|numeric',
+            'status' => 'required',
+            // 'code'=>'required|unique:employees',
+        ]);
+
+        if ($validator->passes()) {
+            $model = new Employee();
+            $model->guid = GUIDv4();
+            $model->name = $request->name;
+            $model->phone = $request->phone;
+            $model->code = $request->code;
+            $model->address = $request->address;
+            $model->company_id = $this->companyId;
+            $model->status = $request->status;
+            $model->type = Employee::CONTRACTOR;
+            $model->save();
+
+            session()->flash('success', 'Contractor added successfully.');
+            return response()->json([
+                'status' => true
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
     }
 
     public function store(Request $request)
@@ -63,6 +129,7 @@ class EmployeeController extends AppController
             $model->address = $request->address;
             $model->company_id = $this->companyId;
             $model->status = $request->status;
+            $model->type = Employee::EMPLOYEE;
             $model->save();
 
             session()->flash('success', 'Employee added successfully.');
@@ -370,6 +437,7 @@ class EmployeeController extends AppController
                 $model->company_id = $companyId;
                 $model->employee_id = $request->employee_id;
                 $model->amount = $request->amount;
+                $model->created_at = $request->date;
                 $model->payment_method = $request->payment_method;
                 $model->save();
             }
@@ -514,11 +582,13 @@ class EmployeeController extends AppController
         }
 
         $totalAmount = $totalAmount->sum('total_amount');
+        $employeePaymentHistory = $employeeTotalPayment->get();
         $employeeTotalPayment = $employeeTotalPayment->sum('amount');
 
         $data['employee'] = $employee;
         $data['totalAmount'] = $totalAmount;
         $data['employeeTotalPayment'] = $employeeTotalPayment;
+        $data['employeePaymentHistory'] = $employeePaymentHistory;
 
         return view('employee.amount', $data);
     }

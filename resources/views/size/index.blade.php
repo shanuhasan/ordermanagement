@@ -114,7 +114,7 @@
                     </table>
                 </div>
                 <div class="card-footer clearfix">
-                    {{ $sizes->links() }}
+                    {{ $sizes->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>

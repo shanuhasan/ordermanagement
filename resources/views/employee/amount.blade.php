@@ -6,6 +6,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid my-2">
+            @include('message')
             <div class="row mb-2">
                 <div class="col-sm-6">
                     {{-- <h3>
@@ -80,7 +81,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="rate">Advance Amount</label>
                                             <input type="text" name="amount"
@@ -91,7 +92,15 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="date">Date<span style="color: red">*</span></label>
+                                            <input type="date" name="date" id="date" class="form-control"
+                                                placeholder="Date" value="{{ date('Y-m-d') }}">
+                                            <p class="error"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="rate">Payment Method</label>
                                             <select name="payment_method" id="payment_method" class="form-control">
@@ -144,6 +153,61 @@
         <!-- /.card -->
     </section>
     <!-- /.content -->
+
+    <section class="content">
+        <!-- Default box -->
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-body">
+                    <h5 style="font-weight:bold">PAYMENT HISTORY</h5>
+                    <table cellpadding="3" cellspacing='3' border="0" width="100%">
+                        <thead style="background: #000;color:#ffffff">
+                            <tr>
+                                <th style="border:1px solid #000;text-align:center">#</th>
+                                <th style="border:1px solid #000;text-align:center">Date</th>
+                                <th style="border:1px solid #000;text-align:center">Pament Method</th>
+                                <th style="border:1px solid #000;text-align:center">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $total = 0;
+                            $i = 1; ?>
+                            @if ($employeePaymentHistory->isNotEmpty())
+                                @foreach ($employeePaymentHistory as $item)
+                                    <tr>
+                                        <td style="border:1px solid #000;text-align:center">{{ $i++ }}</td>
+                                        <td style="border:1px solid #000;text-align:center">
+                                            {{ date('d-m-Y', strtotime($item->created_at)) }}
+                                        </td>
+                                        <td style="border:1px solid #000;text-align:center">{{ $item->payment_method }}
+                                        </td>
+                                        <td style="border:1px solid #000;text-align:center">₹{{ $item->amount }}</td>
+                                    </tr>
+                                    <?php $total += $item->amount; ?>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="4" style="border:1px solid #000;text-align:center">Data not found.
+                                    </td>
+                                </tr>
+                            @endif
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th style="border:1px solid #000;text-align:center"></th>
+                                <th style="border:1px solid #000;text-align:center"></th>
+                                <th style="border:1px solid #000;text-align:center"><strong>Total Paid</strong></th>
+                                <th style="border:1px solid #000;text-align:center">
+                                    <strong>₹{{ $total }}</strong>
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- /.card -->
+    </section>
 @endsection
 
 @section('script')

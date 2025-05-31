@@ -94,7 +94,7 @@
                     </table>
                 </div>
                 <div class="card-footer clearfix">
-                    {{ $years->links() }}
+                    {{ $years->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>
