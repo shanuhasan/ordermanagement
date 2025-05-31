@@ -11,15 +11,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Company\AppController;
+use App\Models\MasterOrder;
 
-class EmployeeController extends AppController
+class MasterController extends AppController
 {
     public function index(Request $request)
     {
         $employees = Employee::latest()
             ->where('company_id', $this->companyId)
             ->where('is_deleted', '!=', '1')
-            ->where('type', '=', Employee::EMPLOYEE)
+            ->where('type', '=', Employee::MASTER)
             ->where('status', '=', '1');
 
         if (!empty($request->get('name'))) {
@@ -36,14 +37,14 @@ class EmployeeController extends AppController
 
         $employees = $employees->paginate(100);
 
-        return view('employee.index', [
+        return view('master.index', [
             'employees' => $employees
         ]);
     }
 
     public function create()
     {
-        return view('employee.create');
+        return view('master.create');
     }
 
     public function store(Request $request)
@@ -60,14 +61,13 @@ class EmployeeController extends AppController
             $model->guid = GUIDv4();
             $model->name = $request->name;
             $model->phone = $request->phone;
-            $model->code = $request->code;
             $model->address = $request->address;
             $model->company_id = $this->companyId;
             $model->status = $request->status;
-            $model->type = Employee::EMPLOYEE;
+            $model->type = Employee::MASTER;
             $model->save();
 
-            session()->flash('success', 'Employee added successfully.');
+            session()->flash('success', 'Master added successfully.');
             return response()->json([
                 'status' => true
             ]);
@@ -84,10 +84,10 @@ class EmployeeController extends AppController
         $employee = Employee::findByGuidAndCompanyId($guid, $this->companyId);
 
         if (empty($employee)) {
-            return redirect()->route('employee.index');
+            return redirect()->route('master.index');
         }
 
-        return view('employee.edit', compact('employee'));
+        return view('master.edit', compact('employee'));
     }
 
     public function update($guid, Request $request)
@@ -124,10 +124,10 @@ class EmployeeController extends AppController
             $model->status = $request->status;
             $model->save();
 
-            $request->session()->flash('success', 'Employee updated successfully.');
+            $request->session()->flash('success', 'Master updated successfully.');
             return response()->json([
                 'status' => true,
-                'message' => 'Employee updated successfully.'
+                'message' => 'Master updated successfully.'
             ]);
         } else {
             return response()->json([
@@ -142,21 +142,21 @@ class EmployeeController extends AppController
         $model = Employee::findByGuidAndCompanyId($guid, $this->companyId);
 
         if (empty($model)) {
-            $request->session()->flash('error', 'Employee not found.');
+            $request->session()->flash('error', 'Master not found.');
             return response()->json([
                 'status' => true,
-                'message' => 'Employee not found.'
+                'message' => 'Master not found.'
             ]);
         }
 
         $model->is_deleted = 1;
         $model->save();
 
-        $request->session()->flash('success', 'Employee deleted successfully.');
+        $request->session()->flash('success', 'Master deleted successfully.');
 
         return response()->json([
             'status' => true,
-            'message' => 'Employee deleted successfully.'
+            'message' => 'Master deleted successfully.'
         ]);
     }
 
@@ -165,11 +165,11 @@ class EmployeeController extends AppController
         $employee = Employee::findByGuid($guid);
         $id = $employee->id;
 
-        $orders = Order::latest()->where('employee_id', $id)
+        $orders = MasterOrder::latest()->where('employee_id', $id)
             ->where('company_id', $this->companyId);
 
         if (!empty($request->get('size'))) {
-            $orders = $orders->where('size', $request->get('size'));
+            $orders = $orders->where('size_id', $request->get('size'));
         }
 
         if (!empty($request->get('item'))) {
@@ -191,14 +191,14 @@ class EmployeeController extends AppController
         $data['orders'] = $orders;
         $data['employee'] = $employee;
 
-        return view('employee.order', $data);
+        return view('master.order', $data);
     }
 
     public function orderCreate($guid)
     {
         $employee = Employee::findByGuid($guid);
         $data['employee'] = $employee;
-        return view('employee.order-create', $data);
+        return view('master.order-create', $data);
     }
 
     public function orderStore(Request $request)
@@ -208,38 +208,20 @@ class EmployeeController extends AppController
             'item_id' => 'required',
             'size' => 'required',
             'qty' => 'required',
-            'rate' => 'required',
+            // 'rate' => 'required',
         ]);
 
         if ($validator->passes()) {
-            $model = new Order();
+            $model = new MasterOrder();
             $model->company_id = $this->companyId;
             $model->employee_id = $request->employee_id;
-            $model->particular = $request->particular;
             $model->item_id = $request->item_id;
-            $model->size = $request->size;
+            $model->size_id = $request->size;
             $model->qty = $request->qty;
             $model->rate = $request->rate;
-            $model->status = $request->status;
             $model->date = $request->date;
             $model->total_amount = $request->qty * $request->rate;
-
-            if ($model->save()) {
-                if ($request->status == 'Completed') {
-                    $rModel = new ReceivedItem();
-                    $rModel->order_id = $model->id;
-                    $rModel->company_id = $this->companyId;
-                    $rModel->employee_id = $request->employee_id;
-                    $rModel->qty = $request->qty;
-                    $rModel->save();
-                }
-            }
-
-            // if($request->qty == receivedItems($model->id))
-            // {
-            //     $model->status = 'Completed';
-            //     $model->save();
-            // }
+            $model->save();
 
             session()->flash('success', 'Added successfully.');
             return response()->json([
@@ -258,7 +240,7 @@ class EmployeeController extends AppController
     {
         $employee = Employee::findByGuid($guid);
 
-        $order = Order::where('id', $orderId)
+        $order = MasterOrder::where('id', $orderId)
             ->where('employee_id', $employee->id)
             ->first();
 
@@ -266,22 +248,16 @@ class EmployeeController extends AppController
             return redirect()->back();
         }
 
-        $orderDetail = OrderItem::where('order_id', $order->id)->get();
-
-        $pendingQty = $order->qty - receivedItems($orderId);
 
         $data['order'] = $order;
-        $data['orderDetail'] = $orderDetail;
         $data['employee'] = $employee;
-        $data['pendingItem'] = $pendingQty;
 
-        return view('employee.order-edit', $data);
+        return view('master.order-edit', $data);
     }
 
     public function orderUpdate($id, Request $request)
     {
-        $model = Order::find($id);
-        $pendingQty = $model->qty - receivedItems($id);
+        $model = MasterOrder::find($id);
         if (empty($model)) {
             return redirect()->route('employee.index')->with('error', 'Order not found.');
         }
@@ -291,42 +267,20 @@ class EmployeeController extends AppController
             'item_id' => 'required',
             'size' => 'required',
             'qty' => 'required',
-            'rate' => 'required',
+            // 'rate' => 'required',
         ]);
 
         if ($validator->passes()) {
 
             $model->company_id = $this->companyId;
             $model->employee_id = $request->employee_id;
-            $model->particular = $request->particular;
             $model->item_id = $request->item_id;
-            $model->size = $request->size;
+            $model->size_id = $request->size;
             $model->qty = $request->qty;
             $model->rate = $request->rate;
             $model->total_amount = $request->qty * $request->rate;
-            $model->status = $request->status;
             $model->date = $request->date;
-            if ($model->save()) {
-                $rModel = new ReceivedItem();
-                $rModel->order_id = $id;
-                $rModel->company_id = $this->companyId;
-                $rModel->employee_id = $request->employee_id;
-
-                if (!empty($request->received_qty) && $request->status == 'Pending' && ($request->received_qty <= $pendingQty)) {
-                    $rModel->qty = $request->received_qty;
-                    $rModel->save();
-                }
-
-                if ($request->status == 'Completed' && !empty($pendingQty) && $pendingQty > 0) {
-                    $rModel->qty = $pendingQty;
-                    $rModel->save();
-                }
-            }
-
-            if ($request->qty == receivedItems($id)) {
-                $model->status = 'Completed';
-                $model->save();
-            }
+            $model->save();
 
             session()->flash('success', 'Updated successfully.');
             return response()->json([
@@ -339,21 +293,6 @@ class EmployeeController extends AppController
                 'errors' => $validator->errors()
             ]);
         }
-    }
-
-    public function orderView($guid, $orderId)
-    {
-        $employee = Employee::findByGuid($guid);
-
-        $items = ReceivedItem::where('order_id', $orderId)
-            ->where('company_id', $this->companyId)
-            ->paginate(30);
-
-        return view('employee.order-view', [
-            'items' => $items,
-            'employee' => $employee,
-            'orderId' => $orderId
-        ]);
     }
 
     public function orderPayment(Request $request)

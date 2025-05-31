@@ -1,16 +1,16 @@
 @extends('layouts.app')
-@section('title', 'Employee')
-@section('employee', 'active')
+@section('title', 'Contractor / Thekedar')
+@section('contractor', 'active')
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Employee</h1>
+                    <h1>Contractor / Thekedar</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('employee.create') }}" class="btn btn-primary">Add Employee</a>
+                    <a href="{{ route('contractor.create') }}" class="btn btn-primary">Add Contractor</a>
                 </div>
             </div>
         </div>
@@ -47,7 +47,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-success">Search</button>
-                        <a href="{{ route('employee.index') }}" class="btn btn-danger">Reset</a>
+                        <a href="{{ route('contractor.index') }}" class="btn btn-danger">Reset</a>
                     </div>
                 </form>
             </div>
@@ -80,15 +80,15 @@
                                     <tr>
                                         <td style="text-align:center">{{ $i++ }}</td>
                                         <td style="text-align:center">
-                                            <a href="{{ route('employee.order', $employee->guid) }}"><strong>{{ $employee->name }}</strong>
+                                            <a href="{{ route('contractor.order', $employee->guid) }}"><strong>{{ $employee->name }}</strong>
                                             </a>
                                         </td>
                                         <td style="text-align:center">
-                                            <a href="{{ route('employee.order', $employee->guid) }}"><strong>{{ $employee->code }}</strong>
+                                            <a href="{{ route('contractor.order', $employee->guid) }}"><strong>{{ $employee->code }}</strong>
                                             </a>
                                         </td>
                                         <td style="text-align:center">
-                                            <a href="{{ route('employee.order', $employee->guid) }}"><strong>{{ $employee->phone }}</strong>
+                                            <a href="{{ route('contractor.order', $employee->guid) }}"><strong>{{ $employee->phone }}</strong>
                                             </a>
                                         </td>
                                         <td style="text-align:center">
@@ -111,7 +111,7 @@
 
                                         </td>
                                         <td style="text-align:center">
-                                            <a href="{{ route('employee.edit', $employee->guid) }}">
+                                            <a href="{{ route('contractor.edit', $employee->guid) }}">
                                                 <svg class="filament-link-icon w-4 h-4 mr-1"
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                     fill="currentColor" aria-hidden="true">
@@ -156,7 +156,7 @@
 @section('script')
     <script>
         function deleteEmployee(id) {
-            var url = "{{ route('employee.delete', 'ID') }}";
+            var url = "{{ route('contractor.delete', 'ID') }}";
             var newUrl = url.replace('ID', id);
 
             if (confirm('Are you sure want to delete')) {
@@ -170,7 +170,7 @@
                     },
                     success: function(response) {
                         if (response['status']) {
-                            window.location.href = "{{ route('employee.index') }}";
+                            window.location.href = "{{ route('contractor.index') }}";
                         }
                     }
                 });

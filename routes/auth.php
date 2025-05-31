@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Company\ItemController;
 use App\Http\Controllers\Company\SizeController;
 use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\Company\MasterController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Company\EmployeeController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Company\ContractorController;
 
 Route::middleware('guest')->group(function () {
     // Route::get('register', [RegisteredUserController::class, 'create'])
@@ -79,10 +81,38 @@ Route::middleware('auth')->group(function () {
     Route::get('/employee/{employee_id}', [EmployeeController::class, 'destroy'])->name('employee.delete');
 
     // contractor
-    Route::get('/employee/contractor/index', [EmployeeController::class, 'contractor'])->name('employee.contractor');
-    Route::get('/employee/create/contractor', [EmployeeController::class, 'createContractor'])->name('employee.contractor.create');
-    Route::post('/employee/store/contractor', [EmployeeController::class, 'storeContractor'])->name('employee.store.contractor');
+    Route::get('/contractor', [ContractorController::class, 'index'])->name('contractor.index');
+    Route::get('/contractor/create', [ContractorController::class, 'create'])->name('contractor.create');
+    Route::post('/contractor/store', [ContractorController::class, 'storeContractor'])->name('contractor.store');
+    Route::get('/contractor/{employee_id}/edit', [ContractorController::class, 'edit'])->name('contractor.edit');
+    Route::put('/contractor/{employee_id}', [ContractorController::class, 'update'])->name('contractor.update');
+    Route::get('/contractor/{employee_id}', [ContractorController::class, 'destroy'])->name('contractor.delete');
 
+    Route::get('/contractor/order/{id}', [ContractorController::class, 'order'])->name('contractor.order');
+    Route::get('/contractor/order/{id}/create', [ContractorController::class, 'orderCreate'])->name('contractor.order.create');
+    Route::post('/contractor/order/store', [ContractorController::class, 'orderStore'])->name('contractor.order.store');
+    Route::get('/contractor/order/{employeeId}/{orderId}/edit', [ContractorController::class, 'orderEdit'])->name('contractor.order.edit');
+    Route::post('/contractor/order/{id}', [ContractorController::class, 'orderUpdate'])->name('contractor.order.update');
+    Route::get('/contractor/order/{employeeId}/{orderId}/view', [ContractorController::class, 'orderView'])->name('contractor.order.view');
+    Route::post('/contractor-order-payment', [ContractorController::class, 'orderPayment'])->name('contractor.order.payment');
+    Route::get('/contractor-order-singleprint/{employeeId}/{orderId}', [ContractorController::class, 'singlePrint'])->name('contractor.order.singleprint');
+    Route::get('/contractor/order/received-piece-history/{employeeId}', [ContractorController::class, 'receivedPieceHistory'])->name('contractor.order.receivedPiece');
+    Route::get('/contractor-order-print/{employeeId}', [ContractorController::class, 'orderPrint'])->name('contractor.order.print');
+    Route::get('/contractor/order/payment-history/{id}', [ContractorController::class, 'paymentHistory'])->name('contractor.order.payment.history');
+    Route::get('/contractor/order/amount/{guid}', [ContractorController::class, 'amount'])->name('contractor.order.amount');
+
+    //master management
+    Route::get('/master', [MasterController::class, 'index'])->name('master.index');
+    Route::get('/master/create', [MasterController::class, 'create'])->name('master.create');
+    Route::post('/master/store', [MasterController::class, 'store'])->name('master.store');
+    Route::get('/master/{master_id}/edit', [MasterController::class, 'edit'])->name('master.edit');
+    Route::put('/master/{master_id}', [MasterController::class, 'update'])->name('master.update');
+    Route::get('/master/{master_id}', [MasterController::class, 'destroy'])->name('master.delete');
+    Route::get('/master/order/{id}', [MasterController::class, 'order'])->name('master.order');
+    Route::get('/master/order/{id}/create', [MasterController::class, 'orderCreate'])->name('master.order.create');
+    Route::post('/master/order/store', [MasterController::class, 'orderStore'])->name('master.order.store');
+    Route::get('/master/order/{employeeId}/{orderId}/edit', [MasterController::class, 'orderEdit'])->name('master.order.edit');
+    Route::post('/master/order/{id}', [MasterController::class, 'orderUpdate'])->name('master.order.update');
 
     //items management
     Route::get('/item', [ItemController::class, 'index'])->name('item.index');

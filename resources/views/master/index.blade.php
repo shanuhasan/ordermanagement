@@ -1,16 +1,16 @@
 @extends('layouts.app')
-@section('title', 'Contractor / Thekedar')
-@section('contractor', 'active')
+@section('title', 'Master')
+@section('master', 'active')
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Contractor / Thekedar</h1>
+                    <h1>Master</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('employee.contractor.create') }}" class="btn btn-primary">Add Contractor</a>
+                    <a href="{{ route('master.create') }}" class="btn btn-primary">Add Master</a>
                 </div>
             </div>
         </div>
@@ -33,21 +33,14 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="code">Code</label>
-                                    <input type="text" name="code" class="form-control" placeholder="Code"
-                                        value="{{ Request::get('code') }}">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="mb-3">
                                     <label for="phone">Phone</label>
                                     <input type="text" name="phone" class="form-control only-number"
                                         placeholder="Phone" maxlength="10" value="{{ Request::get('phone') }}">
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success">Filter</button>
-                        <a href="{{ route('employee.contractor') }}" class="btn btn-danger">Reset</a>
+                        <button type="submit" class="btn btn-success">Search</button>
+                        <a href="{{ route('master.index') }}" class="btn btn-danger">Reset</a>
                     </div>
                 </form>
             </div>
@@ -80,7 +73,7 @@
                                     <tr>
                                         <td style="text-align:center">{{ $i++ }}</td>
                                         <td style="text-align:center">
-                                            <a href="{{ route('employee.order', $employee->guid) }}"><strong>{{ $employee->name }}</strong>
+                                            <a href="{{ route('master.order', $employee->guid) }}"><strong>{{ $employee->name }}</strong>
                                             </a>
                                         </td>
                                         <td style="text-align:center">
@@ -111,7 +104,7 @@
 
                                         </td>
                                         <td style="text-align:center">
-                                            <a href="{{ route('employee.edit', $employee->guid) }}">
+                                            <a href="{{ route('master.edit', $employee->guid) }}">
                                                 <svg class="filament-link-icon w-4 h-4 mr-1"
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                     fill="currentColor" aria-hidden="true">
@@ -170,7 +163,7 @@
                     },
                     success: function(response) {
                         if (response['status']) {
-                            window.location.href = "{{ route('employee.contractor') }}";
+                            window.location.href = "{{ route('employee.index') }}";
                         }
                     }
                 });

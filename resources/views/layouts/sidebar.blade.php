@@ -39,9 +39,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('employee.contractor') }}" class="nav-link @yield('contractor')">
+                    <a href="{{ route('contractor.index') }}" class="nav-link @yield('contractor')">
                         <i class="nav-icon fas fa-users"></i>
                         <p>Employee / Thekedar</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('master.index') }}" class="nav-link @yield('master')">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>Master</p>
                     </a>
                 </li>
                 {{-- <li class="nav-item">

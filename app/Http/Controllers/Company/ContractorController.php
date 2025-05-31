@@ -12,14 +12,14 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Company\AppController;
 
-class EmployeeController extends AppController
+class ContractorController extends AppController
 {
     public function index(Request $request)
     {
         $employees = Employee::latest()
             ->where('company_id', $this->companyId)
             ->where('is_deleted', '!=', '1')
-            ->where('type', '=', Employee::EMPLOYEE)
+            ->where('type', '=', Employee::CONTRACTOR)
             ->where('status', '=', '1');
 
         if (!empty($request->get('name'))) {
@@ -36,17 +36,17 @@ class EmployeeController extends AppController
 
         $employees = $employees->paginate(100);
 
-        return view('employee.index', [
+        return view('contractor.index', [
             'employees' => $employees
         ]);
     }
 
     public function create()
     {
-        return view('employee.create');
+        return view('contractor.create');
     }
 
-    public function store(Request $request)
+    public function storeContractor(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:3',
@@ -64,10 +64,10 @@ class EmployeeController extends AppController
             $model->address = $request->address;
             $model->company_id = $this->companyId;
             $model->status = $request->status;
-            $model->type = Employee::EMPLOYEE;
+            $model->type = Employee::CONTRACTOR;
             $model->save();
 
-            session()->flash('success', 'Employee added successfully.');
+            session()->flash('success', 'Contractor added successfully.');
             return response()->json([
                 'status' => true
             ]);
@@ -84,10 +84,10 @@ class EmployeeController extends AppController
         $employee = Employee::findByGuidAndCompanyId($guid, $this->companyId);
 
         if (empty($employee)) {
-            return redirect()->route('employee.index');
+            return redirect()->route('contractor.index');
         }
 
-        return view('employee.edit', compact('employee'));
+        return view('contractor.edit', compact('employee'));
     }
 
     public function update($guid, Request $request)
@@ -99,11 +99,11 @@ class EmployeeController extends AppController
 
         $model = Employee::findByGuidAndCompanyId($guid, $this->companyId);
         if (empty($model)) {
-            $request->session()->flash('error', 'Employee not found.');
+            $request->session()->flash('error', 'Contractor not found.');
             return response()->json([
                 'status' => false,
                 'notFound' => true,
-                'message' => 'Employee not found.'
+                'message' => 'Contractor not found.'
             ]);
         }
 
@@ -124,10 +124,10 @@ class EmployeeController extends AppController
             $model->status = $request->status;
             $model->save();
 
-            $request->session()->flash('success', 'Employee updated successfully.');
+            $request->session()->flash('success', 'Contractor updated successfully.');
             return response()->json([
                 'status' => true,
-                'message' => 'Employee updated successfully.'
+                'message' => 'Contractor updated successfully.'
             ]);
         } else {
             return response()->json([
@@ -142,21 +142,21 @@ class EmployeeController extends AppController
         $model = Employee::findByGuidAndCompanyId($guid, $this->companyId);
 
         if (empty($model)) {
-            $request->session()->flash('error', 'Employee not found.');
+            $request->session()->flash('error', 'Contractor not found.');
             return response()->json([
                 'status' => true,
-                'message' => 'Employee not found.'
+                'message' => 'Contractor not found.'
             ]);
         }
 
         $model->is_deleted = 1;
         $model->save();
 
-        $request->session()->flash('success', 'Employee deleted successfully.');
+        $request->session()->flash('success', 'Contractor deleted successfully.');
 
         return response()->json([
             'status' => true,
-            'message' => 'Employee deleted successfully.'
+            'message' => 'Contractor deleted successfully.'
         ]);
     }
 
@@ -191,14 +191,14 @@ class EmployeeController extends AppController
         $data['orders'] = $orders;
         $data['employee'] = $employee;
 
-        return view('employee.order', $data);
+        return view('contractor.order', $data);
     }
 
     public function orderCreate($guid)
     {
         $employee = Employee::findByGuid($guid);
         $data['employee'] = $employee;
-        return view('employee.order-create', $data);
+        return view('contractor.order-create', $data);
     }
 
     public function orderStore(Request $request)
@@ -275,7 +275,7 @@ class EmployeeController extends AppController
         $data['employee'] = $employee;
         $data['pendingItem'] = $pendingQty;
 
-        return view('employee.order-edit', $data);
+        return view('contractor.order-edit', $data);
     }
 
     public function orderUpdate($id, Request $request)
@@ -349,7 +349,7 @@ class EmployeeController extends AppController
             ->where('company_id', $this->companyId)
             ->paginate(30);
 
-        return view('employee.order-view', [
+        return view('contractor.order-view', [
             'items' => $items,
             'employee' => $employee,
             'orderId' => $orderId
@@ -390,7 +390,7 @@ class EmployeeController extends AppController
             ->where('company_id', $this->companyId)
             ->get();
 
-        return view('employee.single-print', [
+        return view('contractor.single-print', [
             'items' => $items,
             'employee' => $employee,
         ]);
@@ -413,7 +413,7 @@ class EmployeeController extends AppController
 
         $items = $items->get();
 
-        return view('employee.received-piece-history', [
+        return view('contractor.received-piece-history', [
             'items' => $items,
             'employee' => $employee,
         ]);
@@ -441,7 +441,7 @@ class EmployeeController extends AppController
         $orders = $orders->get();
         $paymentHistory = $paymentHistory->get();
 
-        return view('employee.print', [
+        return view('contractor.print', [
             'orders' => $orders,
             'paymentHistory' => $paymentHistory,
             'employee' => $employee,
@@ -475,7 +475,7 @@ class EmployeeController extends AppController
 
         $data['orders'] = $orders;
 
-        return view('employee.items', $data);
+        return view('contractor.items', $data);
     }
 
     public function paymentHistory($guid, Request $request)
@@ -496,7 +496,7 @@ class EmployeeController extends AppController
         $data['employee'] = $employee;
         $data['employeePaymentHistory'] = $employeePaymentHistory;
 
-        return view('employee.payment-history', $data);
+        return view('contractor.payment-history', $data);
     }
 
     public function amount($guid, Request $request)
@@ -525,6 +525,6 @@ class EmployeeController extends AppController
         $data['employeeTotalPayment'] = $employeeTotalPayment;
         $data['employeePaymentHistory'] = $employeePaymentHistory;
 
-        return view('employee.amount', $data);
+        return view('contractor.amount', $data);
     }
 }

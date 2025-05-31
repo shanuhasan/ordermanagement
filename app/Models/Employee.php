@@ -10,6 +10,7 @@ class Employee extends Model
 {
     const EMPLOYEE = 1;
     const CONTRACTOR = 2;
+    const MASTER = 3;
     use HasFactory;
 
     static public function getEmployee()
