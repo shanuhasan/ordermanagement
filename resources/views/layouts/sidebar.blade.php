@@ -50,6 +50,12 @@
                         <p>Master</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('party.index') }}" class="nav-link @yield('party')">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Parties</p>
+                    </a>
+                </li>
                 {{-- <li class="nav-item">
                     <a href="{{ route('items.index') }}" class="nav-link @yield('items')">
                         <i class="nav-icon fas fa-list"></i>

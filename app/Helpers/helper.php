@@ -4,6 +4,7 @@
 use App\Models\Item;
 use App\Models\Size;
 use App\Models\Order;
+use App\Models\Party;
 use App\Models\Company;
 use App\Models\Employee;
 use App\Models\ReceivedItem;
@@ -14,6 +15,17 @@ function employeeExist($id)
 {
     $companyId = Auth::guard('web')->user()->company_id;
     $exist = Employee::where('id', $id)
+        ->where('company_id', $companyId)
+        ->where('is_deleted', '!=', '1')
+        ->first();
+
+    return $exist;
+}
+
+function partyExist($id)
+{
+    $companyId = Auth::guard('web')->user()->company_id;
+    $exist = Party::where('id', $id)
         ->where('company_id', $companyId)
         ->where('is_deleted', '!=', '1')
         ->first();

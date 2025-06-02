@@ -16,6 +16,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Company\ContractorController;
+use App\Http\Controllers\Company\PartyController;
 
 Route::middleware('guest')->group(function () {
     // Route::get('register', [RegisteredUserController::class, 'create'])
@@ -146,6 +147,25 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/employee/order/payment-history/{id}', [EmployeeController::class, 'paymentHistory'])->name('employee.order.payment.history');
     Route::get('/employee/order/amount/{guid}', [EmployeeController::class, 'amount'])->name('employee.order.amount');
+
+
+    //party management
+    Route::get('/party', [PartyController::class, 'index'])->name('party.index');
+    Route::get('/party/create', [PartyController::class, 'create'])->name('party.create');
+    Route::post('/party/store', [PartyController::class, 'store'])->name('party.store');
+    Route::get('/party/{party_id}/edit', [PartyController::class, 'edit'])->name('party.edit');
+    Route::put('/party/{party_id}', [PartyController::class, 'update'])->name('party.update');
+    Route::get('/party/{party_id}', [PartyController::class, 'destroy'])->name('party.delete');
+    Route::get('/party/order/{id}', [PartyController::class, 'order'])->name('party.order');
+    Route::get('/party/order/{id}/create', [PartyController::class, 'orderCreate'])->name('party.order.create');
+    Route::post('/party/order/store', [PartyController::class, 'orderStore'])->name('party.order.store');
+    Route::get('/party/order/{employeeId}/{orderId}/edit', [PartyController::class, 'orderEdit'])->name('party.order.edit');
+    Route::post('/party/order/{id}', [PartyController::class, 'orderUpdate'])->name('party.order.update');
+    Route::get('/party/order/amount/{guid}', [PartyController::class, 'amount'])->name('party.order.amount');
+    Route::get('/party-order-print/{employeeId}', [PartyController::class, 'orderPrint'])->name('party.order.print');
+    Route::post('/party-order-payment', [PartyController::class, 'orderPayment'])->name('party.order.payment');
+
+
 
 
     //items
