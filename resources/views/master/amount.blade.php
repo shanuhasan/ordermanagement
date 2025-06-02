@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Advance Amount')
-@section('employee', 'active')
+@section('master', 'active')
 
 @section('content')
     <!-- Content Header (Page header) -->
@@ -17,9 +17,9 @@
                     </h3> --}}
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('employee.order.payment.history', $employee->guid) }}" class="btn btn-info">Payment
+                    <a href="{{ route('master.order.payment.history', $employee->guid) }}" class="btn btn-info">Payment
                         History</a>
-                    <a href="{{ route('employee.order', $employee->guid) }}" class="btn btn-primary">Back</a>
+                    <a href="{{ route('master.order', $employee->guid) }}" class="btn btn-primary">Back</a>
                 </div>
             </div>
         </div>
@@ -61,8 +61,8 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success">Filter</button>
-                        <a href="{{ route('employee.order', $employee->guid) }}" class="btn btn-danger">Reset</a>
+                        <button type="submit" class="btn btn-success">Search</button>
+                        <a href="{{ route('master.order.amount', $employee->guid) }}" class="btn btn-danger">Reset</a>
                     </div>
                 </form>
             </div>
@@ -75,7 +75,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-8">
-                    <form action="{{ route('employee.order.payment') }}" method="post">
+                    <form action="{{ route('master.order.payment') }}" method="post">
                         @csrf
                         <input type="hidden" value="{{ $employee->id }}" name="employee_id" id="employee_id">
                         <div class="card">
@@ -177,7 +177,7 @@
                                     <tr>
                                         <td style="border:1px solid #000;text-align:center">{{ $i++ }}</td>
                                         <td style="border:1px solid #000;text-align:center">
-                                            {{ date('d-m-Y', strtotime($item->created_at)) }}
+                                            {{ date('d-m-Y', strtotime($item->date)) }}
                                         </td>
                                         <td style="border:1px solid #000;text-align:center">{{ $item->payment_method }}
                                         </td>

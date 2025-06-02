@@ -98,7 +98,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success">Filter</button>
+                        <button type="submit" class="btn btn-success">Search</button>
                         <a href="{{ route('employee.order', $employee->guid) }}" class="btn btn-danger">Reset</a>
                     </div>
                 </form>

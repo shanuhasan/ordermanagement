@@ -30,7 +30,7 @@
                                     <input type="text" name="name" class="form-control" placeholder="Name"
                                         value="{{ Request::get('name') }}">
                                 </div>
-                                <button type="submit" class="btn btn-success">Filter</button>
+                                <button type="submit" class="btn btn-success">Search</button>
                                 <a href="{{ route('admin.employee.index') }}" class="btn btn-danger">Reset</a>
                             </div>
 

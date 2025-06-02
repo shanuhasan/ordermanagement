@@ -113,6 +113,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/master/order/store', [MasterController::class, 'orderStore'])->name('master.order.store');
     Route::get('/master/order/{employeeId}/{orderId}/edit', [MasterController::class, 'orderEdit'])->name('master.order.edit');
     Route::post('/master/order/{id}', [MasterController::class, 'orderUpdate'])->name('master.order.update');
+    Route::get('/master/order/amount/{guid}', [MasterController::class, 'amount'])->name('master.order.amount');
+    Route::post('/master-order-payment', [MasterController::class, 'orderPayment'])->name('master.order.payment');
+    Route::get('/master/order/payment-history/{id}', [MasterController::class, 'paymentHistory'])->name('master.order.payment.history');
 
     //items management
     Route::get('/item', [ItemController::class, 'index'])->name('item.index');

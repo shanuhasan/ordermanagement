@@ -33,7 +33,7 @@
                                         class="form-control js-filterdatepicker" placeholder="Date"
                                         value="{{ Request::get('date') }}">
                                 </div>
-                                <button type="submit" class="btn btn-success">Filter</button>
+                                <button type="submit" class="btn btn-success">Search</button>
                                 <a href="{{ route('items.index') }}" class="btn btn-danger">Reset</a>
                             </div>
 

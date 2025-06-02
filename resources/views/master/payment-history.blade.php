@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Payment History')
-@section('employee', 'active')
+@section('master', 'active')
 
 @section('content')
 
@@ -35,7 +35,7 @@
                 </div>
                 <div class="col-sm-6 text-right">
                     <a onclick="window.print();" class="btn btn-success">Print </a>
-                    <a href="{{ route('employee.order', $employee->guid) }}" class="btn btn-primary">Back</a>
+                    <a href="{{ route('master.order', $employee->guid) }}" class="btn btn-primary">Back</a>
                 </div>
             </div>
         </div>
@@ -79,8 +79,8 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success">Filter</button>
-                        <a href="{{ route('employee.order.payment.history', $employee->guid) }}"
+                        <button type="submit" class="btn btn-success">Search</button>
+                        <a href="{{ route('master.order.payment.history', $employee->guid) }}"
                             class="btn btn-danger">Reset</a>
                     </div>
                 </form>

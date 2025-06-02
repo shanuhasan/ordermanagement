@@ -61,8 +61,8 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success">Filter</button>
-                        <a href="{{ route('contractor.order', $employee->guid) }}" class="btn btn-danger">Reset</a>
+                        <button type="submit" class="btn btn-success">Search</button>
+                        <a href="{{ route('contractor.order.amount', $employee->guid) }}" class="btn btn-danger">Reset</a>
                     </div>
                 </form>
             </div>

@@ -8,8 +8,8 @@
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-md-12 text-right">
-                    <a href="{{ route('employee.order.amount', $employee->guid) }}" class="btn btn-warning">Advance Amount</a>
-                    <a href="{{ route('employee.order.payment.history', $employee->guid) }}" class="btn btn-secondary">Payment
+                    <a href="{{ route('master.order.amount', $employee->guid) }}" class="btn btn-warning">Advance Amount</a>
+                    <a href="{{ route('master.order.payment.history', $employee->guid) }}" class="btn btn-info">Payment
                         History</a>
                     <a href="{{ route('master.order.create', $employee->guid) }}" class="btn btn-primary">Add</a>
                 </div>
@@ -111,7 +111,7 @@
                         </thead>
                         <tbody>
 
-                            <?php $total = 0; ?>
+                            <?php $totalQty = $total = 0; ?>
                             @if ($orders->isNotEmpty())
                                 <?php $i = 1; ?>
                                 @foreach ($orders as $order)
@@ -143,7 +143,10 @@
                                             </a>
                                         </td>
                                     </tr>
-                                    <?php $total += $order->qty; ?>
+                                    <?php
+                                    $totalQty += $order->qty;
+                                    $total += $order->total_amount;
+                                    ?>
                                 @endforeach
                             @else
                                 <tr>
@@ -157,12 +160,14 @@
                                 <th style="text-align:center"></th>
                                 <th style="text-align:center"></th>
                                 <th style="text-align:center"></th>
-                                <th style="text-align:center"><strong>Total Qty</strong></th>
+                                <th style="text-align:center"></th>
                                 <th style="text-align:center">
-                                    <strong>{{ $total }}</strong>
+                                    <strong>{{ $totalQty }}</strong>
                                 </th>
                                 <th style="text-align:center"></th>
-                                <th style="text-align:center"></th>
+                                <th style="text-align:center">
+                                    <strong>₹{{ $total }}</strong>
+                                </th>
                                 <th style="text-align:center"></th>
                             </tr>
                         </tfoot>

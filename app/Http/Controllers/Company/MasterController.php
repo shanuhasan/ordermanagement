@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\Company;
 
-use App\Models\Order;
 use App\Models\Employee;
-use App\Models\OrderItem;
-use App\Models\ReceivedItem;
+use App\Models\MasterOrder;
 use Illuminate\Http\Request;
+use App\Models\MasterOrderDetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Company\AppController;
-use App\Models\MasterOrder;
 
 class MasterController extends AppController
 {
@@ -295,156 +293,13 @@ class MasterController extends AppController
         }
     }
 
-    public function orderPayment(Request $request)
-    {
-        if (empty(employeeExist($request->employee_id))) {
-            return redirect()->route('employee.index');
-        }
-        $companyId = Auth::guard('web')->user()->company_id;
-        $validator = Validator::make($request->all(), [
-            'amount' => 'required|numeric',
-        ]);
-
-        if ($validator->passes()) {
-            if (!empty($request->amount) && $request->amount > 0) {
-                $model = new OrderItem();
-                $model->company_id = $companyId;
-                $model->employee_id = $request->employee_id;
-                $model->amount = $request->amount;
-                $model->created_at = $request->date;
-                $model->payment_method = $request->payment_method;
-                $model->save();
-            }
-            return redirect()->back()->with('success', 'Payment updated successfully.');
-        } else {
-            return Redirect::back()->withErrors($validator);
-        }
-    }
-
-    public function singlePrint($guid, $orderId)
-    {
-        $employee = Employee::findByGuid($guid);
-
-        $items = ReceivedItem::where('order_id', $orderId)
-            ->where('company_id', $this->companyId)
-            ->get();
-
-        return view('employee.single-print', [
-            'items' => $items,
-            'employee' => $employee,
-        ]);
-    }
-
-    public function receivedPieceHistory(Request $request, $guid)
-    {
-        $employee = Employee::findByGuid($guid);
-
-        $items = ReceivedItem::where('company_id', $this->companyId)
-            ->where('employee_id', $employee->id)
-            ->orderBy('id', 'DESC');
-
-
-        if (!empty($request->get('year'))) {
-            $items = $items->whereYear('created_at', $request->get('year'));
-        } else {
-            $items = $items->whereYear('created_at', date('Y'));
-        }
-
-        $items = $items->get();
-
-        return view('employee.received-piece-history', [
-            'items' => $items,
-            'employee' => $employee,
-        ]);
-    }
-
-    public function orderPrint(Request $request, $guid)
-    {
-        $employee = Employee::findByGuid($guid);
-        $employeeId = $employee->id;
-
-        $orders = Order::latest()->where('employee_id', $employeeId)
-            ->where('company_id', $this->companyId);
-
-        $paymentHistory = OrderItem::latest()->where('employee_id', $employeeId)
-            ->where('company_id', $this->companyId);
-
-        if (!empty($request->get('year'))) {
-            $orders = $orders->whereYear('created_at', $request->get('year'));
-            $paymentHistory = $paymentHistory->whereYear('created_at', $request->get('year'));
-        } else {
-            $orders = $orders->whereYear('created_at', date('Y'));
-            $paymentHistory = $paymentHistory->whereYear('created_at', date('Y'));
-        }
-
-        $orders = $orders->get();
-        $paymentHistory = $paymentHistory->get();
-
-        return view('employee.print', [
-            'orders' => $orders,
-            'paymentHistory' => $paymentHistory,
-            'employee' => $employee,
-        ]);
-    }
-
-    public function items(Request $request)
-    {
-        $companyId = Auth::guard('web')->user()->company_id;
-
-        $orders = Order::latest()
-            ->where('company_id', $companyId);
-
-        if (!empty($request->get('date'))) {
-            $orders = $orders->whereDate('created_at', '=', $request->get('date'));
-        }
-
-        if (!empty($request->get('particular'))) {
-            $orders = $orders->where('particular', 'like', '%' . $request->get('particular') . '%');
-        }
-
-        if (!empty($request->get('employee_id'))) {
-            $orders = $orders->where('employee_id', '=', $request->get('employee_id'));
-        }
-
-        if (!empty($request->get('status'))) {
-            $orders = $orders->where('status', '=', $request->get('status'));
-        }
-
-        $orders = $orders->paginate(20);
-
-        $data['orders'] = $orders;
-
-        return view('employee.items', $data);
-    }
-
-    public function paymentHistory($guid, Request $request)
-    {
-        $employee = Employee::findByGuid($guid);
-
-        $employeePaymentHistory = OrderItem::latest()->where('employee_id', $employee->id)
-            ->where('company_id', $this->companyId);
-
-        if (!empty($request->get('year'))) {
-            $employeePaymentHistory = $employeePaymentHistory->whereYear('created_at', $request->get('year'));
-        } else {
-            $employeePaymentHistory = $employeePaymentHistory->whereYear('created_at', date('Y'));
-        }
-
-        $employeePaymentHistory = $employeePaymentHistory->get();
-
-        $data['employee'] = $employee;
-        $data['employeePaymentHistory'] = $employeePaymentHistory;
-
-        return view('employee.payment-history', $data);
-    }
-
     public function amount($guid, Request $request)
     {
         $employee = Employee::findByGuid($guid);
 
-        $totalAmount = Order::where('employee_id', $employee->id)
+        $totalAmount = MasterOrder::where('employee_id', $employee->id)
             ->where('company_id', $this->companyId);
-        $employeeTotalPayment = OrderItem::where('employee_id', $employee->id)
+        $employeeTotalPayment = MasterOrderDetail::where('employee_id', $employee->id)
             ->where('company_id', $this->companyId);
 
         if (!empty($request->get('year'))) {
@@ -464,6 +319,53 @@ class MasterController extends AppController
         $data['employeeTotalPayment'] = $employeeTotalPayment;
         $data['employeePaymentHistory'] = $employeePaymentHistory;
 
-        return view('employee.amount', $data);
+        return view('master.amount', $data);
+    }
+
+    public function orderPayment(Request $request)
+    {
+        if (empty(employeeExist($request->employee_id))) {
+            return redirect()->route('employee.index');
+        }
+        $companyId = Auth::guard('web')->user()->company_id;
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|numeric',
+        ]);
+
+        if ($validator->passes()) {
+            if (!empty($request->amount) && $request->amount > 0) {
+                $model = new MasterOrderDetail();
+                $model->company_id = $companyId;
+                $model->employee_id = $request->employee_id;
+                $model->amount = $request->amount;
+                $model->date = $request->date;
+                $model->payment_method = $request->payment_method;
+                $model->save();
+            }
+            return redirect()->back()->with('success', 'Payment updated successfully.');
+        } else {
+            return Redirect::back()->withErrors($validator);
+        }
+    }
+
+    public function paymentHistory($guid, Request $request)
+    {
+        $employee = Employee::findByGuid($guid);
+
+        $employeePaymentHistory = MasterOrderDetail::latest()->where('employee_id', $employee->id)
+            ->where('company_id', $this->companyId);
+
+        if (!empty($request->get('year'))) {
+            $employeePaymentHistory = $employeePaymentHistory->whereYear('created_at', $request->get('year'));
+        } else {
+            $employeePaymentHistory = $employeePaymentHistory->whereYear('created_at', date('Y'));
+        }
+
+        $employeePaymentHistory = $employeePaymentHistory->get();
+
+        $data['employee'] = $employee;
+        $data['employeePaymentHistory'] = $employeePaymentHistory;
+
+        return view('master.payment-history', $data);
     }
 }
