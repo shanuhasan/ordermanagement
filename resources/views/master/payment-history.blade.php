@@ -104,6 +104,7 @@
                                 <th style="border:1px solid #000;text-align:center">#</th>
                                 <th style="border:1px solid #000;text-align:center">Date</th>
                                 <th style="border:1px solid #000;text-align:center">Pament Method</th>
+                                <th style="border:1px solid #000;text-align:center">Reference</th>
                                 <th style="border:1px solid #000;text-align:center">Amount</th>
                             </tr>
                         </thead>
@@ -119,6 +120,8 @@
                                         </td>
                                         <td style="border:1px solid #000;text-align:center">{{ $item->payment_method }}
                                         </td>
+                                        <td style="border:1px solid #000;text-align:center">{{ $item->payment_name }}
+                                        </td>
                                         <td style="border:1px solid #000;text-align:center">₹{{ $item->amount }}</td>
                                     </tr>
                                     <?php $total += $item->amount; ?>
@@ -131,6 +134,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
+                                <th style="border:1px solid #000;text-align:center"></th>
                                 <th style="border:1px solid #000;text-align:center"></th>
                                 <th style="border:1px solid #000;text-align:center"></th>
                                 <th style="border:1px solid #000;text-align:center"><strong>Total Paid</strong></th>

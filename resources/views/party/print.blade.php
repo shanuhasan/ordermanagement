@@ -109,11 +109,11 @@
                             $i = 1; ?>
                             @foreach ($orders as $item)
                                 <?php
-                                    $amount = $item->total_amount ?? 0;
-                                    $credit = $item->credit ?? 0;
-                                    $runningBalance += $amount - $credit;
-                                    $total += $amount;
-                                    $creditAmount += $credit;
+                                $amount = $item->total_amount ?? 0;
+                                $credit = $item->credit ?? 0;
+                                $runningBalance += $amount - $credit;
+                                $total += $amount;
+                                $creditAmount += $credit;
                                 ?>
                                 <tr style="border:1px solid #000">
                                     <td style="border:1px solid #000;text-align:center">{{ $i++ }}</td>
@@ -121,7 +121,8 @@
                                         {{ !empty($item->date) ? date('d-m-Y', strtotime($item->date)) : date('d-m-Y h:i A', strtotime($item->created_at)) }}
                                     </td>
                                     <td style="border:1px solid #000;text-align:center">
-                                        {{ !empty($item->item_id) ? getItemName($item->item_id) : $item->payment_name }}</td>
+                                        {{ !empty($item->item_id) ? getItemName($item->item_id) : $item->payment_name . ' (' . $item->payment_method . ')' }}
+                                    </td>
                                     <td style="border:1px solid #000;text-align:center">
                                         {{ sizeName($item->size_id) }}</td>
                                     <td style="border:1px solid #000;text-align:center">{{ $item->qty }}</td>
@@ -131,7 +132,9 @@
                                         {{ !empty($item->total_amount) ? '₹' . $item->total_amount : '' }}</td>
                                     <td style="border:1px solid #000;text-align:center">
                                         {{ !empty($item->credit) ? '₹' . $item->credit : '' }}</td>
-                                    <td style="border:1px solid #000;text-align:center"><strong>₹{{ $runningBalance}}</strong></td>
+                                    <td style="border:1px solid #000;text-align:center">
+                                        <strong>₹{{ $runningBalance }}</strong>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

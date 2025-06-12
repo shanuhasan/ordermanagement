@@ -141,7 +141,7 @@
                                             {{ !empty($order->date) ? date('d-m-Y', strtotime($order->date)) : date('d-m-Y h:i A', strtotime($order->created_at)) }}
                                         </td>
                                         <td style="text-align:center">
-                                            {{ !empty($order->item_id) ? getItemName($order->item_id) : $order->payment_name }}
+                                            {{ !empty($order->item_id) ? getItemName($order->item_id) : $order->payment_name . ' (' . $order->payment_method . ')' }}
                                         </td>
                                         <td style="text-align:center">{{ sizeName($order->size_id) }}</td>
                                         <td style="text-align:center">{{ $order->qty }}</td>
