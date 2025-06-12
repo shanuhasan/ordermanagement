@@ -527,4 +527,22 @@ class ContractorController extends AppController
 
         return view('contractor.amount', $data);
     }
+
+    public function deleteOrder($id, Request $request)
+    {
+        $model = Order::findByIdAndCompanyId($id, $this->companyId);
+        if (empty($model)) {
+            $request->session()->flash('error', 'Not found.');
+            return response()->json([
+                'status' => true,
+                'message' => 'Not found.'
+            ]);
+        }
+        $model->delete();
+        $request->session()->flash('success', 'Order Deleted Successfully.');
+        return response()->json([
+            'status' => true,
+            'message' => 'Order Deleted Successfully.'
+        ]);
+    }
 }

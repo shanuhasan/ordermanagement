@@ -112,7 +112,7 @@
                             <tr>
                                 <th style="text-align:center">#</th>
                                 <th style="text-align:center">Date</th>
-                                <th style="text-align:center">Particular/Item</th>
+                                <th style="text-align:center">Particular/Item/Name</th>
                                 <th style="text-align:center">Size</th>
                                 <th style="text-align:center">Total Piece</th>
                                 <th style="text-align:center">Rate</th>
@@ -124,17 +124,24 @@
                         </thead>
                         <tbody>
 
-                            <?php $total = $creditAmount = 0;
+                            <?php $total = $creditAmount = $runningBalance = 0;
                             $i = 1; ?>
                             @if ($orders->isNotEmpty())
                                 @foreach ($orders as $order)
+                                    <?php
+                                    $amount = $order->total_amount ?? 0;
+                                    $credit = $order->credit ?? 0;
+                                    $runningBalance += $amount - $credit;
+                                    $total += $amount;
+                                    $creditAmount += $credit;
+                                    ?>
                                     <tr>
                                         <td style="text-align:center">{{ $i++ }}</td>
                                         <td style="text-align:center">
                                             {{ !empty($order->date) ? date('d-m-Y', strtotime($order->date)) : date('d-m-Y h:i A', strtotime($order->created_at)) }}
                                         </td>
                                         <td style="text-align:center">
-                                            {{ !empty($order->item_id) ? getItemName($order->item_id) : $order->particular }}
+                                            {{ !empty($order->item_id) ? getItemName($order->item_id) : $order->payment_name }}
                                         </td>
                                         <td style="text-align:center">{{ sizeName($order->size_id) }}</td>
                                         <td style="text-align:center">{{ $order->qty }}</td>
@@ -147,10 +154,23 @@
                                         <td style="text-align:center">
                                             {{ !empty($order->credit) ? '₹' . $order->credit : '' }}</td>
                                         <td style="text-align:center">
-                                            {{ !empty($order->balance) ? '₹' . $order->balance : '' }}</td>
+                                            <b>₹{{ $runningBalance }}</b>
+                                        </td>
                                         <td style="text-align:center">
-                                            <a
-                                                href="{{ route('party.order.edit', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
+
+                                            @php
+                                                $routeName =
+                                                    !empty($order->credit) && $order->credit > 0
+                                                        ? 'party.order.amount.edit'
+                                                        : 'party.order.edit';
+
+                                                $routeParams = [
+                                                    'employeeId' => $employee->guid,
+                                                    'orderId' => $order->id,
+                                                ];
+                                            @endphp
+
+                                            <a href="{{ route($routeName, $routeParams) }}">
                                                 <svg class="filament-link-icon w-4 h-4 mr-1"
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                     fill="currentColor" aria-hidden="true">
@@ -159,12 +179,19 @@
                                                     </path>
                                                 </svg>
                                             </a>
+                                            <a href="javascript:void()" onclick="deleteOrder('{{ $order->id }}')"
+                                                class="text-danger w-4 h-4 mr-1">
+                                                <svg wire:loading.remove.delay="" wire:target=""
+                                                    class="filament-link-icon w-4 h-4 mr-1"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                    fill="currentColor" aria-hidden="true">
+                                                    <path ath fill-rule="evenodd"
+                                                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                            </a>
                                         </td>
                                     </tr>
-                                    <?php
-                                    $total += $order->total_amount;
-                                    $creditAmount += $order->credit;
-                                    ?>
                                 @endforeach
                             @else
                                 <tr>
@@ -181,9 +208,9 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td style="text-align:center"><b>Balance</b></td>
+                                <td style="text-align:center"><b>Total Balance</b></td>
                                 <td style="text-align:center">
-                                    <b>₹{{ $total - $creditAmount }}</b>
+                                    <b>₹{{ $runningBalance }}</b>
                                 </td>
                                 <td></td>
                             </tr>
@@ -197,4 +224,30 @@
         </div>
         <!-- /.card -->
     </section>
+@endsection
+
+@section('script')
+    <script>
+        function deleteOrder(id) {
+            var url = "{{ route('party.order.delete', 'ID') }}";
+            var newUrl = url.replace('ID', id);
+
+            if (confirm('Are you sure want to delete')) {
+                $.ajax({
+                    url: newUrl,
+                    type: 'get',
+                    data: {},
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response['status']) {
+                            window.location.reload();
+                        }
+                    }
+                });
+            }
+        }
+    </script>
 @endsection

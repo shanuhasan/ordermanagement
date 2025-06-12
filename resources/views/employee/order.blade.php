@@ -194,6 +194,10 @@
                                                 href="{{ route('employee.order.singleprint', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
                                                 <i class="fa fa-print" aria-hidden="true"></i>
                                             </a>
+                                            <a href="javascript:void()" onclick="deleteOrder('{{ $order->id }}')"
+                                                class="text-danger w-4 h-4 mr-1">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -213,4 +217,31 @@
         </div>
         <!-- /.card -->
     </section>
+@endsection
+
+
+@section('script')
+    <script>
+        function deleteOrder(id) {
+            var url = "{{ route('employee.order.delete', 'ID') }}";
+            var newUrl = url.replace('ID', id);
+
+            if (confirm('Are you sure want to delete')) {
+                $.ajax({
+                    url: newUrl,
+                    type: 'get',
+                    data: {},
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response['status']) {
+                            window.location.reload();
+                        }
+                    }
+                });
+            }
+        }
+    </script>
 @endsection

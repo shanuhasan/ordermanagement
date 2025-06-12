@@ -101,6 +101,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/contractor-order-print/{employeeId}', [ContractorController::class, 'orderPrint'])->name('contractor.order.print');
     Route::get('/contractor/order/payment-history/{id}', [ContractorController::class, 'paymentHistory'])->name('contractor.order.payment.history');
     Route::get('/contractor/order/amount/{guid}', [ContractorController::class, 'amount'])->name('contractor.order.amount');
+    Route::get('/contractor/order/delete/{id}', [ContractorController::class, 'deleteOrder'])->name('contractor.order.delete');
 
     //master management
     Route::get('/master', [MasterController::class, 'index'])->name('master.index');
@@ -117,6 +118,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/master/order/amount/{guid}', [MasterController::class, 'amount'])->name('master.order.amount');
     Route::post('/master-order-payment', [MasterController::class, 'orderPayment'])->name('master.order.payment');
     Route::get('/master/order/payment-history/{id}', [MasterController::class, 'paymentHistory'])->name('master.order.payment.history');
+    Route::get('/master/order/delete/{id}', [MasterController::class, 'deleteOrder'])->name('master.order.delete');
 
     //items management
     Route::get('/item', [ItemController::class, 'index'])->name('item.index');
@@ -147,6 +149,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/employee/order/payment-history/{id}', [EmployeeController::class, 'paymentHistory'])->name('employee.order.payment.history');
     Route::get('/employee/order/amount/{guid}', [EmployeeController::class, 'amount'])->name('employee.order.amount');
+    Route::get('/employee/order/delete/{id}', [EmployeeController::class, 'deleteOrder'])->name('employee.order.delete');
 
 
     //party management
@@ -164,7 +167,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/party/order/amount/{guid}', [PartyController::class, 'amount'])->name('party.order.amount');
     Route::get('/party-order-print/{employeeId}', [PartyController::class, 'orderPrint'])->name('party.order.print');
     Route::post('/party-order-payment', [PartyController::class, 'orderPayment'])->name('party.order.payment');
-
+    Route::get('/party/order/amount/{employeeId}/{orderId}/edit', [PartyController::class, 'orderAmountEdit'])->name('party.order.amount.edit');
+    Route::post('/party/order/amount/{id}', [PartyController::class, 'orderAmountUpdate'])->name('party.order.amount.update');
+    Route::get('/party/order/delete/{id}', [PartyController::class, 'deleteOrder'])->name('party.order.delete');
 
 
 

@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers\Company;
 
-use App\Models\Order;
 use App\Models\Party;
-use App\Models\Employee;
-use App\Models\OrderItem;
 use App\Models\PartyOrder;
-use App\Models\ReceivedItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -318,22 +314,77 @@ class PartyController extends AppController
         }
         $companyId = Auth::guard('web')->user()->company_id;
         $validator = Validator::make($request->all(), [
-            'amount' => 'required|numeric',
+            'credit' => 'required|numeric',
         ]);
 
         if ($validator->passes()) {
-            if (!empty($request->amount) && $request->amount > 0) {
+            if (!empty($request->credit) && $request->credit > 0) {
                 $model = new PartyOrder();
                 $model->company_id = $companyId;
                 $model->party_id = $request->party_id;
-                $model->credit = $request->amount;
+                $model->credit = $request->credit;
                 $model->date = $request->date;
                 $model->payment_method = $request->payment_method;
+                $model->payment_name = $request->payment_name;
                 $model->save();
             }
             return redirect()->route('party.order', $request->pguid)->with('success', 'Payment updated successfully.');
         } else {
             return Redirect::back()->withErrors($validator);
+        }
+    }
+
+    public function orderAmountEdit($guid, $orderId)
+    {
+        $employee = Party::findByGuid($guid);
+
+        $order = PartyOrder::where('id', $orderId)
+            ->where('party_id', $employee->id)
+            ->first();
+
+        if (empty($order)) {
+            return redirect()->back();
+        }
+
+        $data['order'] = $order;
+        $data['employee'] = $employee;
+
+        return view('party.order-amount-edit', $data);
+    }
+
+    public function orderAmountUpdate($id, Request $request)
+    {
+        $model = PartyOrder::find($id);
+
+        if (empty($model)) {
+            return redirect()->route('party.index')->with('error', 'Order not found.');
+        }
+
+        $companyId = Auth::guard('web')->user()->company_id;
+        $validator = Validator::make($request->all(), [
+            'credit' => 'required|numeric',
+        ]);
+
+        if ($validator->passes()) {
+
+            $model->company_id = $companyId;
+            $model->party_id = $request->party_id;
+            $model->credit = $request->credit;
+            $model->date = $request->date;
+            $model->payment_method = $request->payment_method;
+            $model->payment_name = $request->payment_name;
+            $model->save();
+
+            session()->flash('success', 'Updated successfully.');
+            return response()->json([
+                'status' => true,
+                'employeeId' => $request->employee_id,
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
         }
     }
 
@@ -357,6 +408,24 @@ class PartyController extends AppController
         return view('party.print', [
             'orders' => $orders,
             'employee' => $employee,
+        ]);
+    }
+
+    public function deleteOrder($id, Request $request)
+    {
+        $model = PartyOrder::findByIdAndCompanyId($id, $this->companyId);
+        if (empty($model)) {
+            $request->session()->flash('error', 'Not found.');
+            return response()->json([
+                'status' => true,
+                'message' => 'Not found.'
+            ]);
+        }
+        $model->delete();
+        $request->session()->flash('success', 'Order Deleted Successfully.');
+        return response()->json([
+            'status' => true,
+            'message' => 'Order Deleted Successfully.'
         ]);
     }
 }

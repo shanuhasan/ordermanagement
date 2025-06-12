@@ -111,6 +111,17 @@
                                             <p class="error"></p>
                                         </div>
                                     </div>
+                                    <div class="col-md-4 js-ReferenceName divHide">
+                                        <div class="mb-3">
+                                            <label for="rate">Online Reference Name</label>
+                                            <input type="text" name="payment_name"
+                                                class="form-control @error('payment_name') is-invalid	@enderror"
+                                                placeholder="Online eference Name">
+                                            @error('payment_name')
+                                                <p class="invalid-feedback">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                    </div>
                                 </div>
                                 <button type="submit" class="btn btn-success">Submit</button>
                                 <a href="{{ route('employee.order', $employee->guid) }}" class="btn btn-info">Cancel</a>
@@ -166,6 +177,7 @@
                                 <th style="border:1px solid #000;text-align:center">#</th>
                                 <th style="border:1px solid #000;text-align:center">Date</th>
                                 <th style="border:1px solid #000;text-align:center">Pament Method</th>
+                                <th style="border:1px solid #000;text-align:center">Reference</th>
                                 <th style="border:1px solid #000;text-align:center">Amount</th>
                             </tr>
                         </thead>
@@ -181,6 +193,8 @@
                                         </td>
                                         <td style="border:1px solid #000;text-align:center">{{ $item->payment_method }}
                                         </td>
+                                        <td style="border:1px solid #000;text-align:center">{{ $item->payment_name }}
+                                        </td>
                                         <td style="border:1px solid #000;text-align:center">₹{{ $item->amount }}</td>
                                     </tr>
                                     <?php $total += $item->amount; ?>
@@ -194,6 +208,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
+                                <th style="border:1px solid #000;text-align:center"></th>
                                 <th style="border:1px solid #000;text-align:center"></th>
                                 <th style="border:1px solid #000;text-align:center"></th>
                                 <th style="border:1px solid #000;text-align:center"><strong>Total Paid</strong></th>
@@ -211,5 +226,13 @@
 @endsection
 
 @section('script')
-
+    <script>
+        $('#payment_method').change(function(e) {
+            $('.js-ReferenceName').addClass('divHide');
+            if ($(this).val() == 'Online') {
+                $('.js-ReferenceName').removeClass('divHide');
+            }
+        });
+        $('#payment_method').change();
+    </script>
 @endsection

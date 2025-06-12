@@ -45,18 +45,18 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="mb-3">
                                             <label for="rate">Credit Amount</label>
-                                            <input type="text" name="amount"
-                                                class="form-control only-number @error('amount') is-invalid	@enderror"
+                                            <input type="text" name="credit"
+                                                class="form-control only-number @error('credit') is-invalid	@enderror"
                                                 placeholder="Credit Amount">
-                                            @error('amount')
+                                            @error('credit')
                                                 <p class="invalid-feedback">{{ $message }}</p>
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="mb-3">
                                             <label for="date">Date<span style="color: red">*</span></label>
                                             <input type="date" name="date" id="date" class="form-control"
@@ -64,7 +64,7 @@
                                             <p class="error"></p>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="mb-3">
                                             <label for="rate">Payment Method</label>
                                             <select name="payment_method" id="payment_method" class="form-control">
@@ -73,6 +73,17 @@
                                                 @endforeach
                                             </select>
                                             <p class="error"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 js-ReferenceName divHide">
+                                        <div class="mb-3">
+                                            <label for="rate">Online Reference Name</label>
+                                            <input type="text" name="payment_name"
+                                                class="form-control @error('payment_name') is-invalid	@enderror"
+                                                placeholder="Online eference Name">
+                                            @error('payment_name')
+                                                <p class="invalid-feedback">{{ $message }}</p>
+                                            @enderror
                                         </div>
                                     </div>
                                 </div>
@@ -90,5 +101,13 @@
 @endsection
 
 @section('script')
-
+    <script>
+        $('#payment_method').change(function(e) {
+            $('.js-ReferenceName').addClass('divHide');
+            if ($(this).val() == 'Online') {
+                $('.js-ReferenceName').removeClass('divHide');
+            }
+        });
+        $('#payment_method').change();
+    </script>
 @endsection

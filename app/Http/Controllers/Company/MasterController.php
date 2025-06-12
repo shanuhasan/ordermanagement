@@ -340,6 +340,7 @@ class MasterController extends AppController
                 $model->amount = $request->amount;
                 $model->date = $request->date;
                 $model->payment_method = $request->payment_method;
+                $model->payment_name = $request->payment_name;
                 $model->save();
             }
             return redirect()->back()->with('success', 'Payment updated successfully.');
@@ -367,5 +368,23 @@ class MasterController extends AppController
         $data['employeePaymentHistory'] = $employeePaymentHistory;
 
         return view('master.payment-history', $data);
+    }
+
+    public function deleteOrder($id, Request $request)
+    {
+        $model = MasterOrder::findByIdAndCompanyId($id, $this->companyId);
+        if (empty($model)) {
+            $request->session()->flash('error', 'Not found.');
+            return response()->json([
+                'status' => true,
+                'message' => 'Not found.'
+            ]);
+        }
+        $model->delete();
+        $request->session()->flash('success', 'Order Deleted Successfully.');
+        return response()->json([
+            'status' => true,
+            'message' => 'Order Deleted Successfully.'
+        ]);
     }
 }
