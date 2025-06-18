@@ -101,6 +101,14 @@
                                     <p class="error"></p>
                                 </div>
                             </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="printing_name">Printing Name<span style="color: red">*</span></label>
+                                    <input type="text" name="printing_name" id="printing_name" class="form-control"
+                                        placeholder="Printing Name" value="{{ $order->printing_name }}">
+                                    <p class="error"></p>
+                                </div>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-success">Update</button>
                         <a href="{{ route('master.order', $employee->guid) }}" class="btn btn-info">Cancel</a>

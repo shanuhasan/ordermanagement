@@ -218,6 +218,7 @@ class MasterController extends AppController
             $model->qty = $request->qty;
             $model->rate = $request->rate;
             $model->date = $request->date;
+            $model->printing_name = $request->printing_name;
             $model->total_amount = $request->qty * $request->rate;
             $model->save();
 
@@ -278,6 +279,7 @@ class MasterController extends AppController
             $model->rate = $request->rate;
             $model->total_amount = $request->qty * $request->rate;
             $model->date = $request->date;
+            $model->printing_name = $request->printing_name;
             $model->save();
 
             session()->flash('success', 'Updated successfully.');

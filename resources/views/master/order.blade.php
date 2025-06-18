@@ -106,6 +106,7 @@
                                 <th style="text-align:center">Qty</th>
                                 <th style="text-align:center">Rate</th>
                                 <th style="text-align:center">Total Amount</th>
+                                <th style="text-align:center">Printing Name</th>
                                 <th style="text-align:center">Action</th>
                             </tr>
                         </thead>
@@ -130,6 +131,7 @@
                                         </td>
                                         <td style="text-align:center">
                                             {{ !empty($order->total_amount) ? '₹' . $order->total_amount : '' }}</td>
+                                        <td style="text-align:center">{{ $order->printing_name }}</td>
                                         <td style="text-align:center">
                                             <a
                                                 href="{{ route('master.order.edit', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
@@ -179,6 +181,7 @@
                                 <th style="text-align:center">
                                     <strong>₹{{ $total }}</strong>
                                 </th>
+                                <th style="text-align:center"></th>
                                 <th style="text-align:center"></th>
                             </tr>
                         </tfoot>
