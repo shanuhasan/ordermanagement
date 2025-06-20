@@ -25,11 +25,6 @@
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    {{-- <h3>
-                        {{ $employee->name }}
-                        ({{ !empty($employee->code) ? 'Code:- ' . $employee->code . ',' : '' }}
-                        {{ !empty($employee->phone) ? 'Mobile:- ' . $employee->phone : '' }})
-                    </h3> --}}
                 </div>
                 <div class="col-sm-6 text-right">
                     <a class="btn btn-success" onclick="window.print();">Print</a>

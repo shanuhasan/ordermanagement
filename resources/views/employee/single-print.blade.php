@@ -66,7 +66,7 @@
                                     <tr style="border:1px solid #000">
                                         <td style="border:1px solid #000;text-align:center">{{ $i++ }}</td>
                                         <td style="border:1px solid #000;text-align:center">
-                                            {{ date('d-m-Y', strtotime($item->created_at)) }}
+                                            {{ !empty($item->date) ? date('d-m-Y', strtotime($item->date)) : date('d-m-Y', strtotime($item->created_at)) }}
                                         </td>
                                         <td style="border:1px solid #000;text-align:center">
                                             {{-- {{ getOrder($item->order_id)->particular }} --}}

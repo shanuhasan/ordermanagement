@@ -103,6 +103,7 @@
                                 <th style="border:1px solid #000;text-align:center">Particular</th>
                                 <th style="border:1px solid #000;text-align:center">Size</th>
                                 <th style="border:1px solid #000;text-align:center">Received Piece</th>
+                                <th style="border:1px solid #000;text-align:center"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -115,7 +116,7 @@
                                     <tr style="border:1px solid #000">
                                         <td style="border:1px solid #000;text-align:center">{{ $i++ }}</td>
                                         <td style="border:1px solid #000;text-align:center">
-                                            {{ date('d-m-Y', strtotime($item->created_at)) }}
+                                            {{ !empty($item->date) ? date('d-m-Y', strtotime($item->date)) : date('d-m-Y', strtotime($item->created_at)) }}
                                         </td>
                                         <td style="border:1px solid #000;text-align:center">
                                             {{-- {{ getOrder($item->order_id)->particular }} --}}
@@ -126,6 +127,12 @@
                                         </td>
                                         <td style="border:1px solid #000;text-align:center">{{ $item->qty }}
                                         </td>
+                                        <td style="border:1px solid #000;text-align:center">
+                                            <a href="javascript:void()" onclick="deleteOrder('{{ $item->id }}')"
+                                                class="text-danger w-4 h-4 mr-1">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </a>
+                                        </td>
                                     </tr>
                                     @php
                                         $total = $total + $item->qty;
@@ -133,7 +140,7 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <td colspan="5" style="border:1px solid #000;text-align:center">Data not found.</td>
+                                    <td colspan="6" style="border:1px solid #000;text-align:center">Data not found.</td>
                                 </tr>
                             @endif
                         </tbody>
@@ -145,6 +152,7 @@
                                     <th style="border:1px solid #000;text-align:center"></th>
                                     <th style="border:1px solid #000;text-align:center">Total</th>
                                     <th style="border:1px solid #000;text-align:center">{{ $total }}</th>
+                                    <th style="border:1px solid #000;text-align:center"></th>
                                 </tr>
                             </tfoot>
                         @endif
@@ -155,4 +163,30 @@
         <!-- /.card -->
     </section>
     <!-- /.content -->
+@endsection
+
+@section('script')
+    <script>
+        function deleteOrder(id) {
+            var url = "{{ route('contractor.received.pcs.delete', 'ID') }}";
+            var newUrl = url.replace('ID', id);
+
+            if (confirm('Are you sure want to delete')) {
+                $.ajax({
+                    url: newUrl,
+                    type: 'get',
+                    data: {},
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response['status']) {
+                            window.location.reload();
+                        }
+                    }
+                });
+            }
+        }
+    </script>
 @endsection

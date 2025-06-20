@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Edit')
+@section('title', 'Order Received')
 @section('employee', 'active')
 
 @section('content')
@@ -24,7 +24,7 @@
                         {{ $employee->name }}
                         ({{ !empty($employee->code) ? 'Code:- ' . $employee->code . ',' : '' }}
                         {{ !empty($employee->phone) ? 'Mobile:- ' . $employee->phone : ' ' }})
-                        Edit
+                        Received Piece
                     </h5>
                 </div>
             </div>
@@ -40,71 +40,12 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="item_id">Particular/Items<span style="color: red">*</span><span><a
-                                                href="{{ route('item.create') }}"> (Add Item)</a></span></label>
-                                    <select name="item_id" id="item_id" class="form-control">
-                                        <option value="">Select Item</option>
-                                        @foreach (App\Models\Item::list() as $item)
-                                            <option value="{{ $item->id }}"
-                                                {{ $order->item_id == $item->id ? 'selected' : '' }}>{{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <p class="error"></p>
-                                </div>
-                            </div>
 
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="size">Size<span style="color: red">*</span><span><a
-                                                href="{{ route('size.create') }}"> (Add Size)</a></span></label>
-                                    <select name="size" id="size" class="form-control">
-                                        <option value="">Select Size</option>
-                                        @foreach (App\Models\Size::list() as $item)
-                                            <option value="{{ $item->id }}"
-                                                {{ $order->size == $item->id ? 'selected' : '' }}>{{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <p class="error"></p>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="qty">Total Piece<span style="color: red">*</span></label>
-                                    <input type="text" name="qty" id="qty" class="form-control only-number"
-                                        placeholder="Pieces" value="{{ $order->qty }}">
-                                    <p class="error"></p>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="rate">Rate<span style="color: red">*</span></label>
-                                    <input type="text" name="rate" id="rate" class="form-control only-number"
-                                        placeholder="Rate" value="{{ $order->rate }}">
-                                    <p class="error"></p>
-                                </div>
-                            </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="date">Date<span style="color: red">*</span></label>
                                     <input type="date" name="date" id="date" class="form-control"
-                                        placeholder="Date" value="{{ $order->date }}">
-                                    <p class="error"></p>
-                                </div>
-                            </div>
-                            {{-- <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="rate">Status<span style="color: red">*</span></label>
-                                    <select name="status" id="status" class="form-control">
-                                        @foreach (itemStatus() as $key => $item)
-                                            <option value="{{ $key }}"
-                                                {{ $order->status == $key ? 'selected' : '' }}>{{ $item }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                        placeholder="Date" value="{{ date('Y-m-d') }}">
                                     <p class="error"></p>
                                 </div>
                             </div>
@@ -116,7 +57,7 @@
                                         class="form-control only-number" placeholder="Enter Received Piece">
                                     <p class="error"></p>
                                 </div>
-                            </div> --}}
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-success">Update</button>
                         <a href="{{ route('employee.order', $employee->guid) }}" class="btn btn-info">Cancel</a>
@@ -136,7 +77,7 @@
             var elements = $(this);
             $('button[type=submit]').prop('disabled', true);
             $.ajax({
-                url: "{{ route('employee.order.update', $order->id) }}",
+                url: "{{ route('employee.order.received.store', $order->id) }}",
                 type: 'post',
                 data: elements.serializeArray(),
                 dataType: 'json',

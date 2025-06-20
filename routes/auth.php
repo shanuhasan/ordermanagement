@@ -103,6 +103,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/contractor/order/amount/{guid}', [ContractorController::class, 'amount'])->name('contractor.order.amount');
     Route::get('/contractor/order/delete/{id}', [ContractorController::class, 'deleteOrder'])->name('contractor.order.delete');
 
+    Route::get('/contractor/order/{employeeId}/{orderId}/received', [ContractorController::class, 'orderReceived'])->name('contractor.order.received');
+    Route::post('/contractor/order-received/{id}', [ContractorController::class, 'orderReceivedStore'])->name('contractor.order.received.store');
+    Route::get('/contractor/received/pcs/delete/{id}', [ContractorController::class, 'deleteReceivedPcs'])->name('contractor.received.pcs.delete');
+
+
     //master management
     Route::get('/master', [MasterController::class, 'index'])->name('master.index');
     Route::get('/master/create', [MasterController::class, 'create'])->name('master.create');
@@ -141,6 +146,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/employee/order/store', [EmployeeController::class, 'orderStore'])->name('employee.order.store');
     Route::get('/employee/order/{employeeId}/{orderId}/edit', [EmployeeController::class, 'orderEdit'])->name('employee.order.edit');
     Route::post('/employee/order/{id}', [EmployeeController::class, 'orderUpdate'])->name('employee.order.update');
+
+    Route::get('/employee/order/{employeeId}/{orderId}/received', [EmployeeController::class, 'orderReceived'])->name('employee.order.received');
+    Route::post('/employee/order-received/{id}', [EmployeeController::class, 'orderReceivedStore'])->name('employee.order.received.store');
+    Route::get('/employee/received/pcs/delete/{id}', [EmployeeController::class, 'deleteReceivedPcs'])->name('employee.received.pcs.delete');
+
     Route::get('/employee/order/{employeeId}/{orderId}/view', [EmployeeController::class, 'orderView'])->name('employee.order.view');
     Route::post('/employee-order-payment', [EmployeeController::class, 'orderPayment'])->name('employee.order.payment');
     Route::get('/employee-order-singleprint/{employeeId}/{orderId}', [EmployeeController::class, 'singlePrint'])->name('employee.order.singleprint');

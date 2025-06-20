@@ -127,7 +127,7 @@
                                 <th style="text-align:center">Pending Piece</th>
                                 <th style="text-align:center">Rate</th>
                                 <th style="text-align:center">Total Amount</th>
-                                <th style="text-align:center">Status</th>
+                                {{-- <th style="text-align:center">Status</th> --}}
                                 <th style="text-align:center">Action</th>
                             </tr>
                         </thead>
@@ -149,28 +149,62 @@
                                         <td style="text-align:center">{{ $i++ }}</td>
                                         <td style="text-align:center">
                                             <a
-                                                href="{{ route('contractor.order.edit', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
+                                                href="{{ route('contractor.order.received', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
                                                 {{ !empty($order->date) ? date('d-m-Y', strtotime($order->date)) : date('d-m-Y h:i A', strtotime($order->created_at)) }}
                                             </a>
                                         </td>
                                         <td style="text-align:center">
                                             <a
-                                                href="{{ route('contractor.order.edit', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
+                                                href="{{ route('contractor.order.received', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
                                                 {{ !empty($order->item_id) ? getItemName($order->item_id) : $order->particular }}
                                             </a>
                                         </td>
                                         <td style="text-align:center">{{ sizeName($order->size) }}</td>
                                         <td style="text-align:center">{{ $order->qty }}</td>
-                                        <td style="text-align:center">{{ receivedItems($order->id) }}</td>
-                                        <td style="text-align:center">{{ $order->qty - receivedItems($order->id) }}</td>
+                                        {{-- <td style="text-align:center">{{ receivedItems($order->id) }}</td>
+                                        <td style="text-align:center">{{ $order->qty - receivedItems($order->id) }}</td> --}}
+
+
+                                        @php
+                                            $style1 = $style2 = 'text-align:center;';
+                                            $color1 = $color2 = 'color:#000;';
+                                            if ($order->qty == receivedItems($order->id)) {
+                                                $style1 =
+                                                    'text-align:center;background:green;color:#fff;font-weight:bold;';
+                                                $color1 = 'color:#fff;';
+                                            }
+                                        @endphp
+
+                                        <td style="{{ $style1 }}">
+                                            <a style="{{ $color1 }}"
+                                                href="{{ route('contractor.order.received', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
+                                                {{ receivedItems($order->id) }}
+                                            </a>
+                                        </td>
+
+                                        @php
+                                            if ($order->qty - receivedItems($order->id) > 0) {
+                                                $style2 =
+                                                    'text-align:center;background:red;color:#fff;font-weight:bold;';
+                                                $color2 = 'color:#fff;';
+                                            }
+                                        @endphp
+
+                                        <td style="{{ $style2 }}">
+                                            <a style="{{ $color2 }}"
+                                                href="{{ route('contractor.order.received', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
+                                                {{ $order->qty - receivedItems($order->id) }}
+                                            </a>
+                                        </td>
+
                                         <td style="text-align:center">₹{{ $order->rate }}</td>
                                         <td style="text-align:center">
                                             <a
-                                                href="{{ route('contractor.order.edit', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
+                                                href="{{ route('contractor.order.received', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
                                                 ₹{{ $order->total_amount }}
                                             </a>
                                         </td>
-                                        <td
+                                        {{-- <td
                                             style="{{ $order->status == 'Pending' ? 'text-align:center;background:red;color:#fff;font-weight:bold;' : 'text-align:center;background:green;color:#fff;font-weight:bold;' }}">
                                             <a style="color: #fff"
                                                 href="{{ route('contractor.order.edit', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">
@@ -180,7 +214,7 @@
                                                     Completed
                                                 @endif
                                             </a>
-                                        </td>
+                                        </td> --}}
                                         <td style="text-align:center">
                                             <a
                                                 href="{{ route('contractor.order.edit', ['employeeId' => $employee->guid, 'orderId' => $order->id]) }}">

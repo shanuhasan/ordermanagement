@@ -98,7 +98,7 @@
                                     <p class="error"></p>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3" style="display: none">
                                 <div class="mb-3">
                                     <label for="rate">Status<span style="color: red">*</span></label>
                                     <select name="status" id="status" class="form-control">

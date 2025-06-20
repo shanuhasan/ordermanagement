@@ -225,14 +225,14 @@ class ContractorController extends AppController
             $model->total_amount = $request->qty * $request->rate;
 
             if ($model->save()) {
-                if ($request->status == 'Completed') {
-                    $rModel = new ReceivedItem();
-                    $rModel->order_id = $model->id;
-                    $rModel->company_id = $this->companyId;
-                    $rModel->employee_id = $request->employee_id;
-                    $rModel->qty = $request->qty;
-                    $rModel->save();
-                }
+                // if ($request->status == 'Completed') {
+                //     $rModel = new ReceivedItem();
+                //     $rModel->order_id = $model->id;
+                //     $rModel->company_id = $this->companyId;
+                //     $rModel->employee_id = $request->employee_id;
+                //     $rModel->qty = $request->qty;
+                //     $rModel->save();
+                // }
             }
 
             // if($request->qty == receivedItems($model->id))
@@ -307,28 +307,95 @@ class ContractorController extends AppController
             $model->status = $request->status;
             $model->date = $request->date;
             if ($model->save()) {
-                $rModel = new ReceivedItem();
-                $rModel->order_id = $id;
-                $rModel->company_id = $this->companyId;
-                $rModel->employee_id = $request->employee_id;
+                // $rModel = new ReceivedItem();
+                // $rModel->order_id = $id;
+                // $rModel->company_id = $this->companyId;
+                // $rModel->employee_id = $request->employee_id;
 
-                if (!empty($request->received_qty) && $request->status == 'Pending' && ($request->received_qty <= $pendingQty)) {
-                    $rModel->qty = $request->received_qty;
-                    $rModel->save();
-                }
+                // if (!empty($request->received_qty) && $request->status == 'Pending' && ($request->received_qty <= $pendingQty)) {
+                //     $rModel->qty = $request->received_qty;
+                //     $rModel->save();
+                // }
 
-                if ($request->status == 'Completed' && !empty($pendingQty) && $pendingQty > 0) {
-                    $rModel->qty = $pendingQty;
-                    $rModel->save();
-                }
+                // if ($request->status == 'Completed' && !empty($pendingQty) && $pendingQty > 0) {
+                //     $rModel->qty = $pendingQty;
+                //     $rModel->save();
+                // }
             }
 
-            if ($request->qty == receivedItems($id)) {
+            // if ($request->qty == receivedItems($id)) {
+            //     $model->status = 'Completed';
+            //     $model->save();
+            // }
+
+            session()->flash('success', 'Updated successfully.');
+            return response()->json([
+                'status' => true,
+                'employeeId' => $request->employee_id,
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+    }
+
+    public function orderReceived($guid, $orderId)
+    {
+        $employee = Employee::findByGuid($guid);
+
+        $order = Order::where('id', $orderId)
+            ->where('employee_id', $employee->id)
+            ->first();
+
+        if (empty($order)) {
+            return redirect()->back();
+        }
+
+        $orderDetail = OrderItem::where('order_id', $order->id)->get();
+
+        $pendingQty = $order->qty - receivedItems($orderId);
+
+        $data['order'] = $order;
+        $data['orderDetail'] = $orderDetail;
+        $data['employee'] = $employee;
+        $data['pendingItem'] = $pendingQty;
+
+        return view('contractor.order-received', $data);
+    }
+
+    public function orderReceivedStore($id, Request $request)
+    {
+        $model = Order::find($id);
+        $pendingQty = $model->qty - receivedItems($id);
+        if (empty($model)) {
+            return redirect()->route('contractor.index')->with('error', 'Order not found.');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'received_qty' => 'required'
+        ]);
+
+        if ($validator->passes()) {
+
+            $rModel = new ReceivedItem();
+            $rModel->order_id = $id;
+            $rModel->company_id = $this->companyId;
+            $rModel->employee_id = $request->employee_id;
+            $rModel->date = $request->date;
+
+            if (!empty($request->received_qty) && ($request->received_qty <= $pendingQty)) {
+                $rModel->qty = $request->received_qty;
+                $rModel->save();
+            }
+
+            if ($model->qty == receivedItems($id)) {
                 $model->status = 'Completed';
                 $model->save();
             }
 
-            session()->flash('success', 'Updated successfully.');
+            session()->flash('success', 'Pcs Received successfully.');
             return response()->json([
                 'status' => true,
                 'employeeId' => $request->employee_id,
@@ -543,6 +610,24 @@ class ContractorController extends AppController
         return response()->json([
             'status' => true,
             'message' => 'Order Deleted Successfully.'
+        ]);
+    }
+
+    public function deleteReceivedPcs($id, Request $request)
+    {
+        $model = ReceivedItem::findByIdAndCompanyId($id, $this->companyId);
+        if (empty($model)) {
+            $request->session()->flash('error', 'Not found.');
+            return response()->json([
+                'status' => true,
+                'message' => 'Not found.'
+            ]);
+        }
+        $model->delete();
+        $request->session()->flash('success', 'Received Pcs Deleted Successfully.');
+        return response()->json([
+            'status' => true,
+            'message' => 'Received Pcs Deleted Successfully.'
         ]);
     }
 }
