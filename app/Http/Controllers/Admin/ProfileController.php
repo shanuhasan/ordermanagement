@@ -2,60 +2,71 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Admin;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
+    public function edit()
     {
+        $userId = Auth::user()->id;
+        $user = Admin::where('id', $userId)->first();
+
         return view('admin.profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
         ]);
     }
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function updateProfile(Request $request)
     {
-        $request->user()->fill($request->validated());
+        $validator = Validator::make($request->all(), [
+            'name' => 'required'
+        ]);
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($validator->passes()) {
+            $user = Admin::find(Auth::user()->id);
+            $user->name = $request->name;
+            $user->save();
+
+            return redirect()->back()->with('success', 'Profile updated successfully.');
+        } else {
+            return Redirect::back()->withErrors($validator);
         }
-
-        $request->user()->save();
-
-        return Redirect::route('admin.profile.edit')->with('status', 'profile-updated');
     }
 
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
+    public function changePassword()
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
+        return view('admin.profile.change-password');
+    }
+
+    public function changePasswordProcess(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required',
+            'new_password' => 'required|min:5',
+            'confirm_password' => 'required|same:new_password',
         ]);
 
-        $user = $request->user();
+        if ($validator->passes()) {
+            $user = Admin::select('id', 'password')->where('id', Auth::user()->id)->first();
 
-        Auth::guard('admin')->logout();
+            if (!Hash::check($request->old_password, $user->password)) {
+                return redirect()->back()->with('error', 'Your old password is incorrect, please try again.');
+            }
 
-        $user->delete();
+            Admin::where('id', Auth::user()->id)->update(['password' => Hash::make($request->new_password)]);
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+            return redirect()->back()->with('success', 'You have successfully change your password.');
+        } else {
+            return Redirect::back()->withErrors($validator);
+        }
     }
 }

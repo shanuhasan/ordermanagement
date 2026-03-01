@@ -30,7 +30,7 @@ class ItemController extends AppController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:items',
+            'name' => 'required|unique:items,name,NULL,id,company_id,' . $this->companyId,
         ]);
         if ($validator->passes()) {
 
@@ -77,7 +77,8 @@ class ItemController extends AppController
         }
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:items,name,' . $model->id . ',id',
+            // 'name' => 'required|unique:items,name,' . $model->id . ',id',
+            'name' => 'required|unique:items,name,' . $model->id . ',id,company_id,' . $model->company_id,
         ]);
 
         if ($validator->passes()) {

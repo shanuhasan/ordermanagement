@@ -1,23 +1,24 @@
 <?php
 
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Admin\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Admin\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Admin\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Admin\Auth\NewPasswordController;
+use App\Http\Controllers\Admin\Auth\PasswordController;
+use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Admin\Auth\VerifyEmailController;
+use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EmployeeController;
+use App\Http\Controllers\Admin\ItemController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\UploadImageController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\YearController;
-use App\Http\Controllers\Admin\CompanyController;
-use App\Http\Controllers\Admin\ProfileController;
-use App\Http\Controllers\Admin\EmployeeController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\UploadImageController;
-use App\Http\Controllers\Admin\Auth\PasswordController;
-use App\Http\Controllers\Admin\Auth\NewPasswordController;
-use App\Http\Controllers\Admin\Auth\VerifyEmailController;
-use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Admin\Auth\ConfirmablePasswordController;
-use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Admin\Auth\EmailVerificationPromptController;
-use App\Http\Controllers\Admin\Auth\EmailVerificationNotificationController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 Route::group(['middleware' => ['guest:admin'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
 
@@ -115,9 +116,23 @@ Route::group(['middleware' => ['auth:admin'], 'prefix' => 'admin', 'as' => 'admi
     Route::get('/employee-order-singleprint/{employeeId}/{orderId}', [EmployeeController::class, 'singlePrint'])->name('employee.order.singleprint');
     Route::get('/employee-order-print/{employeeId}', [EmployeeController::class, 'orderPrint'])->name('employee.order.print');
 
+    //items management
+    Route::get('/item', [ItemController::class, 'index'])->name('item.index');
+    Route::get('/item/create', [ItemController::class, 'create'])->name('item.create');
+    Route::post('/item/store', [ItemController::class, 'store'])->name('item.store');
+    Route::get('/item/{guid}/edit', [ItemController::class, 'edit'])->name('item.edit');
+    Route::put('/item/{guid}', [ItemController::class, 'update'])->name('item.update');
+    Route::get('/item/{guid}', [ItemController::class, 'destroy'])->name('item.delete');
+
+    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
+
+    Route::get('/change-password', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
+    Route::post('/change-password', [ProfileController::class, 'changePasswordProcess'])->name('profile.changePasswordProcess');
 
     Route::post('/upload-image', [UploadImageController::class, 'create'])->name('media.create');
 

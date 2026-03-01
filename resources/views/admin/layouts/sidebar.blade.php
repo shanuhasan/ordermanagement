@@ -32,6 +32,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('admin.item.index') }}" class="nav-link @yield('item')">
+                        <i class="nav-icon fab fa-product-hunt"></i>
+                        <p>Particular/Items</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('admin.year.index') }}" class="nav-link @yield('year')">
                         <i class="nav-icon fas fa-calendar"></i>
                         <p>Years</p>
