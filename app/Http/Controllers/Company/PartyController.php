@@ -289,20 +289,27 @@ class PartyController extends AppController
     public function amount($guid, Request $request)
     {
         $employee = $this->findParty($guid);
+        $year = $request->get('year') ?: date('Y');
 
-        $totalAmount = PartyOrder::where('party_id', $employee->id)
-            ->where('company_id', $this->companyId);
+        $rows = PartyOrder::where('party_id', $employee->id)
+            ->where('company_id', $this->companyId)
+            ->whereYear('created_at', $year);
 
-        if (!empty($request->get('year'))) {
-            $totalAmount = $totalAmount->whereYear('created_at', $request->get('year'));
-        } else {
-            $totalAmount = $totalAmount->whereYear('created_at', date('Y'));
-        }
+        // One query for both totals.
+        $totals = (clone $rows)
+            ->selectRaw('COALESCE(SUM(total_amount), 0) as amount, COALESCE(SUM(credit), 0) as credit')
+            ->first();
 
-        $totalAmount = $totalAmount->sum('total_amount');
+        // Credit entries only (payments received), newest first.
+        $creditHistory = (clone $rows)
+            ->where('credit', '>', 0)
+            ->orderByRaw('COALESCE(date, created_at) DESC')
+            ->get();
 
         $data['employee'] = $employee;
-        $data['totalAmount'] = $totalAmount;
+        $data['totalAmount'] = (float) $totals->amount;
+        $data['totalCredit'] = (float) $totals->credit;
+        $data['creditHistory'] = $creditHistory;
 
         return view('party.amount', $data);
     }
