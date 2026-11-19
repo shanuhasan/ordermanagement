@@ -21,7 +21,7 @@
         <aside class="pa-brand">
             <div class="pa-logo">
                 <span class="pa-logo-mark">J</span>
-                <span>JOM MUSHEEDA</span>
+                <span>JCUT</span>
             </div>
 
             <div class="pa-hero">
@@ -42,7 +42,7 @@
             <div class="pa-card">
                 <div class="pa-logo pa-mobile-logo">
                     <span class="pa-logo-mark" style="color:#fff">J</span>
-                    <span>JOM MUSHEEDA</span>
+                    <span>JCUT</span>
                 </div>
                 {{ $slot }}
             </div>

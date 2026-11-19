@@ -2,7 +2,7 @@
     <!-- Brand Logo -->
     <a href="{{ route('dashboard') }}" class="brand-link">
         <span class="pm-logo">J</span>
-        <span class="brand-text">JOM MUSHEEDA</span>
+        <span class="brand-text">JCUT</span>
     </a>
     <!-- Sidebar -->
     <div class="sidebar">
