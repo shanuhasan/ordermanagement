@@ -454,6 +454,12 @@ class EmployeeController extends AppController
     {
         $employee = $this->findEmployee($guid);
 
+        $order = Order::where('id', $orderId)
+            ->where('company_id', $this->companyId)
+            ->where('employee_id', $employee->id)
+            ->first();
+        abort_if(empty($order), 404);
+
         $items = ReceivedItem::where('order_id', $orderId)
             ->where('company_id', $this->companyId)
             ->get();
@@ -461,6 +467,7 @@ class EmployeeController extends AppController
         return view('employee.single-print', [
             'items' => $items,
             'employee' => $employee,
+            'order' => $order,
         ]);
     }
 
@@ -481,9 +488,16 @@ class EmployeeController extends AppController
 
         $items = $items->get();
 
+        // Load every order referenced on this page in one query (was 4 lookups per row).
+        $orders = Order::whereIn('id', $items->pluck('order_id')->unique())
+            ->where('company_id', $this->companyId)
+            ->get()
+            ->keyBy('id');
+
         return view('employee.received-piece-history', [
             'items' => $items,
             'employee' => $employee,
+            'orders' => $orders,
         ]);
     }
 

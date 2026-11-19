@@ -1,163 +1,185 @@
 @extends('layouts.app')
-@section('title', 'Print')
+@section('title', 'Statement - ' . $employee->name)
 @section('party', 'active')
 
 @section('content')
-    <style>
-        @media print {
-            .h {
-                background: #000 !important;
-                print-color-adjust: exact;
-            }
+    @php
+        $authUser = Auth::guard('web')->user();
+        $companyTitle = !empty($authUser->company_name) ? $authUser->company_name : companyName($authUser->company_id);
+        $selectedYear = request('year') ?: date('Y');
 
-            th {
-                color: #000;
-            }
-
-            .main-footer,
-            .years {
-                display: none
-            }
+        // Pre-compute rows, running balance and totals once.
+        $rows = [];
+        $total = $creditAmount = $runningBalance = 0;
+        foreach ($orders as $item) {
+            $amount = $item->total_amount ?? 0;
+            $credit = $item->credit ?? 0;
+            $runningBalance += $amount - $credit;
+            $total += $amount;
+            $creditAmount += $credit;
+            $rows[] = [$item, $runningBalance];
         }
-    </style>
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <div class="container-fluid my-2">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h3>
-                        Print
-                    </h3>
-                </div>
-                <div class="col-sm-6 text-right">
-                    <a class="btn btn-success" onclick="window.print();">Print</a>
-                    <a class="btn btn-primary" href="{{ route('party.order', $employee->guid) }}">Back</a>
-                </div>
-            </div>
-        </div>
-        <!-- /.container-fluid -->
-    </section>
 
-    <section class="content">
-        <div class="container-fluid">
-            <div class="card">
-                <div class="card-body text-center" style="background-color: green; color:#fff; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
-                    <h5>
-                        {{ $employee->name }}
-                        {{ !empty($employee->phone) ? '(Mobile:- ' . $employee->phone . ')' : '' }}
-                    </h5>
-                </div>
-            </div>
-        </div>
-    </section>
+        $money = fn($v) => '₹' . number_format((float) $v, 2);
+    @endphp
 
-    <section class="content years">
-        <!-- Default box -->
+    @include('partials.statement-styles')
+
+    <!-- Toolbar (screen only) -->
+    <section class="content-header no-print">
         <div class="container-fluid">
-            <div class="card">
+            <div class="st-toolbar mb-2">
+                <div>
+                    <h1 class="m-0">Account Statement</h1>
+                    <p class="text-muted mb-0">{{ $employee->name }} · {{ $selectedYear }}</p>
+                </div>
+
                 <form action="" method="get">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <label for="year">Year</label>
-                                    <select name="year" id="year" class="form-control">
-                                        <option value="">Select Year</option>
-                                        @foreach (\App\Models\Year::getYear() as $val)
-                                            <?php
-                                            $year = !empty(Request::get('year')) ? Request::get('year') : date('Y');
-                                            ?>
-                                            <option value="{{ $val->name }}" {{ $year == $val->name ? 'selected' : '' }}>
-                                                {{ $val->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-success">Search</button>
-                        <a href="{{ route('party.order.print', $employee->guid) }}" class="btn btn-danger">Reset</a>
+                    <div>
+                        <label for="year" class="mb-1">Year</label>
+                        <select name="year" id="year" class="form-control" onchange="this.form.submit()">
+                            @foreach (\App\Models\Year::getYear() as $val)
+                                <option value="{{ $val->name }}" {{ $selectedYear == $val->name ? 'selected' : '' }}>
+                                    {{ $val->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
+                    <a href="{{ route('party.order', $employee->guid) }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-1"></i> Back
+                    </a>
+                    <button type="button" class="btn btn-primary" onclick="window.print();">
+                        <i class="fas fa-print mr-1"></i> Print
+                    </button>
                 </form>
             </div>
         </div>
-        <!-- /.card -->
     </section>
-    <!-- Main content -->
+
     <section class="content">
-        <!-- Default box -->
         <div class="container-fluid">
-            <div class="card">
-                <div class="card-body">
-                    <h5 style="font-weight:bold">HISTORY
-                        ({{ strtoupper($employee->name) }})</h5>
-                    <table cellpadding="3" cellspacing='3' border="0" width="100%">
-                        <thead style="background: #000;color:#ffffff">
-                            <tr>
-                                <th style="border:1px solid #000;text-align:center">#</th>
-                                <th style="border:1px solid #000;text-align:center">Date</th>
-                                <th style="border:1px solid #000;text-align:center">Particular</th>
-                                <th style="border:1px solid #000;text-align:center">Size</th>
-                                <th style="border:1px solid #000;text-align:center">Piece</th>
-                                <th style="border:1px solid #000;text-align:center">Rate</th>
-                                <th style="border:1px solid #000;text-align:center">Amount</th>
-                                <th style="border:1px solid #000;text-align:center">Credit</th>
-                                <th style="border:1px solid #000;text-align:center">Balance</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php $total = $creditAmount = $runningBalance = 0;
-                            $i = 1; ?>
-                            @foreach ($orders as $item)
-                                <?php
-                                $amount = $item->total_amount ?? 0;
-                                $credit = $item->credit ?? 0;
-                                $runningBalance += $amount - $credit;
-                                $total += $amount;
-                                $creditAmount += $credit;
-                                ?>
-                                <tr style="border:1px solid #000">
-                                    <td style="border:1px solid #000;text-align:center">{{ $i++ }}</td>
-                                    <td style="border:1px solid #000;text-align:center">
-                                        {{ !empty($item->date) ? date('d-m-Y', strtotime($item->date)) : date('d-m-Y h:i A', strtotime($item->created_at)) }}
-                                    </td>
-                                    <td style="border:1px solid #000;text-align:center">
-                                        {{ !empty($item->item_id) ? getItemName($item->item_id) : $item->payment_name . ' (' . $item->payment_method . ')' }}
-                                    </td>
-                                    <td style="border:1px solid #000;text-align:center">
-                                        {{ sizeName($item->size_id) }}</td>
-                                    <td style="border:1px solid #000;text-align:center">{{ $item->qty }}</td>
-                                    <td style="border:1px solid #000;text-align:center">
-                                        {{ !empty($item->rate) ? '₹' . $item->rate : '' }}</td>
-                                    <td style="border:1px solid #000;text-align:center">
-                                        {{ !empty($item->total_amount) ? '₹' . $item->total_amount : '' }}</td>
-                                    <td style="border:1px solid #000;text-align:center">
-                                        {{ !empty($item->credit) ? '₹' . $item->credit : '' }}</td>
-                                    <td style="border:1px solid #000;text-align:center">
-                                        <strong>₹{{ $runningBalance }}</strong>
-                                    </td>
+            <div class="st-sheet">
+                <div class="st-band"></div>
+                <div class="st-pad">
+
+                    <!-- Header -->
+                    <div class="st-head">
+                        <div class="st-brand">
+                            <div class="st-mark">{{ strtoupper(mb_substr($companyTitle ?: 'J', 0, 1)) }}</div>
+                            <div>
+                                <div class="st-company">{{ $companyTitle }}</div>
+                                <div class="st-muted">Order Management</div>
+                            </div>
+                        </div>
+                        <div class="st-title">
+                            <h2>Statement</h2>
+                            <div class="st-meta">Period: <b>Jan – Dec {{ $selectedYear }}</b></div>
+                            <div class="st-meta">Generated: <b>{{ date('d M Y, h:i A') }}</b></div>
+                        </div>
+                    </div>
+
+                    <!-- Party -->
+                    <div class="st-party">
+                        <div>
+                            <div class="st-label">Statement for</div>
+                            <div class="st-party-name">{{ $employee->name }}</div>
+                            @if (!empty($employee->phone))
+                                <div class="st-muted">Mobile: {{ $employee->phone }}</div>
+                            @endif
+                            @if (!empty($employee->address))
+                                <div class="st-muted" style="max-width:360px">{{ $employee->address }}</div>
+                            @endif
+                        </div>
+                        <div style="text-align:right">
+                            <div class="st-label">Entries</div>
+                            <div class="st-party-name">{{ count($rows) }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="st-summary">
+                        <div class="st-box">
+                            <div class="st-label">Total Amount</div>
+                            <div class="st-val">{{ $money($total) }}</div>
+                        </div>
+                        <div class="st-box">
+                            <div class="st-label">Credit Received</div>
+                            <div class="st-val">{{ $money($creditAmount) }}</div>
+                        </div>
+                        <div class="st-box st-box--due">
+                            <div class="st-label">Balance Due</div>
+                            <div class="st-val">{{ $money($runningBalance) }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Ledger -->
+                    <div class="st-table-wrap">
+                        <table class="st-table">
+                            <thead>
+                                <tr>
+                                    <th class="c">#</th>
+                                    <th>Date</th>
+                                    <th>Particular</th>
+                                    <th class="c">Size</th>
+                                    <th class="num">Pcs</th>
+                                    <th class="num">Rate</th>
+                                    <th class="num">Amount</th>
+                                    <th class="num">Credit</th>
+                                    <th class="num">Balance</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                        <tfoot>
-                            <tr style="border:1px solid #000">
-                                <td style="border:1px solid #000;text-align:center"></td>
-                                <td style="border:1px solid #000;text-align:center"></td>
-                                <td style="border:1px solid #000;text-align:center"></td>
-                                <td style="border:1px solid #000;text-align:center"></td>
-                                <td style="border:1px solid #000;text-align:center"></td>
-                                <td style="border:1px solid #000;text-align:center"></td>
-                                <td style="border:1px solid #000;text-align:center"></td>
-                                <td style="border:1px solid #000;text-align:center;font-weight:bold">Total Balance</td>
-                                <td style="border:1px solid #000;text-align:center;font-weight:bold">
-                                    ₹{{ $runningBalance }}
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @forelse ($rows as $i => [$item, $balance])
+                                    @php $isPayment = empty($item->item_id); @endphp
+                                    <tr class="{{ $isPayment ? 'st-pay' : '' }}">
+                                        <td class="c">{{ $i + 1 }}</td>
+                                        <td style="white-space:nowrap">
+                                            {{ !empty($item->date) ? date('d-m-Y', strtotime($item->date)) : date('d-m-Y', strtotime($item->created_at)) }}
+                                        </td>
+                                        <td>
+                                            @if ($isPayment)
+                                                {{ $item->payment_name }}
+                                                <span class="st-pay-tag">{{ $item->payment_method ?: 'Payment' }}</span>
+                                            @else
+                                                {{ getItemName($item->item_id) }}
+                                            @endif
+                                        </td>
+                                        <td class="c">{{ sizeName($item->size_id) }}</td>
+                                        <td class="num">{{ $item->qty }}</td>
+                                        <td class="num">{{ !empty($item->rate) ? '₹' . $item->rate : '' }}</td>
+                                        <td class="num">{{ !empty($item->total_amount) ? $money($item->total_amount) : '' }}</td>
+                                        <td class="num st-credit">{{ !empty($item->credit) ? $money($item->credit) : '' }}</td>
+                                        <td class="num"><strong>{{ $money($balance) }}</strong></td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="9" class="st-empty">No entries for {{ $selectedYear }}.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                            @if (count($rows))
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="6" class="num">Total</td>
+                                        <td class="num">{{ $money($total) }}</td>
+                                        <td class="num st-credit">{{ $money($creditAmount) }}</td>
+                                        <td class="num st-grand">{{ $money($runningBalance) }}</td>
+                                    </tr>
+                                </tfoot>
+                            @endif
+                        </table>
+                    </div>
+
+                    <!-- Signatures -->
+                    <div class="st-sign">
+                        <div>Party Signature</div>
+                        <div>Authorised Signatory</div>
+                    </div>
+
+                    <div class="st-foot">
+                        This is a computer-generated statement from {{ $companyTitle }}.
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- /.card -->
     </section>
-    <!-- /.content -->
 @endsection
