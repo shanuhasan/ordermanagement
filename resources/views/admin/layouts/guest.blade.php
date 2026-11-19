@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Admin sign in | JOM</title>
+    <title>Admin sign in | JCUT</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,7 +21,7 @@
         <aside class="pa-brand">
             <div class="pa-logo">
                 <span class="pa-logo-mark">J</span>
-                <span>JOM ADMIN</span>
+                <span>JCUT ADMIN</span>
             </div>
 
             <div class="pa-hero">
@@ -41,7 +41,7 @@
             <div class="pa-card">
                 <div class="pa-logo pa-mobile-logo">
                     <span class="pa-logo-mark" style="color:#fff">J</span>
-                    <span>JOM ADMIN</span>
+                    <span>JCUT ADMIN</span>
                 </div>
                 {{ $slot }}
             </div>

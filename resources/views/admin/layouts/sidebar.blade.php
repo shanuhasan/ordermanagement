@@ -2,7 +2,7 @@
     <!-- Brand Logo -->
     <a href="{{ route('admin.dashboard') }}" class="brand-link">
         <span class="pm-logo">J</span>
-        <span class="brand-text">JOM ADMIN</span>
+        <span class="brand-text">JCUT ADMIN</span>
     </a>
     <!-- Sidebar -->
     <div class="sidebar">
