@@ -35,12 +35,13 @@ function partyExist($id)
 
 function getEmployeeDetail($id)
 {
-    $employee =  Employee::find($id);
+    static $cache = [];
 
-    if (empty($employee)) {
-        return 'NA';
+    if (!array_key_exists($id, $cache)) {
+        $cache[$id] = Employee::find($id);
     }
-    return $employee;
+
+    return empty($cache[$id]) ? 'NA' : $cache[$id];
 }
 
 function getStatus()
@@ -108,43 +109,95 @@ function getCompany()
 
 function companyName($id)
 {
-    $company =  Company::find($id);
+    static $cache = [];
 
-    if (empty($company)) {
-        return '';
+    if (!array_key_exists($id, $cache)) {
+        $cache[$id] = (string) Company::where('id', $id)->value('name');
     }
-    return $company->name;
+
+    return $cache[$id];
 }
 
+/**
+ * Size name by id. All sizes are loaded once per request (one query)
+ * instead of one query per table row.
+ */
 function sizeName($id)
 {
-    $size =  Size::find($id);
+    static $names = null;
 
-    if (empty($size)) {
-        return '';
+    if ($names === null) {
+        $names = Size::pluck('name', 'id')->all();
     }
-    return $size->name;
+
+    return $names[$id] ?? '';
 }
 
+/**
+ * Item name by id. All items are loaded once per request (one query)
+ * instead of one query per table row.
+ */
 function getItemName($id)
 {
-    $item =  Item::find($id);
+    static $names = null;
 
-    if (empty($item)) {
-        return '';
+    if ($names === null) {
+        $names = Item::pluck('name', 'id')->all();
     }
-    return $item->name;
+
+    return $names[$id] ?? '';
 }
 
 
+/**
+ * Total received qty for an order, cached per request.
+ * The cache is cleared automatically when a ReceivedItem is saved or deleted
+ * (see ReceivedItem::booted), so values are never stale.
+ */
 function receivedItems($orderId)
 {
-    $items =  ReceivedItem::where('order_id', $orderId)->sum('qty');
+    $cache = &receivedItemsCache();
 
-    if (empty($items)) {
-        return 0;
+    if (!array_key_exists($orderId, $cache)) {
+        $cache[$orderId] = (int) ReceivedItem::where('order_id', $orderId)->sum('qty');
     }
-    return $items;
+
+    return $cache[$orderId];
+}
+
+/**
+ * Load received qty for many orders with a single grouped query.
+ * Call this from a controller before rendering a list of orders.
+ */
+function preloadReceivedItems($orderIds)
+{
+    $cache = &receivedItemsCache();
+    $orderIds = collect($orderIds)->filter()->unique()->values();
+
+    if ($orderIds->isEmpty()) {
+        return;
+    }
+
+    $sums = ReceivedItem::whereIn('order_id', $orderIds)
+        ->groupBy('order_id')
+        ->selectRaw('order_id, SUM(qty) as total')
+        ->pluck('total', 'order_id');
+
+    foreach ($orderIds as $id) {
+        $cache[$id] = (int) ($sums[$id] ?? 0);
+    }
+}
+
+function &receivedItemsCache()
+{
+    static $cache = [];
+    return $cache;
+}
+
+function flushReceivedItemsCache()
+{
+    $cache = &receivedItemsCache();
+    $cache = [];
 }
 
 function getOrder($id)

@@ -68,15 +68,6 @@ $employeeDetail = getEmployeeDetail($employeeId);
                             @if ($orders->isNotEmpty())
                                 <?php $i = 1; ?>
                                 @foreach ($orders as $order)
-                                    <?php
-                                    $advAmt = 0;
-                                    $orderDetail = \App\Models\OrderItem::where('order_id', $order->id)->get();
-                                    if (!empty($orderDetail)) {
-                                        foreach ($orderDetail as $k => $vl) {
-                                            $advAmt += $vl->amount;
-                                        }
-                                    }
-                                    ?>
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td>{{ date('d-m-Y', strtotime($order->created_at)) }}</td>

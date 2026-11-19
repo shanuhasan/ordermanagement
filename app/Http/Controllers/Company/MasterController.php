@@ -160,7 +160,7 @@ class MasterController extends AppController
 
     public function order($guid, Request $request)
     {
-        $employee = Employee::findByGuid($guid);
+        $employee = $this->findEmployee($guid);
         $id = $employee->id;
 
         $orders = MasterOrder::latest()->where('employee_id', $id)
@@ -194,7 +194,7 @@ class MasterController extends AppController
 
     public function orderCreate($guid)
     {
-        $employee = Employee::findByGuid($guid);
+        $employee = $this->findEmployee($guid);
         $data['employee'] = $employee;
         return view('master.order-create', $data);
     }
@@ -237,7 +237,7 @@ class MasterController extends AppController
 
     public function orderEdit($guid, $orderId)
     {
-        $employee = Employee::findByGuid($guid);
+        $employee = $this->findEmployee($guid);
 
         $order = MasterOrder::where('id', $orderId)
             ->where('employee_id', $employee->id)
@@ -256,7 +256,7 @@ class MasterController extends AppController
 
     public function orderUpdate($id, Request $request)
     {
-        $model = MasterOrder::find($id);
+        $model = MasterOrder::findByIdAndCompanyId($id, $this->companyId);
         if (empty($model)) {
             return redirect()->route('employee.index')->with('error', 'Order not found.');
         }
@@ -297,7 +297,7 @@ class MasterController extends AppController
 
     public function amount($guid, Request $request)
     {
-        $employee = Employee::findByGuid($guid);
+        $employee = $this->findEmployee($guid);
 
         $totalAmount = MasterOrder::where('employee_id', $employee->id)
             ->where('company_id', $this->companyId);
@@ -353,7 +353,7 @@ class MasterController extends AppController
 
     public function paymentHistory($guid, Request $request)
     {
-        $employee = Employee::findByGuid($guid);
+        $employee = $this->findEmployee($guid);
 
         $employeePaymentHistory = MasterOrderDetail::latest()->where('employee_id', $employee->id)
             ->where('company_id', $this->companyId);

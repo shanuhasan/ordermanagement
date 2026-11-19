@@ -151,7 +151,7 @@ class PartyController extends AppController
 
     public function order($guid, Request $request)
     {
-        $employee = Party::findByGuid($guid);
+        $employee = $this->findParty($guid);
         $id = $employee->id;
 
         $orders = PartyOrder::where('party_id', $id)
@@ -185,7 +185,7 @@ class PartyController extends AppController
 
     public function orderCreate($guid)
     {
-        $employee = Party::findByGuid($guid);
+        $employee = $this->findParty($guid);
         $data['employee'] = $employee;
         return view('party.order-create', $data);
     }
@@ -228,7 +228,7 @@ class PartyController extends AppController
 
     public function orderEdit($guid, $orderId)
     {
-        $employee = Party::findByGuid($guid);
+        $employee = $this->findParty($guid);
 
         $order = PartyOrder::where('id', $orderId)
             ->where('party_id', $employee->id)
@@ -246,7 +246,7 @@ class PartyController extends AppController
 
     public function orderUpdate($id, Request $request)
     {
-        $model = PartyOrder::find($id);
+        $model = PartyOrder::findByIdAndCompanyId($id, $this->companyId);
 
         if (empty($model)) {
             return redirect()->route('party.index')->with('error', 'Order not found.');
@@ -288,7 +288,7 @@ class PartyController extends AppController
 
     public function amount($guid, Request $request)
     {
-        $employee = Party::findByGuid($guid);
+        $employee = $this->findParty($guid);
 
         $totalAmount = PartyOrder::where('party_id', $employee->id)
             ->where('company_id', $this->companyId);
@@ -336,7 +336,7 @@ class PartyController extends AppController
 
     public function orderAmountEdit($guid, $orderId)
     {
-        $employee = Party::findByGuid($guid);
+        $employee = $this->findParty($guid);
 
         $order = PartyOrder::where('id', $orderId)
             ->where('party_id', $employee->id)
@@ -354,7 +354,7 @@ class PartyController extends AppController
 
     public function orderAmountUpdate($id, Request $request)
     {
-        $model = PartyOrder::find($id);
+        $model = PartyOrder::findByIdAndCompanyId($id, $this->companyId);
 
         if (empty($model)) {
             return redirect()->route('party.index')->with('error', 'Order not found.');
@@ -390,7 +390,7 @@ class PartyController extends AppController
 
     public function orderPrint(Request $request, $guid)
     {
-        $employee = Party::findByGuid($guid);
+        $employee = $this->findParty($guid);
         $employeeId = $employee->id;
 
         $orders = PartyOrder::where('party_id', $employeeId)

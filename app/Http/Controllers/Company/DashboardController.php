@@ -6,39 +6,36 @@ use App\Models\Order;
 use App\Models\Employee;
 use App\Models\OrderItem;
 use App\Models\ReceivedItem;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Company\AppController;
 
 class DashboardController extends AppController
 {
     public function index()
     {
-        $companyId = Auth::guard('web')->user()->company_id;
-        $totalEmployee = Employee::where('is_deleted', '!=', '1')
-            ->where('company_id', $companyId)
+        $year = date('Y');
+
+        $totalEmployee = Employee::where('company_id', $this->companyId)
+            ->where('is_deleted', '!=', '1')
             ->count();
 
-        // $totalComplete = Order::where('status','=','Completed')
-        //                         ->where('company_id',$companyId)
-        //                         ->sum('qty');
+        // One query for both order totals (was two).
+        $orderTotals = Order::where('company_id', $this->companyId)
+            ->whereYear('created_at', $year)
+            ->selectRaw('COALESCE(SUM(qty), 0) as pcs, COALESCE(SUM(total_amount), 0) as amount')
+            ->first();
 
-        $totalComplete = ReceivedItem::where('company_id', $companyId)
-            ->whereYear('created_at', date('Y'))
+        $totalComplete = ReceivedItem::where('company_id', $this->companyId)
+            ->whereYear('created_at', $year)
             ->sum('qty');
 
-        $totalPcs = Order::where('company_id', $companyId)
-            ->whereYear('created_at', date('Y'))
-            ->sum('qty');
-
-        $totalAmount = Order::where('company_id', $companyId)
-            ->whereYear('created_at', date('Y'))
-            ->sum('total_amount');
-
-        $paidAmount = OrderItem::where('company_id', $companyId)
-            ->whereYear('created_at', date('Y'))
+        $paidAmount = OrderItem::where('company_id', $this->companyId)
+            ->whereYear('created_at', $year)
             ->sum('amount');
 
+        $totalPcs = (int) $orderTotals->pcs;
+        $totalAmount = (float) $orderTotals->amount;
+
         return view('dashboard', [
+            'year' => $year,
             'totalEmployee' => $totalEmployee,
             'totalPcs' => $totalPcs,
             'totalComplete' => $totalComplete,

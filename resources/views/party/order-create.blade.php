@@ -21,11 +21,11 @@
     <section class="content">
         <div class="container-fluid">
             <div class="card">
-                <div class="text-center" style="background-color: rgb(25, 0, 255); color:#fff;border-radius:20px;">
-                    <h3>
-                        <b>{{ $employee->name }}
-                            ({{ !empty($employee->phone) ? 'Mobile:- ' . $employee->phone : ' ' }})</b>
-                    </h3>
+                <div class="card-body text-center" style="background-color: green; color:#fff">
+                    <h5>
+                        {{ $employee->name }}
+                        {{ !empty($employee->phone) ? '(Mobile:- ' . $employee->phone . ')' : '' }}
+                    </h5>
                 </div>
             </div>
         </div>

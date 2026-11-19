@@ -162,7 +162,7 @@ class ContractorController extends AppController
 
     public function order($guid, Request $request)
     {
-        $employee = Employee::findByGuid($guid);
+        $employee = $this->findEmployee($guid);
         $id = $employee->id;
 
         $orders = Order::latest()->where('employee_id', $id)
@@ -187,6 +187,7 @@ class ContractorController extends AppController
         }
 
         $orders = $orders->paginate(50);
+        preloadReceivedItems($orders->pluck('id'));
 
         $data['orders'] = $orders;
         $data['employee'] = $employee;
@@ -196,7 +197,7 @@ class ContractorController extends AppController
 
     public function orderCreate($guid)
     {
-        $employee = Employee::findByGuid($guid);
+        $employee = $this->findEmployee($guid);
         $data['employee'] = $employee;
         return view('contractor.order-create', $data);
     }
@@ -256,7 +257,7 @@ class ContractorController extends AppController
 
     public function orderEdit($guid, $orderId)
     {
-        $employee = Employee::findByGuid($guid);
+        $employee = $this->findEmployee($guid);
 
         $order = Order::where('id', $orderId)
             ->where('employee_id', $employee->id)
@@ -280,11 +281,11 @@ class ContractorController extends AppController
 
     public function orderUpdate($id, Request $request)
     {
-        $model = Order::find($id);
-        $pendingQty = $model->qty - receivedItems($id);
+        $model = Order::findByIdAndCompanyId($id, $this->companyId);
         if (empty($model)) {
             return redirect()->route('employee.index')->with('error', 'Order not found.');
         }
+        $pendingQty = $model->qty - receivedItems($id);
 
         $validator = Validator::make($request->all(), [
             'employee_id' => 'required',
@@ -343,7 +344,7 @@ class ContractorController extends AppController
 
     public function orderReceived($guid, $orderId)
     {
-        $employee = Employee::findByGuid($guid);
+        $employee = $this->findEmployee($guid);
 
         $order = Order::where('id', $orderId)
             ->where('employee_id', $employee->id)
@@ -367,11 +368,11 @@ class ContractorController extends AppController
 
     public function orderReceivedStore($id, Request $request)
     {
-        $model = Order::find($id);
-        $pendingQty = $model->qty - receivedItems($id);
+        $model = Order::findByIdAndCompanyId($id, $this->companyId);
         if (empty($model)) {
             return redirect()->route('contractor.index')->with('error', 'Order not found.');
         }
+        $pendingQty = $model->qty - receivedItems($id);
 
         $validator = Validator::make($request->all(), [
             'received_qty' => 'required'
@@ -410,7 +411,7 @@ class ContractorController extends AppController
 
     public function orderView($guid, $orderId)
     {
-        $employee = Employee::findByGuid($guid);
+        $employee = $this->findEmployee($guid);
 
         $items = ReceivedItem::where('order_id', $orderId)
             ->where('company_id', $this->companyId)
@@ -451,7 +452,7 @@ class ContractorController extends AppController
 
     public function singlePrint($guid, $orderId)
     {
-        $employee = Employee::findByGuid($guid);
+        $employee = $this->findEmployee($guid);
 
         $items = ReceivedItem::where('order_id', $orderId)
             ->where('company_id', $this->companyId)
@@ -465,7 +466,7 @@ class ContractorController extends AppController
 
     public function receivedPieceHistory(Request $request, $guid)
     {
-        $employee = Employee::findByGuid($guid);
+        $employee = $this->findEmployee($guid);
 
         $items = ReceivedItem::where('company_id', $this->companyId)
             ->where('employee_id', $employee->id)
@@ -488,7 +489,7 @@ class ContractorController extends AppController
 
     public function orderPrint(Request $request, $guid)
     {
-        $employee = Employee::findByGuid($guid);
+        $employee = $this->findEmployee($guid);
         $employeeId = $employee->id;
 
         $orders = Order::latest()->where('employee_id', $employeeId)
@@ -539,6 +540,7 @@ class ContractorController extends AppController
         }
 
         $orders = $orders->paginate(20);
+        preloadReceivedItems($orders->pluck('id'));
 
         $data['orders'] = $orders;
 
@@ -547,7 +549,7 @@ class ContractorController extends AppController
 
     public function paymentHistory($guid, Request $request)
     {
-        $employee = Employee::findByGuid($guid);
+        $employee = $this->findEmployee($guid);
 
         $employeePaymentHistory = OrderItem::latest()->where('employee_id', $employee->id)
             ->where('company_id', $this->companyId);
@@ -568,7 +570,7 @@ class ContractorController extends AppController
 
     public function amount($guid, Request $request)
     {
-        $employee = Employee::findByGuid($guid);
+        $employee = $this->findEmployee($guid);
 
         $totalAmount = Order::where('employee_id', $employee->id)
             ->where('company_id', $this->companyId);

@@ -1,0 +1,282 @@
+/* Premium sign-in screens (company + admin). Works alongside the Breeze/Tailwind components. */
+:root {
+  --pa-primary: #059669;
+  --pa-primary-600: #047857;
+  --pa-text: #0f172a;
+  --pa-muted: #64748b;
+  --pa-border: #dbe1ea;
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body.pm-auth {
+  margin: 0;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--pa-text);
+  background: #f3f5f9;
+  -webkit-font-smoothing: antialiased;
+}
+
+.pa-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+}
+
+/* Brand panel */
+.pa-brand {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px 56px;
+  color: #fff;
+  background:
+    radial-gradient(1200px 600px at -10% -20%, rgba(16, 185, 129, .35), transparent 60%),
+    radial-gradient(800px 500px at 120% 120%, rgba(5, 150, 105, .35), transparent 60%),
+    linear-gradient(160deg, #0b1220 0%, #111a2e 100%);
+}
+
+.pa-brand::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .04) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+  pointer-events: none;
+}
+
+.pa-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  position: relative;
+  z-index: 1;
+}
+
+.pa-logo-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #10b981, #047857);
+  font-weight: 800;
+  font-size: 18px;
+  box-shadow: 0 10px 24px rgba(16, 185, 129, .35);
+}
+
+.pa-hero {
+  position: relative;
+  z-index: 1;
+  max-width: 460px;
+}
+
+.pa-hero h1 {
+  font-size: 40px;
+  line-height: 1.12;
+  letter-spacing: -.03em;
+  font-weight: 800;
+  margin: 0 0 16px;
+}
+
+.pa-hero h1 span {
+  background: linear-gradient(90deg, #6ee7b7, #10b981);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.pa-hero p {
+  color: #94a3b8;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.pa-points {
+  list-style: none;
+  padding: 0;
+  margin: 28px 0 0;
+  display: grid;
+  gap: 12px;
+}
+
+.pa-points li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #cbd5e1;
+  font-size: 14.5px;
+}
+
+.pa-points li::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, .18) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2334d399'%3E%3Cpath fill-rule='evenodd' d='M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z'/%3E%3C/svg%3E") center / 12px no-repeat;
+}
+
+.pa-foot {
+  position: relative;
+  z-index: 1;
+  color: #64748b;
+  font-size: 13px;
+}
+
+/* Form panel */
+.pa-form-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.pa-card {
+  width: 100%;
+  max-width: 420px;
+}
+
+.pa-card h2 {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  margin: 0 0 6px;
+}
+
+.pa-card .pa-sub {
+  color: var(--pa-muted);
+  margin: 0 0 28px;
+  font-size: 15px;
+}
+
+.pa-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--pa-primary-600);
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 999px;
+  padding: 4px 10px;
+  margin-bottom: 14px;
+}
+
+/* Restyle Breeze components inside the card */
+.pa-card label,
+.pa-card label.block {
+  display: block;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #334155 !important;
+  margin-bottom: 6px;
+}
+
+.pa-card input[type="email"],
+.pa-card input[type="password"],
+.pa-card input[type="text"] {
+  width: 100%;
+  height: 46px;
+  padding: 0 14px;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--pa-text);
+  background: #fff !important;
+  border: 1px solid var(--pa-border) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .04) !important;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.pa-card input:focus {
+  border-color: var(--pa-primary) !important;
+  box-shadow: 0 0 0 4px rgba(5, 150, 105, .15) !important;
+}
+
+.pa-card input[type="checkbox"] {
+  accent-color: var(--pa-primary);
+  width: 16px;
+  height: 16px;
+}
+
+.pa-card button[type="submit"] {
+  width: 100%;
+  height: 46px;
+  margin: 0 !important;
+  justify-content: center;
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: linear-gradient(135deg, #10b981, #047857) !important;
+  color: #fff !important;
+  font-family: inherit;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(5, 150, 105, .28);
+  transition: transform .08s ease, filter .15s ease;
+}
+
+.pa-card button[type="submit"]:hover { filter: brightness(1.05); }
+.pa-card button[type="submit"]:active { transform: translateY(1px); }
+
+.pa-card a {
+  color: var(--pa-primary-600) !important;
+  text-decoration: none !important;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.pa-card a:hover { text-decoration: underline !important; }
+
+.pa-card ul.text-red-600,
+.pa-card .text-red-600 {
+  color: #e11d48 !important;
+  font-size: 13px;
+  margin-top: 6px;
+  list-style: none;
+  padding: 0;
+}
+
+.pa-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 18px 0 22px;
+  font-size: 14px;
+  color: #475569;
+}
+
+.pa-row label {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  margin: 0 !important;
+  font-weight: 500 !important;
+  color: #475569 !important;
+}
+
+.pa-field + .pa-field { margin-top: 16px; }
+
+.pa-mobile-logo { display: none; }
+
+@media (max-width: 900px) {
+  .pa-shell { grid-template-columns: 1fr; }
+  .pa-brand { display: none; }
+  .pa-mobile-logo { display: flex; margin-bottom: 28px; color: var(--pa-text); }
+}

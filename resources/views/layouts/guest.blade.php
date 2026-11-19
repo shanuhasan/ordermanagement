@@ -6,23 +6,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Login | JCM</title>
+    <title>Sign in | JOM</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
 
-    <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('admin-assets/css/auth.css') }}?v=1">
 </head>
 
-<body class="font-sans text-gray-900 antialiased">
+<body class="pm-auth">
+    <div class="pa-shell">
+        <aside class="pa-brand">
+            <div class="pa-logo">
+                <span class="pa-logo-mark">J</span>
+                <span>JOM MUSHEEDA</span>
+            </div>
 
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-        <div
-            class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
-            {{ $slot }}
-        </div>
+            <div class="pa-hero">
+                <h1>Every order, piece &amp; payment — <span>in one place.</span></h1>
+                <p>Track work given to karigars, thekedars and masters, record received pieces and keep party balances
+                    up to date.</p>
+                <ul class="pa-points">
+                    <li>Live pending &amp; received piece counts</li>
+                    <li>Advance and payment history per worker</li>
+                    <li>Printable statements in one click</li>
+                </ul>
+            </div>
+
+            <div class="pa-foot">&copy; {{ date('Y') }} Musheeda. All rights reserved.</div>
+        </aside>
+
+        <main class="pa-form-wrap">
+            <div class="pa-card">
+                <div class="pa-logo pa-mobile-logo">
+                    <span class="pa-logo-mark" style="color:#fff">J</span>
+                    <span>JOM MUSHEEDA</span>
+                </div>
+                {{ $slot }}
+            </div>
+        </main>
     </div>
 </body>
 

@@ -3,133 +3,105 @@
 @section('title', 'Dashboard')
 @section('dashboard', 'active')
 @section('content')
+    @php
+        $remaining = $totalAmount - $paidAmount;
+        $completePct = $totalPcs > 0 ? min(100, round(($totalComplete / $totalPcs) * 100)) : 0;
+        $paidPct = $totalAmount > 0 ? min(100, round(($paidAmount / $totalAmount) * 100)) : 0;
+    @endphp
 
-    <style>
-        .inner {
-            text-align: center;
-        }
-    </style>
-
-    <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Dashboard</h1>
+            <div class="pm-page-title mb-2">
+                <div>
+                    <h1 class="m-0">Welcome back, {{ Auth::user()->name }}</h1>
+                    <p>Here's how production and payments are tracking for {{ $year }}.</p>
                 </div>
-                <div class="col-sm-6">
-
+                <div>
+                    <a href="{{ route('employee.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-user-friends mr-1"></i> Employees
+                    </a>
+                    <a href="{{ route('party.index') }}" class="btn btn-primary">
+                        <i class="fas fa-handshake mr-1"></i> Parties
+                    </a>
                 </div>
             </div>
         </div>
-        <!-- /.container-fluid -->
     </section>
-    <!-- Main content -->
+
     <section class="content">
-        <!-- Default box -->
         <div class="container-fluid">
+
+            <div class="pm-section-label">Production · {{ $year }}</div>
             <div class="row">
-                <div class="col-lg-3 col-6">
-                    <div class="small-box card">
-                        <div class="inner">
-                            <h3>{{ $totalEmployee }}</h3>
-                            <h4><strong>Total Employee</strong></h4>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                        <a href="{{ route('employee.index') }}" class="small-box-footer text-dark">More info <i
-                                class="fas fa-arrow-circle-right"></i></a>
+                <div class="col-xl-3 col-sm-6">
+                    <a href="{{ route('employee.index') }}" class="pm-stat pm-stat--slate">
+                        <div class="pm-stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="pm-stat-label">Total Employees</div>
+                        <div class="pm-stat-value">{{ number_format($totalEmployee) }}</div>
+                        <div class="pm-stat-foot">View all <i class="fas fa-arrow-right ml-1"></i></div>
+                    </a>
+                </div>
+
+                <div class="col-xl-3 col-sm-6">
+                    <div class="pm-stat pm-stat--blue">
+                        <div class="pm-stat-icon"><i class="fas fa-layer-group"></i></div>
+                        <div class="pm-stat-label">Total Pieces</div>
+                        <div class="pm-stat-value">{{ number_format($totalPcs) }}</div>
+                        <div class="pm-stat-foot">Issued this year</div>
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-6">
-                    <div class="small-box card">
-                        <div class="inner">
-                            <h3>{{ number_format($totalPcs) }}</h3>
-                            <h4><strong>Total Piece</strong></h4>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp</a>
+                <div class="col-xl-3 col-sm-6">
+                    <div class="pm-stat pm-stat--green">
+                        <div class="pm-stat-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="pm-stat-label">Completed Pieces</div>
+                        <div class="pm-stat-value">{{ number_format($totalComplete) }}</div>
+                        <div class="pm-progress"><span style="width: {{ $completePct }}%"></span></div>
+                        <div class="pm-stat-foot">{{ $completePct }}% of total received</div>
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-6">
-                    <div class="small-box card">
-                        <div class="inner">
-                            <h3>{{ number_format($totalComplete) }}</h3>
-                            <h4><strong>Complete Piece</strong></h4>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp</a>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-6">
-                    <div class="small-box card">
-                        <div class="inner">
-                            <h3>{{ number_format($totalPending) }}</h3>
-                            <h4><strong>Pending Piece</strong></h4>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp</a>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="background:rgb(255, 147, 6);color:#fff">
-                            <h3>₹{{ number_format($totalAmount) }}</h3>
-                            <h4><strong>Total Amount</strong></h4>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="background:green;color:#fff">
-                            <h3>₹{{ number_format($paidAmount) }}</h3>
-                            <h4><strong>Paid Amount</strong></h4>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <div class="small-box card">
-                        <div class="inner" style="background:red;color:#fff">
-                            <h3>₹{{ number_format($totalAmount - $paidAmount) }}</h3>
-                            <h4><strong>Remaining Amount</strong></h4>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="javascript:void(0);" class="small-box-footer text-dark">&nbsp;</a>
+                <div class="col-xl-3 col-sm-6">
+                    <div class="pm-stat pm-stat--amber">
+                        <div class="pm-stat-icon"><i class="fas fa-hourglass-half"></i></div>
+                        <div class="pm-stat-label">Pending Pieces</div>
+                        <div class="pm-stat-value">{{ number_format($totalPending) }}</div>
+                        <div class="pm-stat-foot">Still with workers</div>
                     </div>
                 </div>
             </div>
+
+            <div class="pm-section-label">Payments · {{ $year }}</div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="pm-stat pm-stat--hero">
+                        <div class="pm-stat-icon"><i class="fas fa-rupee-sign"></i></div>
+                        <div class="pm-stat-label">Total Amount</div>
+                        <div class="pm-stat-value">₹{{ number_format($totalAmount, 2) }}</div>
+                        <div class="pm-progress"><span style="width: {{ $paidPct }}%"></span></div>
+                        <div class="pm-stat-foot">{{ $paidPct }}% paid so far</div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-sm-6">
+                    <div class="pm-stat pm-stat--green">
+                        <div class="pm-stat-icon"><i class="fas fa-wallet"></i></div>
+                        <div class="pm-stat-label">Paid Amount</div>
+                        <div class="pm-stat-value">₹{{ number_format($paidAmount, 2) }}</div>
+                        <div class="pm-stat-foot">Advances &amp; payments made</div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-sm-6">
+                    <div class="pm-stat pm-stat--rose">
+                        <div class="pm-stat-icon"><i class="fas fa-file-invoice"></i></div>
+                        <div class="pm-stat-label">Remaining Amount</div>
+                        <div class="pm-stat-value">₹{{ number_format($remaining, 2) }}</div>
+                        <div class="pm-stat-foot">Balance still payable</div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <!-- /.card -->
     </section>
-    <!-- /.content -->
-
-@endsection
-
-@section('script')
-    <script>
-        console.log('test');
-    </script>
 @endsection

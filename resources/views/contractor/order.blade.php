@@ -136,15 +136,6 @@
                             @if ($orders->isNotEmpty())
                                 <?php $i = 1; ?>
                                 @foreach ($orders as $order)
-                                    <?php
-                                    $advAmt = 0;
-                                    $orderDetail = \App\Models\OrderItem::where('order_id', $order->id)->get();
-                                    if (!empty($orderDetail)) {
-                                        foreach ($orderDetail as $k => $vl) {
-                                            $advAmt += $vl->amount;
-                                        }
-                                    }
-                                    ?>
                                     <tr>
                                         <td style="text-align:center">{{ $i++ }}</td>
                                         <td style="text-align:center">
